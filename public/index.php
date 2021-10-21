@@ -2,13 +2,13 @@
 try {
   $pdo = new PDO('mysql:host=localhost;dbname=room4Two', 'room4TwoUser', 'mypassword');
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $sql = 'SELECT `blogtext` FROM `blog` WHERE id = :id';
-
-$statement = $pdo->prepare($sql);
-$statement->execute( ['id' => 1] );
-$text = $statement->fetchColumn();
-
-$output = $text;
+  
+  $sql = 'SELECT `blogtext` FROM `blog` WHERE id = 1';
+  $result = $pdo->query($sql);
+  
+  while ($row = $result->fetch()) {
+    $blogs[] = $row['blogtext'];
+  }
 }
 catch (PDOException $e) {
   $output = 'Unable to connect to the database server: ' . $e;
