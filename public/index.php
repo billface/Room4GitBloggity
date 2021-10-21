@@ -6,7 +6,7 @@ try {
   $sql = 'SELECT `blogtext` FROM `blog` WHERE id = 1';
   $result = $pdo->query($sql);
   
-  while ($row = $result->fetch()) {
+  foreach ($result as $row) {
     $blogs[] = $row['blogtext'];
   }
 }
