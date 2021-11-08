@@ -1,8 +1,7 @@
 <?php
 if (isset($_POST['blogtext'])) {
   try {
-    $pdo = new PDO('mysql:host=localhost;dbname=room4Two', 'room4TwoUser', 'mypassword');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    include __DIR__ . '/../includes/DatabaseConnection.php';
 
       $sql = 'INSERT INTO `blog` SET
               `blogtext` = :blogtext,

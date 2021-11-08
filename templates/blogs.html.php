@@ -1,3 +1,5 @@
+<p><?=$totalBlogs?> blogs have been added to the site </p>
+
 <?php foreach($blogs as $blog): ?>
 <blockquote>
   <p>

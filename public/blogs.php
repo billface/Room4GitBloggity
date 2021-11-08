@@ -1,8 +1,8 @@
 <?php
 
 try {
-  $pdo = new PDO('mysql:host=localhost;dbname=room4Two', 'room4TwoUser', 'mypassword');
-  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  include __DIR__ . '/../includes/DatabaseConnection.php';
+  include __DIR__ . '/../includes/DatabaseFunctions.php';
 
   $sql = 'SELECT `blog`.`id`, `blogtext`, `name`, `email`
           FROM `blog` INNER JOIN `author`
@@ -11,6 +11,8 @@ try {
   $blogs = $pdo->query($sql);
 
   $title = 'blog list';
+
+  $totalBlogs = totalBlogs($pdo);
 
   ob_start();
 
