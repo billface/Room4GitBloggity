@@ -4,12 +4,11 @@ try {
   $pdo = new PDO('mysql:host=localhost;dbname=room4Two', 'room4TwoUser', 'mypassword');
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  $sql = 'SELECT `id`,`blogtext` FROM `blog`';
-  $result = $pdo->query($sql);
+  $sql = 'SELECT `blog`.`id`, `blogtext`, `name`, `email`
+          FROM `blog` INNER JOIN `author`
+          ON `authorid` = `author`.`id`';
 
-  while ($row = $result->fetch()) {
-    $blogs[] = ['id' => $row['id'], 'blogtext' => $row['blogtext']];
- }
+  $blogs = $pdo->query($sql);
 
   $title = 'blog list';
 

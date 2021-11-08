@@ -3,13 +3,12 @@
 try {
   $pdo = new PDO('mysql:host=localhost;dbname=room4Two', 'room4TwoUser', 'mypassword');
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+ 
+  $sql = 'SELECT `blogtext`, `name`, `email`
+          FROM `blog` INNER JOIN `author`
+          ON `authorid` = `author`.`id` WHERE `blog`.`id` = 1';
 
-  $sql = 'SELECT `blogtext` FROM `blog` WHERE id = 1';
-  $result = $pdo->query($sql);
-
-  while ($row = $result->fetch()) {
-     $blogs[] = $row['blogtext'];
-  }
+  $blogs = $pdo->query($sql);
 
   $title = 'blog list';
 
