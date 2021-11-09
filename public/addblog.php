@@ -2,16 +2,10 @@
 if (isset($_POST['blogtext'])) {
   try {
     include __DIR__ . '/../includes/DatabaseConnection.php';
+    include __DIR__ . '/../includes/DatabaseFunctions.php';
 
-      $sql = 'INSERT INTO `blog` SET
-              `blogtext` = :blogtext,
-              `blogdate` = CURDATE()';
-
-      $stmt = $pdo->prepare($sql);
-
-      $stmt->bindValue(':blogtext', $_POST['blogtext']);
-
-      $stmt->execute();
+      // 1 currently represents the author id
+      insertBlog($pdo, $_POST['blogtext'], 1);
 
       header('location: blogs.php');
       

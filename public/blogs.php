@@ -4,13 +4,11 @@ try {
   include __DIR__ . '/../includes/DatabaseConnection.php';
   include __DIR__ . '/../includes/DatabaseFunctions.php';
 
-  $sql = 'SELECT `blog`.`id`, `blogtext`, `name`, `email`
-          FROM `blog` INNER JOIN `author`
-          ON `authorid` = `author`.`id`';
+  
 
-  $blogs = $pdo->query($sql);
+  $blogs = allBlogs($pdo);
 
-  $title = 'blog list';
+  $title = 'Blog list';
 
   $totalBlogs = totalBlogs($pdo);
 
