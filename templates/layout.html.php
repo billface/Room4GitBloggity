@@ -22,8 +22,8 @@
   </main>
 
   <footer>
-  &copy; IJDB 2017
-  </footer>doofy
+  &copy; Bodged Websites 2020&ndash;<?php echo date('Y'); ?>
+  </footer>
 
   </body>
 </html>

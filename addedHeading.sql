@@ -49,11 +49,12 @@ DROP TABLE IF EXISTS `blog`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blog` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `blogheading` text,
   `blogtext` text,
   `blogdate` date DEFAULT NULL,
   `authorid` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,7 +63,7 @@ CREATE TABLE `blog` (
 
 LOCK TABLES `blog` WRITE;
 /*!40000 ALTER TABLE `blog` DISABLE KEYS */;
-INSERT INTO `blog` VALUES (1,'First post very imformative. Oops typos','2021-10-19',1),(2,'Second post less informative','2021-10-19',1),(3,'Third post getting repetitive','2021-10-19',1),(4,'Hey ho and up she rises','2021-11-08',1),(5,'Yakety Smakety','2021-11-09',1),(7,'This is awesome. not','2021-11-09',1);
+INSERT INTO `blog` VALUES (1,'heading 1','First post very imformative. Oops typos','2021-10-19',1),(2,'heading 2','Second post less informative','2021-10-19',1),(3,'heading 3','Third post getting repetitive','2021-10-19',1),(4,'heading 4','Hey ho and up she rises','2021-11-08',1),(5,'heading 5','Yakety Smakety','2021-11-09',1),(7,'heading 6','This is awesome. not','2021-11-09',1),(10,'Heading','Text','2021-11-10',1),(11,'I\'ve moved the columns around','Does it work now?','2021-11-10',1);
 /*!40000 ALTER TABLE `blog` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -75,4 +76,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-10 10:27:50
+-- Dump completed on 2021-11-10 15:00:04

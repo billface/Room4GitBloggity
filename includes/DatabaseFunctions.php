@@ -29,7 +29,7 @@ function getBlog($pdo, $id) {
 
 function allBlogs($pdo) {
 
-	$jokes = query($pdo, 'SELECT `blog`.`id`, `blogtext`, `name`, `email`
+	$jokes = query($pdo, 'SELECT `blog`.`id`, `blogheading`, `name`, `email`
           FROM `blog` INNER JOIN `author`
           ON `authorid` = `author`.`id`');
 
@@ -50,19 +50,19 @@ function wholeBlog($pdo, $id) {
 	return $query->fetch();
 }
 
-function insertBlog($pdo, $blogtext, $authorId) {
-	$query = 'INSERT INTO `blog` (`blogtext`, `blogdate`, `authorId`) 
-			  VALUES (:blogtext, CURDATE(), :authorId)';
+function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {
+	$query = 'INSERT INTO `blog` (`blogheading`, `blogtext`, `blogdate`, `authorId`) 
+			  VALUES (:blogheading, :blogtext, CURDATE(), :authorId)';
 
-	$parameters = [':blogtext' => $blogtext, ':authorId' => $authorId];
+	$parameters = [':blogheading' => $blogheading,':blogtext' => $blogtext, ':authorId' => $authorId];
 
 	query($pdo, $query, $parameters);
 }
 
-function updateBlog($pdo, $blogId, $blogtext, $authorId) {
-	$parameters = [':blogtext' => $blogtext, ':authorId' => $authorId, ':id' => $blogId];
+function updateBlog($pdo, $blogId, $blogheading, $blogtext, $authorId) {
+	$parameters = [':blogheading' => $blogheading,':blogtext' => $blogtext, ':authorId' => $authorId, ':id' => $blogId];
   
-	query($pdo, 'UPDATE `blog` SET `authorId` = :authorId, `blogtext` = :blogtext WHERE `id` = :id', $parameters);
+	query($pdo, 'UPDATE `blog` SET `authorId` = :authorId, `blogheading` = :blogheading, `blogtext` = :blogtext WHERE `id` = :id', $parameters);
   }
 
 function deleteBlog($pdo, $id) {
