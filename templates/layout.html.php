@@ -13,7 +13,6 @@
     <ul>
       <li><a href="index.php">Home</a></li>
       <li><a href="blogs.php">Blog List</a></li>
-      <li><a href="blogday.php">Blog Of The Day</a></li>
       <li><a href="addblog.php">Add a new blog</a></li>
     </ul>
   </nav>
