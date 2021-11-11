@@ -1,15 +1,9 @@
 <?php
 
 try {
-  $pdo = new PDO('mysql:host=localhost;dbname=room4Two', 'room4TwoUser', 'mypassword');
-  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  include __DIR__ . '/../includes/DatabaseConnection.php';
 
-  $sql = 'DELETE FROM `blog` WHERE id = :id';
-
-  $stmt = $pdo->prepare($sql);
-  $stmt = $pdo->prepare($sql);
-  $stmt->bindValue(':id', $_POST['id']);
-  $stmt->execute();
+  deleteBlog($pdo, $_POST['id']);
   
   header('location: blogs.php');
   

@@ -10,3 +10,12 @@
   </p>
 </blockquote>
 <?php // endforeach; ?>
+
+<form action="" method="post">
+    
+    <label for="commtext">Type your comment here:</label>
+    <textarea id="commtext" name="commtext" rows="3" cols="40"></textarea>
+    <input type="submit" value="Add">
+    <br>
+</form>
+<br>

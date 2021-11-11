@@ -50,6 +50,15 @@ function wholeBlog($pdo, $id) {
 	return $query->fetch();
 }
 
+function insertComment($pdo, $commtext, $authorId, $blogId) {
+	$query = 'INSERT INTO `comments` (`commtext`, `commdate`, `authorid`, `blogId`) 
+			  VALUES (:commtext, CURDATE(), :authorId, :blogId)';
+
+	$parameters = [':commtext' => $commtext, ':authorId' => $authorId, ':blogId' => $blogId];
+
+	query($pdo, $query, $parameters);
+}
+
 function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {
 	$query = 'INSERT INTO `blog` (`blogheading`, `blogtext`, `blogdate`, `authorId`) 
 			  VALUES (:blogheading, :blogtext, CURDATE(), :authorId)';
