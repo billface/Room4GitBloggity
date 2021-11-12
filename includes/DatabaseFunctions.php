@@ -29,13 +29,24 @@ function getBlog($pdo, $id) {
 
 function allBlogs($pdo) {
 
-	$jokes = query($pdo, 'SELECT `blog`.`id`, `blogheading`, `name`, `email`
+	$blogs = query($pdo, 'SELECT `blog`.`id`, `blogheading`, `name`, `email`
           FROM `blog` INNER JOIN `author`
           ON `authorid` = `author`.`id`');
 
-	return $jokes->fetchAll();
+	return $blogs->fetchAll();
 
 }
+
+function allComments($pdo) {
+
+	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`
+          FROM `comments` INNER JOIN `author`
+          ON `authorid` = `author`.`id`');
+
+	return $comments->fetchAll();
+}
+
+
 
 function wholeBlog($pdo, $id) {
 	
@@ -45,10 +56,11 @@ function wholeBlog($pdo, $id) {
 
 	//call the query function and provide the `$parameters` array
 	$query = query($pdo, 'SELECT * FROM `blog` INNER JOIN `author`
-	ON `authorid` = `author`.`id` WHERE `blog`.`id` = :id', $parameters);
+	ON `authorid` = `author`.`id` /*INNER JOIN `comments` ON `blog`.`id` = `blogid`*/ WHERE `blog`.`id` = :id', $parameters);
 
 	return $query->fetch();
 }
+
 
 function insertComment($pdo, $commtext, $authorId, $blogId) {
 	$query = 'INSERT INTO `comments` (`commtext`, `commdate`, `authorid`, `blogId`) 

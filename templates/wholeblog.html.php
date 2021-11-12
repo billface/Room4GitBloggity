@@ -1,4 +1,4 @@
-<?php // foreach($blogs as $blog): ?>
+
 <blockquote>
 <h2>
   <?=htmlspecialchars($blog['blogheading'], ENT_QUOTES, 'UTF-8')?>
@@ -8,8 +8,17 @@
               echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
               echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>)
   </p>
+  </blockquote>
+  <blockquote>
+  <strong>Comments</strong><br>
+  <?php foreach($comments as $comment): ?>
+ <small> <?=htmlspecialchars($comment['commtext'], ENT_QUOTES, 'UTF-8')?></small><br>
+
+
+  
+
+<?php  endforeach; ?>
 </blockquote>
-<?php // endforeach; ?>
 
 <form action="" method="post">
     

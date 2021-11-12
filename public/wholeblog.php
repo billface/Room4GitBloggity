@@ -8,6 +8,8 @@ try {
 
 		$blog = wholeBlog($pdo, $_GET['id']);
 
+		$comments = allComments($pdo);
+
 		if (isset($_POST['commtext'])) {
 
 		// 1 currently represents the author id
