@@ -12,10 +12,12 @@ try {
 
 		if (isset($_POST['commtext'])) {
 
-		// 1 currently represents the author id
+		// 1 currently represents the author id & blog id
 		insertComment($pdo, $_POST['commtext'], 1 , 1);
-
-		header('location: blogs.php');
+		
+		//head back to the current page after inserting comment
+		header('location: '.$_SERVER['PHP_SELF']);
+		die;
 
 		}
 
