@@ -12,8 +12,10 @@
   <blockquote>
   <strong>Comments</strong><br>
   <?php foreach($comments as $comment): ?>
- <small> <?=htmlspecialchars($comment['commtext'], ENT_QUOTES, 'UTF-8')?></small><br>
-
+ <small> <?=htmlspecialchars($comment['commtext'], ENT_QUOTES, 'UTF-8')?>
+ (by <a href="mailto:<?php
+              echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
+              echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>)</small><br>
 
   
 
