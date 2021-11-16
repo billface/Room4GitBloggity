@@ -4,18 +4,58 @@
 try {
 
     include __DIR__ . '/../includes/DatabaseConnection.php';
-	include __DIR__ . '/../includes/DatabaseFunctions.php';
+	//include __DIR__ . '/../includes/DatabaseFunctions.php';
 
-		$blog = wholeBlog($pdo, $_GET['id']);
+	function wholeBlog($pdo, $id) {
+	
+		//Create the array of `$parameters` for use in the `query` function
+		$parameters = [':id' => $id];
+	
+	
+		//call the query function and provide the `$parameters` array
+		$query = $pdo->prepare('SELECT * FROM `blog` INNER JOIN `author`
+		ON `authorid` = `author`.`id`  WHERE `blog`.`id` = :id', $parameters);
 
-		$comments = allComments($pdo);
+		$query->bindValue(':id', $id);
+		$query->execute();
 
-		if (isset($_POST['commtext'])) {
+	
+		return $query->fetch();
+	}	
+	
+	
+	$blog = wholeBlog($pdo, $_GET['id']);
+
+	function allComments($pdo) {
+
+
+			$query = $pdo->prepare('SELECT `comments`.`id`, `commtext`, `name`, `email`, `blogid`
+				FROM `comments` INNER JOIN `author`
+				ON `authorid` = `author`.`id` ');
+			$query->execute();
+			return $query->fetchAll();
+	}
+
+	$comments = allComments($pdo);
+
+
+	if (isset($_POST['commtext'])) {
 
 		// 1 currently represents the author id & blog id
-		insertComment($pdo, $_POST['commtext'], 1 , 1);
+
+		$sql = 'INSERT INTO `comments` (`commtext`, `commdate`, `authorid`, `blogId`) 
+				VALUES (:commtext, CURDATE(), :authorId, :blogId)' ;
+
+      	$stmt = $pdo->prepare($sql);
+
+      	$stmt->bindValue(':commtext', $_POST['commtext']);
+      	$stmt->bindValue(':authorId', 1 );
+		$stmt->bindValue(':blogId', 1 );
+
+      	$stmt->execute();
 		
 		//head back to the current page after inserting comment
+		//THIS NO LONGER WORKS
 		header('location: '.$_SERVER['PHP_SELF']);
 		die;
 

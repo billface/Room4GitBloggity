@@ -17,6 +17,7 @@
               echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
               echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>)</small><br>
 
+
   
 
 <?php  endforeach; ?>

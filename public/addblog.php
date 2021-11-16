@@ -2,10 +2,23 @@
 if (isset($_POST['blogtext'])) {
   try {
     include __DIR__ . '/../includes/DatabaseConnection.php';
-    include __DIR__ . '/../includes/DatabaseFunctions.php';
+    //include __DIR__ . '/../includes/DatabaseFunctions.php';
 
-      // 1 currently represents the author id
-      insertBlog($pdo, $_POST['blogheading'], $_POST['blogtext'], 1);
+      
+
+      $sql = 'INSERT INTO `blog` SET
+              `blogheading` = :blogheading,
+              `blogtext` = :blogtext,
+              `blogdate` = CURDATE(),
+              `authorId` = :authorId' ;
+
+      $stmt = $pdo->prepare($sql);
+
+      $stmt->bindValue(':blogheading', $_POST['blogheading']);
+      $stmt->bindValue(':blogtext', $_POST['blogtext']);
+      $stmt->bindValue(':authorId', 1 );
+
+      $stmt->execute();
 
       header('location: blogs.php');
       
@@ -13,7 +26,7 @@ if (isset($_POST['blogtext'])) {
   catch (PDOException $e) {
     $title = 'An error has occurred';
 
-    $output = 'DAtabase error: ' . $e->getMessage() . ' in ' .
+    $output = 'Database error: ' . $e->getMessage() . ' in ' .
     $e->getFile() . ':' . $e->getLine();
   }
 

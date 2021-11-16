@@ -1,26 +1,50 @@
 <?php
 include __DIR__ . '/../includes/DatabaseConnection.php';
-include __DIR__ . '/../includes/DatabaseFunctions.php';
+//include __DIR__ . '/../includes/DatabaseFunctions.php';
 
 try {
-		if (isset($_POST['blogtext'])) {
 
-		updateBlog($pdo, $_POST['blogid'], $_POST['blogtext'], 1);
+	if (isset($_POST['blogheading'])) {
+		$sql = 'UPDATE `blog` SET `authorId` = :authorId, 
+									`blogheading` = :blogheading, 
+									`blogtext` = :blogtext 
+									WHERE `id` = :id';
+		
 
-		header('location: blogs.php');  
+		$stmt = $pdo->prepare($sql);
+
+      	$stmt->bindValue(':blogheading', $_POST['blogheading']);
+      	$stmt->bindValue(':blogtext', $_POST['blogtext']);
+      	$stmt->bindValue(':authorId', 1 );
+		$stmt->bindValue(':id', $_POST['id']);
+
+      	$stmt->execute();
+		
+    	header('location: blogs.php');
 
 	}
 	else {
+		
+		function getBlog($pdo, $id) {
+	
+			$query = $pdo->prepare('SELECT * FROM `blog` WHERE `id` = :id');
+			$query->bindValue(':id', $id);
+			$query->execute();
+			
+		
+			return $query->fetch();
 
-		$blog = getBlog($pdo, $_GET['id']);
+		}
 
-		$title = 'Edit blog';
+			$blog = getBlog($pdo, $_GET['id']);
 
-		ob_start();
+			$title = 'Edit blog';
 
-		include  __DIR__ . '/../templates/editblog.html.php';
+			ob_start();
 
-		$output = ob_get_clean();
+			include  __DIR__ . '/../templates/editblog.html.php';
+
+			$output = ob_get_clean();
 	}
 }
 catch (PDOException $e) {

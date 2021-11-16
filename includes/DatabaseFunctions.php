@@ -26,6 +26,22 @@ function getBlog($pdo, $id) {
 
 	return $query->fetch();
 }
+
+//retrieves comments for the wholeblog.php page
+function getComments($pdo, $id) {
+	
+	//Create the array of `$parameters` for use in the `query` function
+	$parameters = [':id' => $id];
+
+
+	//call the query function and provide the `$parameters` array
+	$query = query($pdo, 'SELECT * FROM `comments` WHERE `blogid` = :id', $parameters);
+
+	return $query->fetch();
+}
+
+
+
 //used to display blogs on blogs.php
 function allBlogs($pdo) {
 
@@ -36,15 +52,19 @@ function allBlogs($pdo) {
 	return $blogs->fetchAll();
 
 }
+
+
 //displays comments on wholeblog.php
 function allComments($pdo) {
 
-	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`
+
+	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`, `blogid`
           FROM `comments` INNER JOIN `author`
-          ON `authorid` = `author`.`id`');
+          ON `authorid` = `author`.`id` ');
 
 	return $comments->fetchAll();
 }
+
 
 //displays blog on wholeblog.php
 function wholeBlog($pdo, $id) {
@@ -60,6 +80,7 @@ function wholeBlog($pdo, $id) {
 	return $query->fetch();
 }
 
+
 //inserts comment on wholeblog.php
 function insertComment($pdo, $commtext, $authorId, $blogId) {
 	$query = 'INSERT INTO `comments` (`commtext`, `commdate`, `authorid`, `blogId`) 
@@ -69,6 +90,8 @@ function insertComment($pdo, $commtext, $authorId, $blogId) {
 
 	query($pdo, $query, $parameters);
 }
+
+
 
 //used on add blog.php
 function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {

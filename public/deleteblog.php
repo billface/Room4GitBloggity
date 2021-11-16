@@ -2,8 +2,15 @@
 
 try {
   include __DIR__ . '/../includes/DatabaseConnection.php';
+  
+  $sql = 'DELETE FROM `blog` WHERE id = :id';
 
-  deleteBlog($pdo, $_POST['id']);
+  $stmt = $pdo->prepare($sql);
+  
+  $stmt->bindValue(':id', $_POST['id']);
+  $stmt->execute();
+
+  
   
   header('location: blogs.php');
   
