@@ -61,7 +61,7 @@ function wholeBlog($pdo, $id) {
 }
 
 //inserts comment on wholeblog.php
-function insertComment($pdo, $commtext, $authorId, $blogId) {
+function insertComment($pdo, $blogId, $commtext, $authorId) {
 	$query = 'INSERT INTO `comments` (`commtext`, `commdate`, `authorid`, `blogId`) 
 			  VALUES (:commtext, CURDATE(), :authorId, :blogId)';
 
