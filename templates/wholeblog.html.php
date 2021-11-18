@@ -24,8 +24,9 @@
 
 <form action="" method="post">
     
-    <label for="commtext">Type your comment here:</label>
-    <textarea id="commtext" name="commtext" rows="3" cols="40"></textarea>
+    <label for="commText">Type your comment here:</label>
+    <textarea id="commText" name="commText" rows="3" cols="40"></textarea>
+    <input type="hidden" name="commBlogid" value="6">
     <input type="submit" value="Add">
     <br>
 </form>
