@@ -5,7 +5,7 @@ include __DIR__ . '/../includes/DatabaseFunctions.php';
 try {
 		if (isset($_POST['blogtext'])) {
 
-		updateBlog($pdo, $_POST['blogid'], $_POST['blogtext'], 1);
+		updateBlog($pdo, $_POST['blogid'], $_POST['blogtext'], 2);
 
 		header('location: blogs.php');  
 

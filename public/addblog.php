@@ -5,7 +5,7 @@ if (isset($_POST['blogtext'])) {
     include __DIR__ . '/../includes/DatabaseFunctions.php';
 
       // 1 currently represents the author id
-      insertBlog($pdo, $_POST['blogheading'], $_POST['blogtext'], 1);
+      insertBlog($pdo, $_POST['blogheading'], $_POST['blogtext'], 2);
 
       header('location: blogs.php');
       

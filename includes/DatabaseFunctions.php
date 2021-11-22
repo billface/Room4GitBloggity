@@ -37,11 +37,13 @@ function allBlogs($pdo) {
 
 }
 //displays comments on wholeblog.php
-function allComments($pdo) {
+function allComments($pdo, $id) {
+
+	$parameters = [':id' => $id];
 
 	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`
           FROM `comments` INNER JOIN `author`
-          ON `authorid` = `author`.`id`');
+          ON `authorid` = `author`.`id` WHERE `comments`.`commblogid` = :id', $parameters);
 
 	return $comments->fetchAll();
 }
@@ -54,18 +56,18 @@ function wholeBlog($pdo, $id) {
 
 
 	//call the query function and provide the `$parameters` array
-	$query = query($pdo, 'SELECT * FROM `blog` INNER JOIN `author`
+	$query = query($pdo, 'SELECT blog.id AS blogId, author.id AS authorId , `blogheading`, `blogtext`, `name`, `email` FROM `blog` INNER JOIN `author`
 	ON `authorid` = `author`.`id`  WHERE `blog`.`id` = :id', $parameters);
 
 	return $query->fetch();
 }
 
 //inserts comment on wholeblog.php
-function insertComment($pdo, $commtext, $authorId, $blogId) {
-	$query = 'INSERT INTO `comments` (`commtext`, `commdate`, `authorid`, `blogId`) 
-			  VALUES (:commtext, CURDATE(), :authorId, :blogId)';
+function insertComment($pdo, $commtext, $authorId, $commblogId) {
+	$query = 'INSERT INTO `comments` (`commtext`, `commdate`, `authorid`, `commblogId`) 
+			  VALUES (:commtext, CURDATE(), :authorId, :commblogId)';
 
-	$parameters = [':commtext' => $commtext, ':authorId' => $authorId, ':blogId' => $blogId];
+	$parameters = [':commtext' => $commtext, ':authorId' => $authorId, ':commblogId' => $commblogId];
 
 	query($pdo, $query, $parameters);
 }

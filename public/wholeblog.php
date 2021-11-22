@@ -8,15 +8,24 @@ try {
 
 		$blog = wholeBlog($pdo, $_GET['id']);
 
-		$comments = allComments($pdo);
+		
+		
+
+		$comments = allComments($pdo, $_GET['id']);
+
+		
+		
+		
 
 		if (isset($_POST['commtext'])) {
 
 		// 1 currently represents the author id & blog id
-		insertComment($pdo, $_POST['commtext'], 1 , 1);
+		insertComment($pdo, $_POST['commtext'], 2 , $_POST['commblogId']);
+
+		
 		
 		//head back to the current page after inserting comment
-		header('location: '.$_SERVER['PHP_SELF']);
+		header('location: '.$_SERVER['PHP_SELF'] . '?id=' . $_POST['commblogId']);
 		die;
 
 		}
@@ -24,6 +33,9 @@ try {
 		else {
 
 		$title = 'Whole blog';
+
+		
+			
 
 		ob_start();
 
