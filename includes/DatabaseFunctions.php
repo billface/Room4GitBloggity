@@ -86,7 +86,7 @@ function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {
 function updateBlog($pdo, $blogId, $blogheading, $blogtext, $authorId) {
 	$parameters = [':blogheading' => $blogheading,':blogtext' => $blogtext, ':authorId' => $authorId, ':id' => $blogId];
   
-	query($pdo, 'UPDATE `blog` SET `authorId` = :authorId, `blogheading` = :blogheading, `blogtext` = :blogtext, `blogmoddate` = NOW() WHERE `id` = :id', $parameters);
+	query($pdo, 'UPDATE `blog` SET `authorId` = :authorId, `blogheading` = :blogheading, `blogtext` = :blogtext WHERE `id` = :id', $parameters);
   }
 // delete blog.php
 function deleteBlog($pdo, $id) {
