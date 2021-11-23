@@ -3,11 +3,14 @@
 <h2>
   <?=htmlspecialchars($blog['blogheading'], ENT_QUOTES, 'UTF-8')?>
 </h2>
-  <?=htmlspecialchars($blog['blogtext'], ENT_QUOTES, 'UTF-8')?>
+  <?=htmlspecialchars($blog['blogtext'], ENT_QUOTES, 'UTF-8')?><br>
   (by <a href="mailto:<?php
               echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
-              echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>)
-  </p>
+              echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>
+              on 
+              <?php
+              echo htmlspecialchars($blog['blogdate'], ENT_QUOTES, 'UTF-8'); ?>)
+  
   </blockquote>
   <blockquote>
   <strong>Comments</strong><br>
@@ -17,7 +20,8 @@
               echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
               echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>)</small><br>
 
-  </p>
+  
+
 
 <?php  endforeach; ?>
 </blockquote>

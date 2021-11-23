@@ -56,7 +56,7 @@ function wholeBlog($pdo, $id) {
 
 
 	//call the query function and provide the `$parameters` array
-	$query = query($pdo, 'SELECT blog.id AS blogId, author.id AS authorId , `blogheading`, `blogtext`, `name`, `email` FROM `blog` INNER JOIN `author`
+	$query = query($pdo, 'SELECT blog.id AS blogId, author.id AS authorId , `blogheading`, `blogtext`, `blogdate`, `name`, `email` FROM `blog` INNER JOIN `author`
 	ON `authorid` = `author`.`id`  WHERE `blog`.`id` = :id', $parameters);
 
 	return $query->fetch();
@@ -74,13 +74,14 @@ function insertComment($pdo, $commtext, $authorId, $commblogId) {
 
 //used on add blog.php
 function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {
-	$query = 'INSERT INTO `blog` (`blogheading`, `blogtext`, `blogdate`, `authorId`, `blogmoddate`) 
-			  VALUES (:blogheading, :blogtext, CURDATE(), :authorId, NOW())';
+	$query = 'INSERT INTO `blog` (`blogheading`, `blogtext`, `blogdate`, `authorId`) 
+			  VALUES (:blogheading, :blogtext, CURDATE(), :authorId)';
 
 	$parameters = [':blogheading' => $blogheading,':blogtext' => $blogtext, ':authorId' => $authorId ];
 
 	query($pdo, $query, $parameters);
 }
+
 
 //used on addblog.php
 function updateBlog($pdo, $blogId, $blogheading, $blogtext, $authorId) {
