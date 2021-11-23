@@ -74,10 +74,10 @@ function insertComment($pdo, $commtext, $authorId, $commblogId) {
 
 //used on add blog.php
 function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {
-	$query = 'INSERT INTO `blog` (`blogheading`, `blogtext`, `blogdate`, `authorId`) 
-			  VALUES (:blogheading, :blogtext, CURDATE(), :authorId)';
+	$query = 'INSERT INTO `blog` (`blogheading`, `blogtext`, `blogdate`, `authorId`, `blogmoddate`) 
+			  VALUES (:blogheading, :blogtext, CURDATE(), :authorId, NOW())';
 
-	$parameters = [':blogheading' => $blogheading,':blogtext' => $blogtext, ':authorId' => $authorId];
+	$parameters = [':blogheading' => $blogheading,':blogtext' => $blogtext, ':authorId' => $authorId ];
 
 	query($pdo, $query, $parameters);
 }
@@ -86,7 +86,7 @@ function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {
 function updateBlog($pdo, $blogId, $blogheading, $blogtext, $authorId) {
 	$parameters = [':blogheading' => $blogheading,':blogtext' => $blogtext, ':authorId' => $authorId, ':id' => $blogId];
   
-	query($pdo, 'UPDATE `blog` SET `authorId` = :authorId, `blogheading` = :blogheading, `blogtext` = :blogtext WHERE `id` = :id', $parameters);
+	query($pdo, 'UPDATE `blog` SET `authorId` = :authorId, `blogheading` = :blogheading, `blogtext` = :blogtext, `blogmoddate` = NOW() WHERE `id` = :id', $parameters);
   }
 // delete blog.php
 function deleteBlog($pdo, $id) {
