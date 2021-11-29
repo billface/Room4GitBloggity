@@ -56,7 +56,7 @@ function wholeBlog($pdo, $id) {
 
 
 	//call the query function and provide the `$parameters` array
-	$query = query($pdo, 'SELECT blog.id AS blogId, author.id AS authorId , `blogheading`, `blogtext`, `blogdate`, `name`, `email` FROM `blog` INNER JOIN `author`
+	$query = query($pdo, 'SELECT blog.id AS blogId, author.id AS authorId , `blogheading`, `blogtext`, `blogdate`, `blogmoddate`, `name`, `email` FROM `blog` INNER JOIN `author`
 	ON `authorid` = `author`.`id`  WHERE `blog`.`id` = :id', $parameters);
 
 	return $query->fetch();

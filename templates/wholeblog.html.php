@@ -4,12 +4,17 @@
   <?=htmlspecialchars($blog['blogheading'], ENT_QUOTES, 'UTF-8')?>
 </h2>
   <?=htmlspecialchars($blog['blogtext'], ENT_QUOTES, 'UTF-8')?><br>
-  (by <a href="mailto:<?php
-              echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
-              echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>
+  (by <a href="mailto:
+              <?php echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>">
+              <?php echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>
               on 
+              <?php echo htmlspecialchars($blog['blogdate'], ENT_QUOTES, 'UTF-8');?>
+              
               <?php
-              echo htmlspecialchars($blog['blogdate'], ENT_QUOTES, 'UTF-8'); ?>)
+              if (isset($blog['blogmoddate'])) {
+                echo '(Edited ' . htmlspecialchars($blog['blogmoddate'], ENT_QUOTES, 'UTF-8'). ')';
+              }
+              ?>)
   
   </blockquote>
   <blockquote>
