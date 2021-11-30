@@ -41,7 +41,7 @@ function allComments($pdo, $id) {
 
 	$parameters = [':id' => $id];
 
-	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`
+	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`, `commdate`, `commblogmoddate`
           FROM `comments` INNER JOIN `author`
           ON `authorid` = `author`.`id` WHERE `comments`.`commblogid` = :id', $parameters);
 
@@ -82,13 +82,13 @@ function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {
 	query($pdo, $query, $parameters);
 }
 
-
 //used on addblog.php
 function updateBlog($pdo, $blogId, $blogheading, $blogtext, $authorId) {
 	$parameters = [':blogheading' => $blogheading,':blogtext' => $blogtext, ':authorId' => $authorId, ':id' => $blogId];
   
 	query($pdo, 'UPDATE `blog` SET `authorId` = :authorId, `blogheading` = :blogheading, `blogtext` = :blogtext, `blogmoddate` = NOW() WHERE `id` = :id', $parameters);
   }
+
 // delete blog.php
 function deleteBlog($pdo, $id) {
 	$parameters = [':id' => $id];

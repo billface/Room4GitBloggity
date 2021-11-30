@@ -23,7 +23,9 @@
  <small> <?=htmlspecialchars($comment['commtext'], ENT_QUOTES, 'UTF-8')?>
  (by <a href="mailto:<?php
               echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
-              echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>)</small><br>
+              echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>
+              on 
+              <?php echo htmlspecialchars($comment['commdate'], ENT_QUOTES, 'UTF-8');?>)</small><br>
 
   
 
