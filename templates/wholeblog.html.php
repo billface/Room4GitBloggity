@@ -27,6 +27,11 @@
               echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>
               on 
               <?php echo htmlspecialchars($comment['commdate'], ENT_QUOTES, 'UTF-8');?>)
+              <?php 
+              if (isset($comment['commmoddate'])) {
+                echo '(Edited ' . htmlspecialchars($comment['commmoddate'], ENT_QUOTES, 'UTF-8'). ')';
+              }
+              ?>)
               <a href="editcomment.php?id=<?=$comment['id']?>">Edit</a></small><br>
 
   
