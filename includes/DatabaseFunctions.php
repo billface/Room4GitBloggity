@@ -14,18 +14,7 @@ function totalBlogs($pdo) {
 
 	return $row[0];
 }
-//retrieves blogs for the editblog.php page
-function getBlog($pdo, $id) {
-	
-	//Create the array of `$parameters` for use in the `query` function
-	$parameters = [':id' => $id];
 
-
-	//call the query function and provide the `$parameters` array
-	$query = query($pdo, 'SELECT * FROM `blog` WHERE `id` = :id', $parameters);
-
-	return $query->fetch();
-}
 //used to display blogs on blogs.php
 function allBlogs($pdo) {
 
@@ -41,7 +30,7 @@ function allComments($pdo, $id) {
 
 	$parameters = [':id' => $id];
 
-	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`, `commdate`, `commblogmoddate`
+	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`, `commdate`, `commmoddate`
           FROM `comments` INNER JOIN `author`
           ON `authorid` = `author`.`id` WHERE `comments`.`commblogid` = :id', $parameters);
 
@@ -72,7 +61,7 @@ function insertComment($pdo, $commtext, $authorId, $commblogId) {
 	query($pdo, $query, $parameters);
 }
 
-//used on add blog.php
+//used on addblog.php
 function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {
 	$query = 'INSERT INTO `blog` (`blogheading`, `blogtext`, `blogdate`, `authorId`) 
 			  VALUES (:blogheading, :blogtext, CURDATE(), :authorId)';
@@ -82,11 +71,46 @@ function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {
 	query($pdo, $query, $parameters);
 }
 
-//used on addblog.php
+//retrieves blogs for the editblog.php page
+function getBlog($pdo, $id) {
+	
+	//Create the array of `$parameters` for use in the `query` function
+	$parameters = [':id' => $id];
+
+	//call the query function and provide the `$parameters` array
+	$query = query($pdo, 'SELECT * FROM `blog` WHERE `id` = :id', $parameters);
+
+	return $query->fetch();
+}
+
+function getComment($pdo, $id) {
+	
+	//Create the array of `$parameters` for use in the `query` function
+	$parameters = [':id' => $id];
+
+	//call the query function and provide the `$parameters` array
+	$query = query($pdo, 'SELECT * FROM `comments` WHERE `id` = :id', $parameters);
+
+	return $query->fetch();
+}
+
+//used on editblog.php
 function updateBlog($pdo, $blogId, $blogheading, $blogtext, $authorId) {
 	$parameters = [':blogheading' => $blogheading,':blogtext' => $blogtext, ':authorId' => $authorId, ':id' => $blogId];
   
 	query($pdo, 'UPDATE `blog` SET `authorId` = :authorId, `blogheading` = :blogheading, `blogtext` = :blogtext, `blogmoddate` = NOW() WHERE `id` = :id', $parameters);
+  }
+
+// used on wholeblog.php
+/*function updateComment($pdo, $commentsId, $commtext, $commblogId, $authorId) {
+	$parameters = [':commtext' => $commtext, ':authorId' => $authorId, ':commblogId' => $commblogId, ':id' => $commentsId];
+  
+	query($pdo, 'UPDATE `comments` SET `authorId` = :authorId, `commtext` = :commtext, `commmoddate` = NOW() WHERE `id` = :id', $parameters);
+  }*/
+function updateComment($pdo, $commentsId, $commtext, $authorId) {
+	$parameters = [':commtext' => $commtext, ':authorId' => $authorId, ':id' => $commentsId];
+  
+	query($pdo, 'UPDATE `comments` SET `authorId` = :authorId, `commtext` = :commtext, `commmoddate` = NOW() WHERE `id` = :id', $parameters);
   }
 
 // delete blog.php

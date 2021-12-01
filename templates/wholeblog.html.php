@@ -15,6 +15,7 @@
                 echo '(Edited ' . htmlspecialchars($blog['blogmoddate'], ENT_QUOTES, 'UTF-8'). ')';
               }
               ?>)
+              <a href="editblog.php?id=<?=$blog['blogId']?>">Edit</a>
   
   </blockquote>
   <blockquote>
@@ -25,7 +26,8 @@
               echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
               echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>
               on 
-              <?php echo htmlspecialchars($comment['commdate'], ENT_QUOTES, 'UTF-8');?>)</small><br>
+              <?php echo htmlspecialchars($comment['commdate'], ENT_QUOTES, 'UTF-8');?>)
+              <a href="editcomment.php?id=<?=$comment['id']?>">Edit</a></small><br>
 
   
 
