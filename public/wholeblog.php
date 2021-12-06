@@ -31,10 +31,15 @@ try {
 		}
 
 		else {
+			//if (isset($_GET['commentId'])) {
+			//	if (is_numeric($_GET['commentId'])) {
+			$comment2edit = getComment($pdo, $_GET['commentId']);
+			//	}
+			//}
 
 		$title = 'Whole blog';
 
-		
+
 			
 
 		ob_start();

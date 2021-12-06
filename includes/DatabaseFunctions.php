@@ -25,17 +25,7 @@ function allBlogs($pdo) {
 	return $blogs->fetchAll();
 
 }
-//displays comments on wholeblog.php
-function allComments($pdo, $id) {
 
-	$parameters = [':id' => $id];
-
-	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`, `commdate`, `commmoddate`
-          FROM `comments` INNER JOIN `author`
-          ON `authorid` = `author`.`id` WHERE `comments`.`commblogid` = :id', $parameters);
-
-	return $comments->fetchAll();
-}
 
 //displays blog on wholeblog.php
 function wholeBlog($pdo, $id) {
@@ -81,6 +71,18 @@ function getBlog($pdo, $id) {
 	$query = query($pdo, 'SELECT * FROM `blog` WHERE `id` = :id', $parameters);
 
 	return $query->fetch();
+}
+
+//displays comments on wholeblog.php
+function allComments($pdo, $id) {
+
+	$parameters = [':id' => $id];
+
+	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`, `commdate`, `commmoddate`
+          FROM `comments` INNER JOIN `author`
+          ON `authorid` = `author`.`id` WHERE `comments`.`commblogid` = :id', $parameters);
+
+	return $comments->fetchAll();
 }
 
 function getComment($pdo, $id) {

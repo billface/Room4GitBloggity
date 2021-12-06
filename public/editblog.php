@@ -7,7 +7,8 @@ try {
 
 		updateBlog($pdo, $_POST['blogid'], $_POST['blogheading'], $_POST['blogtext'], 2);
 
-		header('location: blogs.php');  
+		header('location: wholeblog.php?id=' . $_POST['blogid']);
+		die;  
 
 	}
 	else {

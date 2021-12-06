@@ -32,7 +32,7 @@
                 echo '(Edited ' . htmlspecialchars($comment['commmoddate'], ENT_QUOTES, 'UTF-8'). ')';
               }
               ?>)
-              <a href="editcomment.php?id=<?=$comment['id']?>">Edit</a></small><br>
+              <a href="wholeblog.php?id=<?=$blog['blogId']?>&commentId=<?=$comment['id']?>">Edit</a></small><br>
 
   
 
@@ -53,14 +53,40 @@ if (is_numeric($_GET['id'])) {
 */
 
 ?>
+<?php
 
-<form action="" method="post">
+
+
+if (isset($_GET['commentId'])) {
+	if (is_numeric($_GET['commentId'])) {
+
+    echo
+		'<form action="editcomment.php" method="post">
+	<input type="hidden" name="commentsid" value="'.$comment2edit['id'].'">
+  <input type="hidden" name="commblogId" value="'.$blog['blogId'].'">
+    <label for="commtext">Type your comment here:</label>
+    <textarea id="commtext" name="commtext" rows="3" cols="40">'.$comment2edit['commtext'].'</textarea>
+    <input type="submit" value="Save">
+</form>';
+
+		
+	}
+	else {
+		# load error, it's set but we don't have a valid comment id format
+		
+	}
+} else {
+  echo '
+	<form action="" method="post">
     
     <label for="commtext">Type your comment here:</label>
     <textarea id="commtext" name="commtext" rows="3" cols="40"></textarea>
-    <input type="hidden" name="commblogId" value="<?=$blog['blogId']?>">
+    <input type="hidden" name="commblogId" value="'.$blog['blogId'].'">
 
-    <input type="submit" value="Add">
+    <input type="submit" value="Add"> 
     <br>
-</form>
-<br>
+</form> ';
+}
+
+?>
+
