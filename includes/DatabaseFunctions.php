@@ -50,7 +50,7 @@ function insertComment($pdo, $commtext, $authorId, $commblogId) {
 
 	query($pdo, $query, $parameters);
 }
-
+/*
 //used on addblog.php
 function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {
 	$query = 'INSERT INTO `blog` (`blogheading`, `blogtext`, `blogdate`, `authorId`) 
@@ -60,6 +60,31 @@ function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {
 
 	query($pdo, $query, $parameters);
 }
+*/
+
+//used on addblog.php
+function insertBlog($pdo, $fields) {
+	$query = 'INSERT INTO `blog` (';
+	
+	foreach ($fields as $key => $value) {
+		$query .= '`' . $key . '`,';
+	}
+
+	$query = rtrim($query, ',');
+
+	$query .= ') VALUES (';
+
+	foreach ($fields as $key => $value) {
+		$query .= ':' . $key . ',';
+	}
+
+	$query = rtrim($query, ',');
+
+	$query .= ')';
+
+	query($pdo, $query, $fields);
+}
+
 
 //retrieves blogs for the editblog.php page
 function getBlog($pdo, $id) {
@@ -96,19 +121,37 @@ function getComment($pdo, $id) {
 	return $query->fetch();
 }
 
-//used on editblog.php
+/*
+  //used on editblog.php
 function updateBlog($pdo, $blogId, $blogheading, $blogtext, $authorId) {
 	$parameters = [':blogheading' => $blogheading,':blogtext' => $blogtext, ':authorId' => $authorId, ':id' => $blogId];
   
 	query($pdo, 'UPDATE `blog` SET `authorId` = :authorId, `blogheading` = :blogheading, `blogtext` = :blogtext, `blogmoddate` = NOW() WHERE `id` = :id', $parameters);
   }
 
-// used on wholeblog.php
-/*function updateComment($pdo, $commentsId, $commtext, $commblogId, $authorId) {
-	$parameters = [':commtext' => $commtext, ':authorId' => $authorId, ':commblogId' => $commblogId, ':id' => $commentsId];
-  
-	query($pdo, 'UPDATE `comments` SET `authorId` = :authorId, `commtext` = :commtext, `commmoddate` = NOW() WHERE `id` = :id', $parameters);
-  }*/
+  */
+
+//used on editblog.php
+function updateBlog($pdo, $fields) {
+
+	$query = 'UPDATE `blog` SET ';
+
+	foreach ($fields as $key => $value) {
+		$query .= '`' . $key . '` = :' . $key . ',';
+	}
+
+	$query = rtrim($query, ',');
+
+	$query .= 'WHERE `id` = :primaryKey';
+
+	//set the :primaryKey variable
+	$fields['primaryKey'] = $fields['id'];
+
+	query($pdo, $query, $fields);
+
+}
+
+
 function updateComment($pdo, $commentsId, $commtext, $authorId) {
 	$parameters = [':commtext' => $commtext, ':authorId' => $authorId, ':id' => $commentsId];
   
