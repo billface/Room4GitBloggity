@@ -9,8 +9,8 @@ try {
 
 		updateComment($pdo, $_POST['commentsid'], $_POST['commtext'], 2);
 
-		header('location:blogs.php');
-        //header('location: wholeblog.php?id=' . $_POST['commblogId']);  
+		//header('location:blogs.php');
+        header('location: wholeblog.php?id=' . $_POST['commblogId']);  
 
 	}
 	else {

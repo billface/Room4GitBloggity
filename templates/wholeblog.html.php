@@ -58,7 +58,7 @@ if (is_numeric($_GET['id'])) {
 
 
 if (isset($_GET['commentId'])) {
-	if (is_numeric($_GET['commentId'])) {
+	//if (is_numeric($_GET['commentId'])) {
 
     echo
 		'<form action="editcomment.php" method="post">
@@ -70,11 +70,11 @@ if (isset($_GET['commentId'])) {
 </form>';
 
 		
-	}
-	else {
+	//}
+//	else {
 		# load error, it's set but we don't have a valid comment id format
 		
-	}
+	//}
 } else {
   echo '
 	<form action="" method="post">
