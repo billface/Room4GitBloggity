@@ -9,7 +9,8 @@ try {
 			'id' => $_POST['blogid'],
 			'blogheading' => $_POST['blogheading'],
 			'blogtext' => $_POST['blogtext'], 
-			'authorId' => 2
+			'authorId' => 2,
+			'blogmoddate' => new DateTime
 		]);
 
 		header('location: wholeblog.php?id=' . $_POST['blogid']);

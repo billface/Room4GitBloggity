@@ -82,6 +82,8 @@ function insertBlog($pdo, $fields) {
 
 	$query .= ')';
 
+	$fields = processDates($fields);
+
 	query($pdo, $query, $fields);
 }
 
@@ -142,13 +144,14 @@ function updateBlog($pdo, $fields) {
 
 	$query = rtrim($query, ',');
 
-	$query .= 'WHERE `id` = :primaryKey';
+	$query .= ' WHERE `id` = :primaryKey';
 
-	//set the :primaryKey variable
+	//Set the :primaryKey variable
 	$fields['primaryKey'] = $fields['id'];
 
-	query($pdo, $query, $fields);
+	$fields = processDates($fields);
 
+	query($pdo, $query, $fields);
 }
 
 
@@ -164,3 +167,13 @@ function deleteBlog($pdo, $id) {
   
 	query($pdo, 'DELETE FROM `blog` WHERE `id` = :id', $parameters);
   }
+
+  function processDates($fields) {
+	foreach ($fields as $key => $value) {
+		if ($value instanceof DateTime) {
+			$fields[$key] = $value->format('Y-m-d');
+		}
+	}
+
+	return $fields;
+}

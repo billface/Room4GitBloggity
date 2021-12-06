@@ -8,7 +8,8 @@ if (isset($_POST['blogtext'])) {
       insertBlog($pdo,[
         'blogheading' => $_POST['blogheading'],
         'blogtext' => $_POST['blogtext'],
-        'authorId' => 2
+        'authorId' => 2,
+        'blogdate' => new Datetime()
       ]);
 
       header('location: blogs.php');
