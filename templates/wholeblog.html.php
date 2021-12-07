@@ -22,6 +22,11 @@
               }
               ?>)
               <a href="editblog.php?id=<?=$blog['blogId']?>">Edit</a>
+              <form action="deleteblog.php" method="post">
+                <input type="hidden" name="id" value="<?=$blog['id']?>">
+                <input type="submit" value="Delete">
+              </form>
+              
   
   </blockquote>
   <blockquote>
@@ -42,7 +47,13 @@
                 echo '<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
               }
               ?>)
-              <a href="wholeblog.php?id=<?=$blog['blogId']?>&commentId=<?=$comment['id']?>">Edit</a></small><br>
+              <a href="wholeblog.php?id=<?=$blog['blogId']?>&commentId=<?=$comment['id']?>">Edit</a></small>
+              <form action="deletecomment.php" method="post">
+                <input type="hidden" name="id" value="<?=$comment['id']?>">
+                <input type="hidden" name="blogId" value="<?=$blog['blogId']?>">
+                <input type="submit" value="Delete">
+              </form>
+              <br>
 
   
 

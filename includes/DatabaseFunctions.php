@@ -203,6 +203,11 @@ function deleteBlog($pdo, $id) {
 	query($pdo, 'DELETE FROM `blog` WHERE `id` = :id', $parameters);
   }
 
+function deleteComment($pdo, $id) {
+	$parameters = [':id' => $id];
+  
+	query($pdo, 'DELETE FROM `comments` WHERE `id` = :id', $parameters);
+  }
   function processDates($fields) {
 	foreach ($fields as $key => $value) {
 		if ($value instanceof DateTime) {
