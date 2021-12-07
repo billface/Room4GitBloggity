@@ -20,7 +20,12 @@ try {
 		if (isset($_POST['commtext'])) {
 
 		// 1 currently represents the author id & blog id
-		insertComment($pdo, $_POST['commtext'], 2 , $_POST['commblogId']);
+		insertComment($pdo, [
+			'commtext' => $_POST['commtext'],
+			'authorId' => 2,
+			'commblogId' => $_POST['commblogId'],
+			'commdate' => new Datetime()
+		]);
 
 		
 		

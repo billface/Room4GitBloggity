@@ -18,7 +18,7 @@ function totalBlogs($pdo) {
 //used to display blogs on blogs.php
 function allBlogs($pdo) {
 
-	$blogs = query($pdo, 'SELECT `blog`.`id`, `blogheading`, `name`, `email`
+	$blogs = query($pdo, 'SELECT `blog`.`id`, `blogheading`, `blogdate`, `name`, `email`
           FROM `blog` INNER JOIN `author`
           ON `authorid` = `author`.`id`');
 
@@ -42,13 +42,28 @@ function wholeBlog($pdo, $id) {
 }
 
 //inserts comment on wholeblog.php
-function insertComment($pdo, $commtext, $authorId, $commblogId) {
-	$query = 'INSERT INTO `comments` (`commtext`, `commdate`, `authorid`, `commblogId`) 
-			  VALUES (:commtext, CURDATE(), :authorId, :commblogId)';
+function insertComment($pdo, $fields) {
+	$query = 'INSERT INTO `comments` (';
 
-	$parameters = [':commtext' => $commtext, ':authorId' => $authorId, ':commblogId' => $commblogId];
+	foreach ($fields as $key => $value) {
+		$query .= '`' . $key . '`,';
+	}
 
-	query($pdo, $query, $parameters);
+	$query = rtrim($query, ',');
+
+	$query .= ') VALUES (';
+
+	foreach ($fields as $key => $value) {
+		$query .= ':' . $key . ',';
+	}
+
+	$query = rtrim($query, ',');
+
+	$query .= ')';
+
+	$fields = processDates($fields);
+
+	query($pdo, $query, $fields);
 }
 /*
 //used on addblog.php
@@ -154,13 +169,33 @@ function updateBlog($pdo, $fields) {
 	query($pdo, $query, $fields);
 }
 
+function updateComment($pdo, $fields) {
+  
+	$query = 'UPDATE `comments` SET ';
 
+	foreach ($fields as $key => $value) {
+		$query .= '`' . $key . '` = :' . $key . ',';
+	}
+
+	$query = rtrim($query, ',');
+
+	$query .= ' WHERE `id` = :primaryKey';
+
+	//Set the :primaryKey variable
+	$fields['primaryKey'] = $fields['id'];
+
+	$fields = processDates($fields);
+
+	query($pdo, $query, $fields);
+}
+
+/*
 function updateComment($pdo, $commentsId, $commtext, $authorId) {
 	$parameters = [':commtext' => $commtext, ':authorId' => $authorId, ':id' => $commentsId];
   
 	query($pdo, 'UPDATE `comments` SET `authorId` = :authorId, `commtext` = :commtext, `commmoddate` = NOW() WHERE `id` = :id', $parameters);
   }
-
+*/
 // delete blog.php
 function deleteBlog($pdo, $id) {
 	$parameters = [':id' => $id];
@@ -171,7 +206,7 @@ function deleteBlog($pdo, $id) {
   function processDates($fields) {
 	foreach ($fields as $key => $value) {
 		if ($value instanceof DateTime) {
-			$fields[$key] = $value->format('Y-m-d');
+			$fields[$key] = $value->format('Y-m-d H:i:s');
 		}
 	}
 

@@ -7,7 +7,12 @@ try {
 
 		
 
-		updateComment($pdo, $_POST['commentsid'], $_POST['commtext'], 2);
+		updateComment($pdo, [
+			'id' => $_POST['commentsid'],
+			'commtext' => $_POST['commtext'],
+			'authorId' => 2,
+			'commmoddate' => new DateTime
+		]);
 
 		//header('location:blogs.php');
         header('location: wholeblog.php?id=' . $_POST['commblogId']);  

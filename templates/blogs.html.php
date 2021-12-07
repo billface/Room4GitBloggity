@@ -9,7 +9,12 @@
 
   (by <a href="mailto:<?php
               echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
-              echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>)
+              echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a> 
+              on 
+              <?php
+              $date = new DateTime($blog['blogdate']);
+              echo $date->format('jS F Y');
+              ?>)
 
   <a href="editblog.php?id=<?=$blog['id']?>">Edit</a>
   <br>

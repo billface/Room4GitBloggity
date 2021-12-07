@@ -8,11 +8,17 @@
               <?php echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>">
               <?php echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>
               on 
-              <?php echo htmlspecialchars($blog['blogdate'], ENT_QUOTES, 'UTF-8');?>
+              <?php
+              $date = new DateTime($blog['blogdate']);
+              echo $date->format('jS F Y');
+              ?>)
               
               <?php
               if (isset($blog['blogmoddate'])) {
-                echo '(Edited ' . htmlspecialchars($blog['blogmoddate'], ENT_QUOTES, 'UTF-8'). ')';
+                
+                $date = new DateTime($blog['blogmoddate']);
+                echo '<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
+                
               }
               ?>)
               <a href="editblog.php?id=<?=$blog['blogId']?>">Edit</a>
@@ -26,10 +32,14 @@
               echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
               echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>
               on 
-              <?php echo htmlspecialchars($comment['commdate'], ENT_QUOTES, 'UTF-8');?>)
+              <?php
+              $date = new DateTime($comment['commdate']);
+              echo $date->format('jS F Y');
+              ?>
               <?php 
               if (isset($comment['commmoddate'])) {
-                echo '(Edited ' . htmlspecialchars($comment['commmoddate'], ENT_QUOTES, 'UTF-8'). ')';
+                $date = new DateTime($comment['commmoddate']);
+                echo '<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
               }
               ?>)
               <a href="wholeblog.php?id=<?=$blog['blogId']?>&commentId=<?=$comment['id']?>">Edit</a></small><br>
