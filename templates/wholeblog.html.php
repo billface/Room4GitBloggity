@@ -84,7 +84,7 @@ if (isset($_GET['commentId'])) {
     echo
 		'<form action="editcomment.php" method="post">
 	<input type="hidden" name="commentsid" value="'.$comment2edit['id'].'">
-  <input type="hidden" name="commblogId" value="'.$blog['blogId'].'">
+  <input type="hidden" name="commblogId" value="'.$comment2edit['commblogid'].'">
     <label for="commtext">Type your comment here:</label>
     <textarea id="commtext" name="commtext" rows="3" cols="40">'.$comment2edit['commtext'].'</textarea>
     <input type="submit" value="Save">
