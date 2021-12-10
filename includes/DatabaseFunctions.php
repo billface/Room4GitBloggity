@@ -8,10 +8,9 @@ function query($pdo, $sql, $parameters = []) {
 	return $query;
 }
 //shows how many blogs have been added
-function totalBlogs($pdo) {
-	$query = query($pdo, 'SELECT COUNT(*) FROM `blog`');
+function total($pdo, $table) {
+	$query = query($pdo, 'SELECT COUNT(*) FROM `' . $table . '`');
 	$row = $query->fetch();
-
 	return $row[0];
 }
 
@@ -24,6 +23,18 @@ function allBlogs($pdo) {
 
 	return $blogs->fetchAll();
 
+}
+
+//displays comments on wholeblog.php
+function allComments($pdo, $id) {
+
+	$parameters = [':id' => $id];
+
+	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`, `commdate`, `commmoddate`
+          FROM `comments` INNER JOIN `author`
+          ON `authorid` = `author`.`id` WHERE `comments`.`commblogid` = :id', $parameters);
+
+	return $comments->fetchAll();
 }
 
 
@@ -41,9 +52,10 @@ function wholeBlog($pdo, $id) {
 	return $query->fetch();
 }
 
-//inserts comment on wholeblog.php
-function insertComment($pdo, $fields) {
-	$query = 'INSERT INTO `comments` (';
+
+
+function insert($pdo, $table, $fields) {
+	$query = 'INSERT INTO `' . $table . '` (';
 
 	foreach ($fields as $key => $value) {
 		$query .= '`' . $key . '`,';
@@ -53,41 +65,6 @@ function insertComment($pdo, $fields) {
 
 	$query .= ') VALUES (';
 
-	foreach ($fields as $key => $value) {
-		$query .= ':' . $key . ',';
-	}
-
-	$query = rtrim($query, ',');
-
-	$query .= ')';
-
-	$fields = processDates($fields);
-
-	query($pdo, $query, $fields);
-}
-/*
-//used on addblog.php
-function insertBlog($pdo, $blogheading, $blogtext,  $authorId) {
-	$query = 'INSERT INTO `blog` (`blogheading`, `blogtext`, `blogdate`, `authorId`) 
-			  VALUES (:blogheading, :blogtext, CURDATE(), :authorId)';
-
-	$parameters = [':blogheading' => $blogheading,':blogtext' => $blogtext, ':authorId' => $authorId ];
-
-	query($pdo, $query, $parameters);
-}
-*/
-
-//used on addblog.php
-function insertBlog($pdo, $fields) {
-	$query = 'INSERT INTO `blog` (';
-	
-	foreach ($fields as $key => $value) {
-		$query .= '`' . $key . '`,';
-	}
-
-	$query = rtrim($query, ',');
-
-	$query .= ') VALUES (';
 
 	foreach ($fields as $key => $value) {
 		$query .= ':' . $key . ',';
@@ -102,56 +79,23 @@ function insertBlog($pdo, $fields) {
 	query($pdo, $query, $fields);
 }
 
+function findById($pdo, $table, $primaryKey, $value) {
+	$query = 'SELECT * FROM `' . $table . '` WHERE `' . $primaryKey . '` = :value';
 
-//retrieves blogs for the editblog.php page
-function getBlog($pdo, $id) {
-	
-	//Create the array of `$parameters` for use in the `query` function
-	$parameters = [':id' => $id];
+	$parameters = [
+		'value' => $value
+	];
 
-	//call the query function and provide the `$parameters` array
-	$query = query($pdo, 'SELECT * FROM `blog` WHERE `id` = :id', $parameters);
-
-	return $query->fetch();
-}
-
-//displays comments on wholeblog.php
-function allComments($pdo, $id) {
-
-	$parameters = [':id' => $id];
-
-	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`, `commdate`, `commmoddate`
-          FROM `comments` INNER JOIN `author`
-          ON `authorid` = `author`.`id` WHERE `comments`.`commblogid` = :id', $parameters);
-
-	return $comments->fetchAll();
-}
-
-function getComment($pdo, $id) {
-	
-	//Create the array of `$parameters` for use in the `query` function
-	$parameters = [':id' => $id];
-
-	//call the query function and provide the `$parameters` array
-	$query = query($pdo, 'SELECT * FROM `comments` WHERE `id` = :id', $parameters);
+	$query = query($pdo, $query, $parameters);
 
 	return $query->fetch();
 }
 
-/*
-  //used on editblog.php
-function updateBlog($pdo, $blogId, $blogheading, $blogtext, $authorId) {
-	$parameters = [':blogheading' => $blogheading,':blogtext' => $blogtext, ':authorId' => $authorId, ':id' => $blogId];
-  
-	query($pdo, 'UPDATE `blog` SET `authorId` = :authorId, `blogheading` = :blogheading, `blogtext` = :blogtext, `blogmoddate` = NOW() WHERE `id` = :id', $parameters);
-  }
 
-  */
+function update($pdo, $table, $primaryKey, $fields) {
 
-//used on editblog.php
-function updateBlog($pdo, $fields) {
+	$query = ' UPDATE `' . $table .'` SET ';
 
-	$query = 'UPDATE `blog` SET ';
 
 	foreach ($fields as $key => $value) {
 		$query .= '`' . $key . '` = :' . $key . ',';
@@ -159,7 +103,7 @@ function updateBlog($pdo, $fields) {
 
 	$query = rtrim($query, ',');
 
-	$query .= ' WHERE `id` = :primaryKey';
+	$query .= ' WHERE `' . $primaryKey . '` = :primaryKey';
 
 	//Set the :primaryKey variable
 	$fields['primaryKey'] = $fields['id'];
@@ -169,45 +113,18 @@ function updateBlog($pdo, $fields) {
 	query($pdo, $query, $fields);
 }
 
-function updateComment($pdo, $fields) {
-  
-	$query = 'UPDATE `comments` SET ';
+function delete($pdo, $table, $primaryKey, $id ) {
+	$parameters = [':id' => $id];
 
-	foreach ($fields as $key => $value) {
-		$query .= '`' . $key . '` = :' . $key . ',';
-	}
-
-	$query = rtrim($query, ',');
-
-	$query .= ' WHERE `id` = :primaryKey';
-
-	//Set the :primaryKey variable
-	$fields['primaryKey'] = $fields['id'];
-
-	$fields = processDates($fields);
-
-	query($pdo, $query, $fields);
+	query($pdo, 'DELETE FROM `' . $table . '` WHERE `' . $primaryKey . '` = :id', $parameters);
 }
 
-/*
-function updateComment($pdo, $commentsId, $commtext, $authorId) {
-	$parameters = [':commtext' => $commtext, ':authorId' => $authorId, ':id' => $commentsId];
-  
-	query($pdo, 'UPDATE `comments` SET `authorId` = :authorId, `commtext` = :commtext, `commmoddate` = NOW() WHERE `id` = :id', $parameters);
-  }
-*/
-// delete blog.php
-function deleteBlog($pdo, $id) {
-	$parameters = [':id' => $id];
-  
-	query($pdo, 'DELETE FROM `blog` WHERE `id` = :id', $parameters);
-  }
+function findAll($pdo, $table) {
+	$result = query($pdo, 'SELECT * FROM `' . $table . '`');
 
-function deleteComment($pdo, $id) {
-	$parameters = [':id' => $id];
-  
-	query($pdo, 'DELETE FROM `comments` WHERE `id` = :id', $parameters);
-  }
+	return $result->fetchAll();
+}
+
   function processDates($fields) {
 	foreach ($fields as $key => $value) {
 		if ($value instanceof DateTime) {

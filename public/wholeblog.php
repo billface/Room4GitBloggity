@@ -20,7 +20,7 @@ try {
 		if (isset($_POST['commtext'])) {
 
 		// 1 currently represents the author id & blog id
-		insertComment($pdo, [
+		insert($pdo, 'comments', [
 			'commtext' => $_POST['commtext'],
 			'authorId' => 2,
 			'commblogId' => $_POST['commblogId'],
@@ -38,7 +38,8 @@ try {
 		else {
 			//if (isset($_GET['commentId'])) {
 			//	if (is_numeric($_GET['commentId'])) {
-			$comment2edit = getComment($pdo, $_GET['commentId']);
+			//$comment2edit = getComment($pdo, $_GET['commentId']);
+			$comment2edit = findById($pdo, 'comments', 'id', $_GET['commentId']);
 			//	}
 			//}
 

@@ -5,7 +5,7 @@ try {
   include __DIR__ . '/../includes/DatabaseFunctions.php';
 
   
-  deleteComment($pdo, $_POST['id']);
+  delete($pdo, 'comments', 'id', $_POST['id']);
   
   header('location: wholeblog.php?id=' . $_POST['blogId']);
   

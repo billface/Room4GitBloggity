@@ -7,7 +7,7 @@ try {
 
 		
 
-		updateComment($pdo, [
+		update($pdo, 'comments', 'id', [
 			'id' => $_POST['commentsid'],
 			'commtext' => $_POST['commtext'],
 			'authorId' => 2,

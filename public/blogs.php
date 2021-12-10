@@ -4,13 +4,26 @@ try {
   include __DIR__ . '/../includes/DatabaseConnection.php';
   include __DIR__ . '/../includes/DatabaseFunctions.php';
 
-  
 
-  $blogs = allBlogs($pdo);
+  $result = findAll($pdo, 'blog');
+
+  $blogs = [];
+	foreach ($result as $blog) {
+		$author = findById($pdo, 'author', 'id', $blog['authorid']);
+
+    $blogs[] = [
+			'id' => $blog['id'],
+			'blogheading' => $blog['blogheading'],
+			'blogdate' => $blog['blogdate'],
+			'name' => $author['name'],
+			'email' => $author['email']
+		];
+
+	}
 
   $title = 'Blog list';
 
-  $totalBlogs = totalBlogs($pdo);
+  $totalBlogs = total($pdo, 'blog');
 
   ob_start();
 
