@@ -9,9 +9,27 @@ try {
 		$blog = wholeBlog($pdo, $_GET['id']);
 
 		
-		
+		$result = findAll($pdo, 'comments');
+		//$result = findById($pdo, 'comments', 'commblogid', $_GET['id']);
 
-		$comments = allComments($pdo, $_GET['id']);
+
+		$comments = [];
+			foreach ($result as $comment) {
+				$author = findById($pdo, 'author', 'id', $comment['authorid']);
+
+			$comments[] = [
+					'id' => $comment['id'],
+					'commtext' => $comment['commtext'],
+					'commdate' => $comment['commdate'],
+					'commmoddate' => $comment['commmoddate'],
+					'commblogid' => $comment['commblogid'],
+					'name' => $author['name'],
+					'email' => $author['email']
+				];
+
+	}
+
+		
 
 		
 		
