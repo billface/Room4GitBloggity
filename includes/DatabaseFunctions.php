@@ -14,48 +14,6 @@ function total($pdo, $table) {
 	return $row[0];
 }
 
-//used to display blogs on blogs.php
-function allBlogs($pdo) {
-
-	$blogs = query($pdo, 'SELECT `blog`.`id`, `blogheading`, `blogdate`, `name`, `email`
-          FROM `blog` INNER JOIN `author`
-          ON `authorid` = `author`.`id`');
-
-	return $blogs->fetchAll();
-
-}
-
-
-
-//displays comments on wholeblog.php
-function allComments($pdo, $id) {
-
-	$parameters = [':id' => $id];
-
-	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`, `commdate`, `commmoddate`
-          FROM `comments` INNER JOIN `author`
-          ON `authorid` = `author`.`id` WHERE `comments`.`commblogid` = :id', $parameters);
-
-	return $comments->fetchAll();
-}
-
-
-//displays blog on wholeblog.php
-function wholeBlog($pdo, $id) {
-	
-	//Create the array of `$parameters` for use in the `query` function
-	$parameters = [':id' => $id];
-
-
-	//call the query function and provide the `$parameters` array
-	$query = query($pdo, 'SELECT blog.id AS blogId, author.id AS authorId , `blogheading`, `blogtext`, `blogdate`, `blogmoddate`, `name`, `email` FROM `blog` INNER JOIN `author`
-	ON `authorid` = `author`.`id`  WHERE `blog`.`id` = :id', $parameters);
-
-	return $query->fetch();
-}
-
-
-
 function insert($pdo, $table, $fields) {
 	$query = 'INSERT INTO `' . $table . '` (';
 
@@ -138,9 +96,6 @@ function delete($pdo, $table, $primaryKey, $id ) {
 
 	query($pdo, 'DELETE FROM `' . $table . '` WHERE `' . $primaryKey . '` = :id', $parameters);
 }
-
-
-
 
   function processDates($fields) {
 	foreach ($fields as $key => $value) {

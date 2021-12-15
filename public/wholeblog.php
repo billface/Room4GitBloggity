@@ -6,12 +6,29 @@ try {
     include __DIR__ . '/../includes/DatabaseConnection.php';
 	include __DIR__ . '/../includes/DatabaseFunctions.php';
 
-		$blog = wholeBlog($pdo, $_GET['id']);
+
+		$result = findAllById($pdo, 'blog', 'id', $_GET['id']);
+
+		$blogs = [];
+			foreach ($result as $blog) {
+				$author = findById($pdo, 'author', 'id', $blog['authorid']);
+
+			$blogs[] = [
+					'id' => $blog['id'],
+					'blogheading' => $blog['blogheading'],
+					'blogtext' => $blog['blogtext'],
+					'blogdate' => $blog['blogdate'],
+					'blogmoddate' => $blog['blogmoddate'],
+					'name' => $author['name'],
+					'email' => $author['email']
+				];
+
+			}
 		
-		$result = findAllById($pdo, 'comments', 'commblogid', $_GET['id']);
+		$resultComm = findAllById($pdo, 'comments', 'commblogid', $_GET['id']);
 
 		$comments = [];
-			foreach ($result as $comment) {
+			foreach ($resultComm as $comment) {
 				$author = findById($pdo, 'author', 'id', $comment['authorid']);
 
 			$comments[] = [
