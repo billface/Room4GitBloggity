@@ -25,6 +25,8 @@ function allBlogs($pdo) {
 
 }
 
+
+
 //displays comments on wholeblog.php
 function allComments($pdo, $id) {
 
@@ -91,6 +93,24 @@ function findById($pdo, $table, $primaryKey, $value) {
 	return $query->fetch();
 }
 
+function findAllById($pdo, $table, $primaryKey, $value) {
+	$query = 'SELECT * FROM `' . $table . '` WHERE `' . $primaryKey . '` = :value';
+
+	$parameters = [ 
+		'value' => $value
+	];
+
+	$query = query($pdo, $query, $parameters);
+
+	return $query->fetchAll();
+}
+
+function findAll($pdo, $table) {
+	$result = query($pdo, 'SELECT * FROM `' . $table . '`');
+
+	return $result->fetchAll();
+}
+
 
 function update($pdo, $table, $primaryKey, $fields) {
 
@@ -119,11 +139,8 @@ function delete($pdo, $table, $primaryKey, $id ) {
 	query($pdo, 'DELETE FROM `' . $table . '` WHERE `' . $primaryKey . '` = :id', $parameters);
 }
 
-function findAll($pdo, $table) {
-	$result = query($pdo, 'SELECT * FROM `' . $table . '`');
 
-	return $result->fetchAll();
-}
+
 
   function processDates($fields) {
 	foreach ($fields as $key => $value) {

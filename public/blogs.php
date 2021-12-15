@@ -5,6 +5,7 @@ try {
   include __DIR__ . '/../includes/DatabaseFunctions.php';
 
 
+
   $result = findAll($pdo, 'blog');
 
   $blogs = [];

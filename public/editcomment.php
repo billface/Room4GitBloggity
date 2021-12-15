@@ -14,14 +14,12 @@ try {
 			'commmoddate' => new DateTime
 		]);
 
-		//header('location:blogs.php');
         header('location: wholeblog.php?id=' . $_POST['commblogId']);  
 
 	}
 	else {
 
-		$comment = getComment($pdo, $_GET['id']);
-
+		$comment = findById($pdo, 'blog', 'id', $_GET['id']);
 		$title = 'Edit comment';
 
 		ob_start();

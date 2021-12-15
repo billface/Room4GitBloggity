@@ -7,11 +7,8 @@ try {
 	include __DIR__ . '/../includes/DatabaseFunctions.php';
 
 		$blog = wholeBlog($pdo, $_GET['id']);
-
 		
-		$result = findAll($pdo, 'comments');
-		//$result = findById($pdo, 'comments', 'commblogid', $_GET['id']);
-
+		$result = findAllById($pdo, 'comments', 'commblogid', $_GET['id']);
 
 		$comments = [];
 			foreach ($result as $comment) {
@@ -21,19 +18,14 @@ try {
 					'id' => $comment['id'],
 					'commtext' => $comment['commtext'],
 					'commdate' => $comment['commdate'],
-					'commmoddate' => $comment['commmoddate'],
 					'commblogid' => $comment['commblogid'],
+					'commmoddate' => $comment['commmoddate'],
 					'name' => $author['name'],
 					'email' => $author['email']
 				];
-
-	}
-
 		
 
-		
-		
-		
+			}
 
 		if (isset($_POST['commtext'])) {
 
@@ -44,9 +36,7 @@ try {
 			'commblogId' => $_POST['commblogId'],
 			'commdate' => new Datetime()
 		]);
-
-		
-		
+	
 		//head back to the current page after inserting comment
 		header('location: '.$_SERVER['PHP_SELF'] . '?id=' . $_POST['commblogId']);
 		die;
@@ -54,13 +44,8 @@ try {
 		}
 
 		else {
-			//if (isset($_GET['commentId'])) {
-			//	if (is_numeric($_GET['commentId'])) {
-			//$comment2edit = getComment($pdo, $_GET['commentId']);
 			$comment2edit = findById($pdo, 'comments', 'id', $_GET['commentId']);
-			//	}
-			//}
-
+			
 		$title = 'Whole blog';
 
 

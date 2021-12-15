@@ -31,6 +31,8 @@
   </blockquote>
   <blockquote>
   <strong>Comments</strong><br>
+
+  
   <?php foreach($comments as $comment): ?>
  <small> <?=htmlspecialchars($comment['commtext'], ENT_QUOTES, 'UTF-8')?>
  (by <a href="mailto:<?php
@@ -39,11 +41,11 @@
               on 
               <?php
               $date = new DateTime($comment['commdate']);
-              echo $date->format('jS F Y');
+                echo $date->format('jS F Y');
               ?>
               <?php 
               if (isset($comment['commmoddate'])) {
-                $date = new DateTime($comment['commmoddate']);
+              $date = new DateTime($comment['commmoddate']);
                 echo '<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
               }
               ?>)
@@ -63,23 +65,9 @@
 
 <?php
 
-//cleans get variable if use on form
-/*
-if (is_numeric($_GET['id'])) {
-	$commBlogIdValueForForm = $_GET['id'];
-} else {
-	$commBlogIdValueForForm = '';
-}
-
-*/
-
-?>
-<?php
-
 
 
 if (isset($_GET['commentId'])) {
-	//if (is_numeric($_GET['commentId'])) {
 
     echo
 		'<form action="editcomment.php" method="post">
@@ -91,11 +79,7 @@ if (isset($_GET['commentId'])) {
 </form>';
 
 		
-	//}
-//	else {
-		# load error, it's set but we don't have a valid comment id format
-		
-	//}
+
 } else {
   echo '
 	<form action="" method="post">
