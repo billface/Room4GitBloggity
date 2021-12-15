@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.7.34)
 # Database: room4Two
-# Generation Time: 2021-12-01 12:14:13 +0000
+# Generation Time: 2021-12-15 14:30:09 +0000
 # ************************************************************
 
 
@@ -51,26 +51,22 @@ DROP TABLE IF EXISTS `blog`;
 
 CREATE TABLE `blog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `blogheading` text,
-  `blogtext` text,
-  `blogdate` date DEFAULT NULL,
-  `authorid` int(11) DEFAULT NULL,
-  `blogmoddate` datetime DEFAULT NULL,
+  `blogHeading` text,
+  `blogText` text,
+  `blogDate` date DEFAULT NULL,
+  `authorId` int(11) DEFAULT NULL,
+  `blogModDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 LOCK TABLES `blog` WRITE;
 /*!40000 ALTER TABLE `blog` DISABLE KEYS */;
 
-INSERT INTO `blog` (`id`, `blogheading`, `blogtext`, `blogdate`, `authorid`, `blogmoddate`)
+INSERT INTO `blog` (`id`, `blogHeading`, `blogText`, `blogDate`, `authorId`, `blogModDate`)
 VALUES
-	(1,'heading 1 EDITED','First post very informative. Oops typos. More typos. \r\n','2021-10-19',2,'2021-12-01 11:02:22'),
+	(1,'heading 1 edited fice','First post very informative. No more typos. Awesome it reverts to the blog page. Where I can edit it further. How about a date?\r\n','2021-10-19',2,'2021-12-15 12:49:12'),
 	(2,'heading 2 EDITED','Second post less informative. How about now?','2021-10-19',2,'2021-12-01 11:02:52'),
-	(18,'Dave Phillips EDITED','Adding a blog','2021-11-22',2,'2021-12-01 11:03:10'),
-	(19,'Is this still Dave? EDITED','author ID 2?','2021-11-22',2,'2021-12-01 11:03:47'),
-	(20,'Blog with mod date?','???','2021-11-23',2,'2021-11-23 00:00:00'),
-	(21,'blog with datetime?','12.15','2021-11-23',2,'2021-11-23 12:15:10'),
-	(22,'This is a new blog','That should have a 12.19 blogmoddate','2021-11-23',2,'2021-11-23 12:19:48');
+	(31,'Running out of blogs','vefbiujvfbi','2021-12-15',2,NULL);
 
 /*!40000 ALTER TABLE `blog` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -83,27 +79,27 @@ DROP TABLE IF EXISTS `comments`;
 
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `commtext` text,
-  `commdate` date DEFAULT NULL,
-  `authorid` int(11) DEFAULT NULL,
-  `commblogid` int(11) DEFAULT NULL,
-  `commmoddate` datetime DEFAULT NULL,
+  `commText` text,
+  `commDate` date DEFAULT NULL,
+  `authorId` int(11) DEFAULT NULL,
+  `commBlogId` int(11) DEFAULT NULL,
+  `commModDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
 
-INSERT INTO `comments` (`id`, `commtext`, `commdate`, `authorid`, `commblogid`, `commmoddate`)
+INSERT INTO `comments` (`id`, `commText`, `commDate`, `authorId`, `commBlogId`, `commModDate`)
 VALUES
-	(1,'This is a comment','2021-11-17',1,1,NULL),
-	(2,'A comment on the macbook super pro super','2021-11-25',2,1,'2021-11-30 12:55:19'),
-	(3,'this is a comment. It sure is','2021-11-30',2,2,'2021-11-30 12:51:48'),
-	(4,'add a new comment','2021-11-30',2,1,NULL),
-	(5,'This is a comment \r\n','2021-12-01',2,19,NULL),
-	(6,'No comments?','2021-12-01',2,18,NULL),
-	(7,'How about now. When I edit you? Again','2021-12-01',2,2,'2021-12-01 12:09:28'),
-	(8,'This is a comment that I\'m going to edit. Where do I go?','2021-12-01',2,18,'2021-12-01 11:33:20');
+	(1,'This is a comment is edited, is it?\r\n','2021-11-17',2,1,'2021-12-13 14:21:36'),
+	(30,'Another Comment. edited','2021-12-10',2,2,'2021-12-13 14:21:51'),
+	(31,'Adding a comment on 1 edited\r\n','2021-12-14',2,1,'2021-12-14 13:24:44'),
+	(32,'Adding a comment on 2','2021-12-14',2,2,NULL),
+	(33,'Adding a comment on 3','2021-12-14',2,18,NULL),
+	(35,'Another comment on 2','2021-12-14',2,2,NULL),
+	(36,'Another comment on 3','2021-12-14',2,18,NULL),
+	(44,'Adding a comment which I won\'t edit','2021-12-15',2,27,NULL);
 
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;

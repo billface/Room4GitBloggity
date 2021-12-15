@@ -1,15 +1,15 @@
 <?php
-if (isset($_POST['blogtext'])) {
+if (isset($_POST['blogText'])) {
   try {
     include __DIR__ . '/../includes/DatabaseConnection.php';
     include __DIR__ . '/../includes/DatabaseFunctions.php';
 
       // 1 currently represents the author id
       insert($pdo, 'blog', [
-        'blogheading' => $_POST['blogheading'],
-        'blogtext' => $_POST['blogtext'],
+        'blogHeading' => $_POST['blogHeading'],
+        'blogText' => $_POST['blogText'],
         'authorId' => 2,
-        'blogdate' => new Datetime()
+        'blogDate' => new Datetime()
       ]);
 
       header('location: blogs.php');

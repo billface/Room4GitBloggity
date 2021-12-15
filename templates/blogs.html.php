@@ -6,14 +6,14 @@
   <p>
   <!--hidden form field so as not to display id of each blog
       form and input tags aren't outside the blockquote to simplify CSS -->
-  <?=htmlspecialchars($blog['blogheading'], ENT_QUOTES, 'UTF-8')?>
+  <?=htmlspecialchars($blog['blogHeading'], ENT_QUOTES, 'UTF-8')?>
 
   (by <a href="mailto:<?php
               echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
               echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a> 
               on 
               <?php
-              $date = new DateTime($blog['blogdate']);
+              $date = new DateTime($blog['blogDate']);
               echo $date->format('jS F Y');
               ?>)
 
@@ -21,7 +21,7 @@
   <br>
   <a href="wholeblog.php?id=<?=$blog['id']?>">See more</a>
   <form action="deleteblog.php" method="post">
-    <input type="hidden" name="id" value="<?=$blog['id']?>">
+    <input type="hidden" name="blogId" value="<?=$blog['id']?>">
     <input type="submit" value="Delete">
   </form>
   </p>

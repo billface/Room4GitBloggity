@@ -10,12 +10,12 @@ try {
 
   $blogs = [];
 	foreach ($result as $blog) {
-		$author = findById($pdo, 'author', 'id', $blog['authorid']);
+		$author = findById($pdo, 'author', 'id', $blog['authorId']);
 
     $blogs[] = [
 			'id' => $blog['id'],
-			'blogheading' => $blog['blogheading'],
-			'blogdate' => $blog['blogdate'],
+			'blogHeading' => $blog['blogHeading'],
+			'blogDate' => $blog['blogDate'],
 			'name' => $author['name'],
 			'email' => $author['email']
 		];

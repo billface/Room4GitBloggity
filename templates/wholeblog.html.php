@@ -1,29 +1,29 @@
 <?php foreach($blogs as $blog): ?>
 <blockquote>
 <h2>
-  <?=htmlspecialchars($blog['blogheading'], ENT_QUOTES, 'UTF-8')?>
+  <?=htmlspecialchars($blog['blogHeading'], ENT_QUOTES, 'UTF-8')?>
 </h2>
-  <?=htmlspecialchars($blog['blogtext'], ENT_QUOTES, 'UTF-8')?><br>
+  <?=htmlspecialchars($blog['blogText'], ENT_QUOTES, 'UTF-8')?><br>
   (by <a href="mailto:
               <?php echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>">
               <?php echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>
               on 
               <?php
-              $date = new DateTime($blog['blogdate']);
+              $date = new DateTime($blog['blogDate']);
               echo $date->format('jS F Y');
               ?>
               
               <?php
-              if (isset($blog['blogmoddate'])) {
+              if (isset($blog['blogModDate'])) {
                 
-                $date = new DateTime($blog['blogmoddate']);
+                $date = new DateTime($blog['blogModDate']);
                 echo '<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
                 
               }
               ?>)
               <a href="editblog.php?id=<?=$blog['id']?>">Edit</a>
               <form action="deleteblog.php" method="post">
-                <input type="hidden" name="id" value="<?=$blog['id']?>">
+                <input type="hidden" name="blogId" value="<?=$blog['id']?>">
                 <input type="submit" value="Delete">
               </form>
 
@@ -36,24 +36,24 @@
 
   
   <?php foreach($comments as $comment): ?>
- <small> <?=htmlspecialchars($comment['commtext'], ENT_QUOTES, 'UTF-8')?>
+ <small> <?=htmlspecialchars($comment['commText'], ENT_QUOTES, 'UTF-8')?>
  (by <a href="mailto:<?php
               echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
               echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a>
               on 
               <?php
-              $date = new DateTime($comment['commdate']);
+              $date = new DateTime($comment['commDate']);
                 echo $date->format('jS F Y');
               ?>
               <?php 
-              if (isset($comment['commmoddate'])) {
-              $date = new DateTime($comment['commmoddate']);
+              if (isset($comment['commModDate'])) {
+              $date = new DateTime($comment['commModDate']);
                 echo '<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
               }
               ?>)
               <a href="wholeblog.php?id=<?=$blog['id']?>&commentId=<?=$comment['id']?>">Edit</a></small>
               <form action="deletecomment.php" method="post">
-                <input type="hidden" name="id" value="<?=$comment['id']?>">
+                <input type="hidden" name="commId" value="<?=$comment['id']?>">
                 <input type="hidden" name="blogId" value="<?=$blog['id']?>">
                 <input type="submit" value="Delete">
               </form>
@@ -73,10 +73,10 @@ if (isset($_GET['commentId'])) {
 
     echo
 		'<form action="editcomment.php" method="post">
-	<input type="hidden" name="commentsid" value="'.$comment2edit['id'].'">
-  <input type="hidden" name="commblogId" value="'.$comment2edit['commblogid'].'">
-    <label for="commtext">Type your comment here:</label>
-    <textarea id="commtext" name="commtext" rows="3" cols="40">'.$comment2edit['commtext'].'</textarea>
+	<input type="hidden" name="commentId" value="'.$comment2edit['id'].'">
+  <input type="hidden" name="commBlogId" value="'.$comment2edit['commBlogId'].'">
+    <label for="commText">Type your comment here:</label>
+    <textarea id="commText" name="commText" rows="3" cols="40">'.$comment2edit['commText'].'</textarea>
     <input type="submit" value="Save">
 </form>';
 
@@ -86,9 +86,9 @@ if (isset($_GET['commentId'])) {
   echo '
 	<form action="" method="post">
     
-    <label for="commtext">Type your comment here:</label>
-    <textarea id="commtext" name="commtext" rows="3" cols="40"></textarea>
-    <input type="hidden" name="commblogId" value="'.$blog['id'].'">
+    <label for="commText">Type your comment here:</label>
+    <textarea id="commText" name="commText" rows="3" cols="40"></textarea>
+    <input type="hidden" name="commBlogId" value="'.$blog['id'].'">
 
     <input type="submit" value="Add"> 
     <br>

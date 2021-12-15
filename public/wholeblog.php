@@ -11,32 +11,32 @@ try {
 
 		$blogs = [];
 			foreach ($result as $blog) {
-				$author = findById($pdo, 'author', 'id', $blog['authorid']);
+				$author = findById($pdo, 'author', 'id', $blog['authorId']);
 
 			$blogs[] = [
 					'id' => $blog['id'],
-					'blogheading' => $blog['blogheading'],
-					'blogtext' => $blog['blogtext'],
-					'blogdate' => $blog['blogdate'],
-					'blogmoddate' => $blog['blogmoddate'],
+					'blogHeading' => $blog['blogHeading'],
+					'blogText' => $blog['blogText'],
+					'blogDate' => $blog['blogDate'],
+					'blogModDate' => $blog['blogModDate'],
 					'name' => $author['name'],
 					'email' => $author['email']
 				];
 
 			}
 		
-		$resultComm = findAllById($pdo, 'comments', 'commblogid', $_GET['id']);
+		$resultComm = findAllById($pdo, 'comments', 'commBlogId', $_GET['id']);
 
 		$comments = [];
 			foreach ($resultComm as $comment) {
-				$author = findById($pdo, 'author', 'id', $comment['authorid']);
+				$author = findById($pdo, 'author', 'id', $comment['authorId']);
 
 			$comments[] = [
 					'id' => $comment['id'],
-					'commtext' => $comment['commtext'],
-					'commdate' => $comment['commdate'],
-					'commblogid' => $comment['commblogid'],
-					'commmoddate' => $comment['commmoddate'],
+					'commText' => $comment['commText'],
+					'commDate' => $comment['commDate'],
+					'commBlogId' => $comment['commBlogId'],
+					'commModDate' => $comment['commModDate'],
 					'name' => $author['name'],
 					'email' => $author['email']
 				];
@@ -44,18 +44,18 @@ try {
 
 			}
 
-		if (isset($_POST['commtext'])) {
+		if (isset($_POST['commText'])) {
 
 		// 1 currently represents the author id & blog id
 		insert($pdo, 'comments', [
-			'commtext' => $_POST['commtext'],
+			'commText' => $_POST['commText'],
 			'authorId' => 2,
-			'commblogId' => $_POST['commblogId'],
-			'commdate' => new Datetime()
+			'commBlogId' => $_POST['commBlogId'],
+			'commDate' => new Datetime()
 		]);
 	
 		//head back to the current page after inserting comment
-		header('location: '.$_SERVER['PHP_SELF'] . '?id=' . $_POST['commblogId']);
+		header('location: '.$_SERVER['PHP_SELF'] . '?id=' . $_POST['commBlogId']);
 		die;
 
 		}
