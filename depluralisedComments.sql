@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.7.34)
 # Database: room4Two
-# Generation Time: 2021-12-15 14:30:09 +0000
+# Generation Time: 2021-12-17 16:01:32 +0000
 # ************************************************************
 
 
@@ -53,7 +53,7 @@ CREATE TABLE `blog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `blogHeading` text,
   `blogText` text,
-  `blogDate` date DEFAULT NULL,
+  `blogDate` datetime DEFAULT NULL,
   `authorId` int(11) DEFAULT NULL,
   `blogModDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -64,20 +64,20 @@ LOCK TABLES `blog` WRITE;
 
 INSERT INTO `blog` (`id`, `blogHeading`, `blogText`, `blogDate`, `authorId`, `blogModDate`)
 VALUES
-	(1,'heading 1 edited fice','First post very informative. No more typos. Awesome it reverts to the blog page. Where I can edit it further. How about a date?\r\n','2021-10-19',2,'2021-12-15 12:49:12'),
-	(2,'heading 2 EDITED','Second post less informative. How about now?','2021-10-19',2,'2021-12-01 11:02:52'),
-	(31,'Running out of blogs','vefbiujvfbi','2021-12-15',2,NULL);
+	(1,'heading 1 editted twice','First post very informative. No more typos. Awesome it reverts to the blog page. Where I can edit it further. How about a date???How aboout header\r\n\r\n','2021-12-16 12:18:09',2,'2021-12-17 11:16:16'),
+	(2,'heading 2 EDITED?','Second post less informative. How about now??','2021-10-19 00:00:00',2,'2021-12-17 09:33:34'),
+	(42,'Adding a new blog','To test it all out edit','2021-12-17 15:09:59',2,'2021-12-17 15:10:12');
 
 /*!40000 ALTER TABLE `blog` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
-# Dump of table comments
+# Dump of table comment
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `comments`;
+DROP TABLE IF EXISTS `comment`;
 
-CREATE TABLE `comments` (
+CREATE TABLE `comment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `commText` text,
   `commDate` date DEFAULT NULL,
@@ -87,21 +87,25 @@ CREATE TABLE `comments` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `comments` WRITE;
-/*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+LOCK TABLES `comment` WRITE;
+/*!40000 ALTER TABLE `comment` DISABLE KEYS */;
 
-INSERT INTO `comments` (`id`, `commText`, `commDate`, `authorId`, `commBlogId`, `commModDate`)
+INSERT INTO `comment` (`id`, `commText`, `commDate`, `authorId`, `commBlogId`, `commModDate`)
 VALUES
 	(1,'This is a comment is edited, is it?\r\n','2021-11-17',2,1,'2021-12-13 14:21:36'),
 	(30,'Another Comment. edited','2021-12-10',2,2,'2021-12-13 14:21:51'),
 	(31,'Adding a comment on 1 edited\r\n','2021-12-14',2,1,'2021-12-14 13:24:44'),
 	(32,'Adding a comment on 2','2021-12-14',2,2,NULL),
 	(33,'Adding a comment on 3','2021-12-14',2,18,NULL),
-	(35,'Another comment on 2','2021-12-14',2,2,NULL),
 	(36,'Another comment on 3','2021-12-14',2,18,NULL),
-	(44,'Adding a comment which I won\'t edit','2021-12-15',2,27,NULL);
+	(44,'Adding a comment which I won\'t edit','2021-12-15',2,27,NULL),
+	(46,'adding a comment','2021-12-16',2,1,NULL),
+	(47,'Adding a comment','2021-12-17',2,41,NULL),
+	(48,'Adding a new comment with save','2021-12-17',2,41,NULL),
+	(52,'Nice to see you, to see you nice','2021-12-17',2,42,'2021-12-17 15:17:02'),
+	(54,'Adding a comment','2021-12-17',2,1,NULL);
 
-/*!40000 ALTER TABLE `comments` ENABLE KEYS */;
+/*!40000 ALTER TABLE `comment` ENABLE KEYS */;
 UNLOCK TABLES;
 
 

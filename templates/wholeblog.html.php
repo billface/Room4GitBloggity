@@ -70,10 +70,10 @@ if (isset($_GET['commentId'])) {
 
     echo
 		'<form action="editcomment.php" method="post">
-	    <input type="hidden" name="comments[id]" value="'.$comment2edit['id'].'">
-      <input type="hidden" name="comments[commBlogId]" value="'.$comment2edit['commBlogId'].'">
+	    <input type="hidden" name="comment[id]" value="'.$comment2edit['id'].'">
+      <input type="hidden" name="comment[commBlogId]" value="'.$comment2edit['commBlogId'].'">
       <label for="commText">Type your comment here:</label>
-      <textarea id="commText" name="comments[commText]" rows="3" cols="40">'.$comment2edit['commText'].'</textarea>
+      <textarea id="commText" name="comment[commText]" rows="3" cols="40">'.$comment2edit['commText'].'</textarea>
       <input type="submit" value="Save">
     </form>';
 
@@ -84,8 +84,8 @@ if (isset($_GET['commentId'])) {
     <form action="" method="post">
       
       <label for="commText">Type your comment here:</label>
-      <textarea id="commText" name="comments[commText]" rows="3" cols="40"></textarea>
-      <input type="hidden" name="comments[commBlogId]" value="'.$blog['id'].'">
+      <textarea id="commText" name="comment[commText]" rows="3" cols="40"></textarea>
+      <input type="hidden" name="comment[commBlogId]" value="'.$blog['id'].'">
       <input type="hidden" name="commBlogId" value="'.$blog['id'].'">
 
       <input type="submit" value="Add"> 

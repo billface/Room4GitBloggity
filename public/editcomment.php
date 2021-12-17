@@ -3,15 +3,15 @@ include __DIR__ . '/../includes/DatabaseConnection.php';
 include __DIR__ . '/../includes/DatabaseFunctions.php';
 
 try {
-		if (isset($_POST['comments'])) {
+		if (isset($_POST['comment'])) {
 
-			$comments = $_POST['comments'];
-			$comments['authorId'] = 2;
-			$comments['commModDate'] = new DateTime();
+			$comment = $_POST['comment'];
+			$comment['authorId'] = 2;
+			$comment['commModDate'] = new DateTime();
 
-			save($pdo, 'comments', 'id',  $comments);
+			save($pdo, 'comment', 'id',  $comment);
 
-        	header('location: wholeblog.php?id=' . $comments['commBlogId']);  
+        	header('location: wholeblog.php?id=' . $comment['commBlogId']);  
 
 		}
 		else {

@@ -25,7 +25,7 @@ try {
 
 			}
 		
-		$resultComm = findAllById($pdo, 'comments', 'commBlogId', $_GET['id']);
+		$resultComm = findAllById($pdo, 'comment', 'commBlogId', $_GET['id']);
 
 		$comments = [];
 			foreach ($resultComm as $comment) {
@@ -44,16 +44,16 @@ try {
 
 		}
 
-		if (isset($_POST['comments'])) {
+		if (isset($_POST['comment'])) {
 
 		// 1 currently represents the author id & blog id
 		
-			$comments = $_POST['comments'];
-			$comments['authorId'] = 2;
-			$comments['commDate'] = new Datetime();
+			$comment = $_POST['comment'];
+			$comment['authorId'] = 2;
+			$comment['commDate'] = new Datetime();
 	
 
-			save($pdo, 'comments', 'id', $comments);
+			save($pdo, 'comment', 'id', $comment);
 		
 			//head back to the current page after inserting comment
 			header('location: '.$_SERVER['PHP_SELF'] . '?id=' . $_POST['commBlogId']);
@@ -65,7 +65,7 @@ try {
 
 			if (isset($_GET['commentId'])) {
 				
-			$comment2edit = findById($pdo, 'comments', 'id', $_GET['commentId']);
+			$comment2edit = findById($pdo, 'comment', 'id', $_GET['commentId']);
 
 			}
 			
