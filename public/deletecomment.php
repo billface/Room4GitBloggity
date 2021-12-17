@@ -6,7 +6,7 @@ try {
 
   
   delete($pdo, 'comments', 'id', $_POST['commId']);
-  
+   
   header('location: wholeblog.php?id=' . $_POST['blogId']);
   
 }

@@ -11,13 +11,11 @@
               <?php
               $date = new DateTime($blog['blogDate']);
               echo $date->format('jS F Y');
-              ?>
               
-              <?php
               if (isset($blog['blogModDate'])) {
                 
                 $date = new DateTime($blog['blogModDate']);
-                echo '<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
+                echo ' (<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
                 
               }
               ?>)
@@ -44,11 +42,10 @@
               <?php
               $date = new DateTime($comment['commDate']);
                 echo $date->format('jS F Y');
-              ?>
-              <?php 
+              
               if (isset($comment['commModDate'])) {
               $date = new DateTime($comment['commModDate']);
-                echo '<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
+                echo ' (<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
               }
               ?>)
               <a href="wholeblog.php?id=<?=$blog['id']?>&commentId=<?=$comment['id']?>">Edit</a></small>
@@ -73,26 +70,27 @@ if (isset($_GET['commentId'])) {
 
     echo
 		'<form action="editcomment.php" method="post">
-	<input type="hidden" name="commentId" value="'.$comment2edit['id'].'">
-  <input type="hidden" name="commBlogId" value="'.$comment2edit['commBlogId'].'">
-    <label for="commText">Type your comment here:</label>
-    <textarea id="commText" name="commText" rows="3" cols="40">'.$comment2edit['commText'].'</textarea>
-    <input type="submit" value="Save">
-</form>';
+	    <input type="hidden" name="comments[id]" value="'.$comment2edit['id'].'">
+      <input type="hidden" name="comments[commBlogId]" value="'.$comment2edit['commBlogId'].'">
+      <label for="commText">Type your comment here:</label>
+      <textarea id="commText" name="comments[commText]" rows="3" cols="40">'.$comment2edit['commText'].'</textarea>
+      <input type="submit" value="Save">
+    </form>';
 
 		
 
 } else {
   echo '
-	<form action="" method="post">
-    
-    <label for="commText">Type your comment here:</label>
-    <textarea id="commText" name="commText" rows="3" cols="40"></textarea>
-    <input type="hidden" name="commBlogId" value="'.$blog['id'].'">
+    <form action="" method="post">
+      
+      <label for="commText">Type your comment here:</label>
+      <textarea id="commText" name="comments[commText]" rows="3" cols="40"></textarea>
+      <input type="hidden" name="comments[commBlogId]" value="'.$blog['id'].'">
+      <input type="hidden" name="commBlogId" value="'.$blog['id'].'">
 
-    <input type="submit" value="Add"> 
-    <br>
-</form> ';
+      <input type="submit" value="Add"> 
+      <br>
+    </form> ';
 }
 
 ?>

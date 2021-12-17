@@ -3,24 +3,25 @@ include __DIR__ . '/../includes/DatabaseConnection.php';
 include __DIR__ . '/../includes/DatabaseFunctions.php';
 
 try {
-		if (isset($_POST['blogText'])) {
 
-		update($pdo, 'blog', 'id',  [
-				'id' => $_POST['blogId'],
-				'blogHeading' => $_POST['blogHeading'],
-				'blogText' => $_POST['blogText'], 
-				'authorId' => 2,
-				'blogModDate' => new DateTime
-			]);
+	if (isset($_POST['blog'])) {
+		
+		$blog = $_POST['blog'];
+		//the above is from form, below is others
+		$blog['blogModDate'] = new DateTime();
+		$blog['authorId'] = 2;
 
-		header('location: wholeblog.php?id=' . $_POST['blogId']);
-		//header('location: blogs.php');
-		die;  
+		save($pdo, 'blog', 'id',  $blog);
 
+		header('location: wholeblog.php?id=' . $blog['id']);
+	
 	}
+
 	else {
 
+	
 		$blog = findById($pdo, 'blog', 'id', $_GET['id']);
+
 
 		$title = 'Edit blog';
 

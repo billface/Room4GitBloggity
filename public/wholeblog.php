@@ -42,31 +42,34 @@ try {
 				];
 		
 
-			}
+		}
 
-		if (isset($_POST['commText'])) {
+		if (isset($_POST['comments'])) {
 
 		// 1 currently represents the author id & blog id
-		insert($pdo, 'comments', [
-			'commText' => $_POST['commText'],
-			'authorId' => 2,
-			'commBlogId' => $_POST['commBlogId'],
-			'commDate' => new Datetime()
-		]);
+		
+			$comments = $_POST['comments'];
+			$comments['authorId'] = 2;
+			$comments['commDate'] = new Datetime();
 	
-		//head back to the current page after inserting comment
-		header('location: '.$_SERVER['PHP_SELF'] . '?id=' . $_POST['commBlogId']);
-		die;
+
+			save($pdo, 'comments', 'id', $comments);
+		
+			//head back to the current page after inserting comment
+			header('location: '.$_SERVER['PHP_SELF'] . '?id=' . $_POST['commBlogId']);
+			die;
 
 		}
 
 		else {
+
+			if (isset($_GET['commentId'])) {
+				
 			$comment2edit = findById($pdo, 'comments', 'id', $_GET['commentId']);
+
+			}
 			
 		$title = 'Whole blog';
-
-
-			
 
 		ob_start();
 
@@ -74,7 +77,7 @@ try {
 
 		$output = ob_get_clean();
 
-	}
+		}
 	}
 
 catch (PDOException $e) {
