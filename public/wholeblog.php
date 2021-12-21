@@ -4,14 +4,18 @@
 try {
 
     include __DIR__ . '/../includes/DatabaseConnection.php';
-	include __DIR__ . '/../includes/DatabaseFunctions.php';
+	include __DIR__ . '/../classes/DatabaseTable.php';
+
+	$blogsTable = new DatabaseTable($pdo, 'blog', 'id');
+	$authorsTable = new DatabaseTable($pdo, 'author', 'id');
+	$commentsTable = new DatabaseTable($pdo, 'comment', 'commBlogId');
 
 
-		$result = findAllById($pdo, 'blog', 'id', $_GET['id']);
+		$result = $blogsTable->findAllById($_GET['id']);
 
 		$blogs = [];
 			foreach ($result as $blog) {
-				$author = findById($pdo, 'author', 'id', $blog['authorId']);
+				$author = $authorsTable->findById($blog['authorId']);
 
 			$blogs[] = [
 					'id' => $blog['id'],
@@ -25,11 +29,11 @@ try {
 
 			}
 		
-		$resultComm = findAllById($pdo, 'comment', 'commBlogId', $_GET['id']);
+		$resultComm = $commentsTable->findAllById($_GET['id']);
 
 		$comments = [];
 			foreach ($resultComm as $comment) {
-				$author = findById($pdo, 'author', 'id', $comment['authorId']);
+				$author = $authorsTable->findById($comment['authorId']);
 
 			$comments[] = [
 					'id' => $comment['id'],
@@ -69,7 +73,7 @@ try {
 
 			}
 			
-		$title = 'Whole blog';
+		$title = 'Whole bloggity';
 
 		ob_start();
 

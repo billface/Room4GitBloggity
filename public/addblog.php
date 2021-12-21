@@ -2,16 +2,17 @@
 if (isset($_POST['blog'])) {
   try {
     include __DIR__ . '/../includes/DatabaseConnection.php';
-    include __DIR__ . '/../includes/DatabaseFunctions.php';
+    include __DIR__ . '/../classes/DatabaseTable.php';
 
-      
+    $blogsTable = new DatabaseTable($pdo, 'blog', 'id');
+
         $blog = $_POST['blog'];
         //the above is from form, below is others
         $blog['blogDate'] = new Datetime();
         $blog['authorId'] = 2;
 
       
-        save($pdo, 'blog', 'id', $blog);
+        $blogsTable->save($blog);
 
 
       header('location: blogs.php');

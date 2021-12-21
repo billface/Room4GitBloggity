@@ -2,15 +2,18 @@
 
 try {
   include __DIR__ . '/../includes/DatabaseConnection.php';
-  include __DIR__ . '/../includes/DatabaseFunctions.php';
+  include __DIR__ . '/../classes/DatabaseTable.php';
 
 
+  $blogsTable = new DatabaseTable($pdo, 'blog', 'id');
+  $authorsTable = new DatabaseTable($pdo, 'author', 'id');
 
-  $result = findAll($pdo, 'blog');
+
+  $result = $blogsTable->findAll();
 
   $blogs = [];
 	foreach ($result as $blog) {
-		$author = findById($pdo, 'author', 'id', $blog['authorId']);
+		$author = $authorsTable->findById($blog['authorId']);
 
     $blogs[] = [
 			'id' => $blog['id'],
@@ -24,7 +27,7 @@ try {
 
   $title = 'Blog list';
 
-  $totalBlogs = total($pdo, 'blog');
+  $totalBlogs = $blogsTable->total();
 
   ob_start();
 

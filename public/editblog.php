@@ -1,8 +1,11 @@
 <?php
 include __DIR__ . '/../includes/DatabaseConnection.php';
-include __DIR__ . '/../includes/DatabaseFunctions.php';
+include __DIR__ . '/../classes/DatabaseTable.php';
+
 
 try {
+
+	$blogsTable = new DatabaseTable($pdo, 'blog', 'id');
 
 	if (isset($_POST['blog'])) {
 		
@@ -11,7 +14,7 @@ try {
 		$blog['blogModDate'] = new DateTime();
 		$blog['authorId'] = 2;
 
-		save($pdo, 'blog', 'id',  $blog);
+		$blogsTable->save($blog);
 
 		header('location: wholeblog.php?id=' . $blog['id']);
 	
@@ -20,7 +23,7 @@ try {
 	else {
 
 	
-		$blog = findById($pdo, 'blog', 'id', $_GET['id']);
+		$blog = $blogsTable->findById($_GET['id']);
 
 
 		$title = 'Edit blog';
