@@ -1,23 +1,26 @@
 <?php
 include __DIR__ . '/../includes/DatabaseConnection.php';
-include __DIR__ . '/../includes/DatabaseFunctions.php';
+include __DIR__ . '/../classes/DatabaseTable.php';
 
 try {
+
+	$commentsTable = new DatabaseTable($pdo, 'comment', 'id');
+
 		if (isset($_POST['comment'])) {
 
 			$comment = $_POST['comment'];
 			$comment['authorId'] = 2;
 			$comment['commModDate'] = new DateTime();
 
-			save($pdo, 'comment', 'id',  $comment);
+			$commentsTable->save($comment);
 
         	header('location: wholeblog.php?id=' . $comment['commBlogId']);  
 
 		}
 		else {
 
-			$comment = findById($pdo, 'blog', 'id', $_GET['id']);
-			$title = 'Edit comment';
+			$comment = $commentsTable->findById($_GET['id']);
+			$title = ' comment';
 
 			ob_start();
 

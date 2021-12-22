@@ -86,8 +86,6 @@ if (isset($_GET['commentId'])) {
       <label for="commText">Type your comment here:</label>
       <textarea id="commText" name="comment[commText]" rows="3" cols="40"></textarea>
       <input type="hidden" name="comment[commBlogId]" value="'.$blog['id'].'">
-      <input type="hidden" name="commBlogId" value="'.$blog['id'].'">
-
       <input type="submit" value="Add"> 
       <br>
     </form> ';

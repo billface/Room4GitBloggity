@@ -2,10 +2,12 @@
 
 try {
   include __DIR__ . '/../includes/DatabaseConnection.php';
-  include __DIR__ . '/../includes/DatabaseFunctions.php';
+  include __DIR__ . '/../classes/DatabaseTable.php';
+
+  $commentsTable = new DatabaseTable($pdo, 'comment', 'id');
 
   
-  delete($pdo, 'comment', 'id', $_POST['commId']);
+  $commentsTable->delete($_POST['commId']);
    
   header('location: wholeblog.php?id=' . $_POST['blogId']);
   

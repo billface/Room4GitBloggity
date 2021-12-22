@@ -8,7 +8,8 @@ try {
 
 	$blogsTable = new DatabaseTable($pdo, 'blog', 'id');
 	$authorsTable = new DatabaseTable($pdo, 'author', 'id');
-	$commentsTable = new DatabaseTable($pdo, 'comment', 'commBlogId');
+	$displayCommentsTable = new DatabaseTable($pdo, 'comment', 'commBlogId');
+	$commentsTable = new DatabaseTable($pdo, 'comment', 'id');
 
 
 		$result = $blogsTable->findAllById($_GET['id']);
@@ -29,7 +30,7 @@ try {
 
 			}
 		
-		$resultComm = $commentsTable->findAllById($_GET['id']);
+		$resultComm = $displayCommentsTable->findAllById($_GET['id']);
 
 		$comments = [];
 			foreach ($resultComm as $comment) {
@@ -49,6 +50,8 @@ try {
 		}
 
 		if (isset($_POST['comment'])) {
+			
+			//$addCommentTable = new DatabaseTable($pdo, 'comment', 'id');
 
 		// 1 currently represents the author id & blog id
 		
@@ -57,10 +60,10 @@ try {
 			$comment['commDate'] = new Datetime();
 	
 
-			save($pdo, 'comment', 'id', $comment);
+			$commentsTable->save($comment);
 		
 			//head back to the current page after inserting comment
-			header('location: '.$_SERVER['PHP_SELF'] . '?id=' . $_POST['commBlogId']);
+			header('location: '.$_SERVER['PHP_SELF'] . '?id=' . $blog['id']);
 			die;
 
 		}
@@ -68,12 +71,14 @@ try {
 		else {
 
 			if (isset($_GET['commentId'])) {
-				
-			$comment2edit = findById($pdo, 'comment', 'id', $_GET['commentId']);
+			
+			//$editCommentTable = new DatabaseTable($pdo, 'comment', 'id');
+
+			$comment2edit = $commentsTable->findById($_GET['commentId']);
 
 			}
 			
-		$title = 'Whole bloggity';
+		$title = 'Whole blog';
 
 		ob_start();
 
