@@ -16,11 +16,11 @@
                 
                 $date = new DateTime($blog['blogModDate']);
                 echo ' (<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
-                
+               
               }
               ?>)
-              <a href="editblog.php?id=<?=$blog['id']?>">Edit</a>
-              <form action="deleteblog.php" method="post">
+              <a href="index.php?action=edit&id=<?=$blog['id']?>">Edit</a>
+              <form action="index.php?action=delete" method="post">
                 <input type="hidden" name="blogId" value="<?=$blog['id']?>">
                 <input type="submit" value="Delete">
               </form>
@@ -48,10 +48,10 @@
                 echo ' (<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
               }
               ?>)
-              <a href="wholeblog.php?id=<?=$blog['id']?>&commentId=<?=$comment['id']?>">Edit</a></small>
-              <form action="deletecomment.php" method="post">
+              <a href="index.php?action=wholeBlog&id=<?=$blog['id']?>&commentId=<?=$comment['id']?>">Edit</a></small>
+              <form action="index.php?action=deleteComment" method="post">
                 <input type="hidden" name="commId" value="<?=$comment['id']?>">
-                <input type="hidden" name="blogId" value="<?=$blog['id']?>">
+                <input type="hidden" name="headerBlogId" value="<?=$blog['id']?>">
                 <input type="submit" value="Delete">
               </form>
               <br>
@@ -69,7 +69,7 @@
 if (isset($_GET['commentId'])) {
 
     echo
-		'<form action="editcomment.php" method="post">
+		'<form action="index.php?action=editComment" method="post">
 	    <input type="hidden" name="comment[id]" value="'.$comment2edit['id'].'">
       <input type="hidden" name="comment[commBlogId]" value="'.$comment2edit['commBlogId'].'">
       <label for="commText">Type your comment here:</label>

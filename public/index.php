@@ -6,10 +6,10 @@ try {
 
 	$blogsTable = new DatabaseTable($pdo, 'blog', 'id');
 	$authorsTable = new DatabaseTable($pdo, 'author', 'id');
-	//$commentsTable = new DatabaseTable($pdo, 'comment', 'id');
-    //$displayCommentsTable = new DatabaseTable($pdo, 'comment', 'commBlogId');
+	$commentsTable = new DatabaseTable($pdo, 'comment', 'id');
+    $displayCommentsTable = new DatabaseTable($pdo, 'comment', 'commBlogId');
 
-$blogController = new BlogController($authorsTable, $blogsTable/*, $commentsTable, $displayCommentsTable*/);
+    $blogController = new BlogController($authorsTable, $blogsTable, $commentsTable, $displayCommentsTable);
 
 
 	$action = $_GET['action'] ?? 'home';
