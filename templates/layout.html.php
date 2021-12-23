@@ -12,8 +12,8 @@
     </header>
     <ul>
       <li><a href="index.php">Home</a></li>
-      <li><a href="blogs.php">Blog List</a></li>
-      <li><a href="addblog.php">Add a new blog</a></li>
+      <li><a href="index.php?action=list">Blog List</a></li>
+      <li><a href="index.php?action=add">Add a new blog</a></li>
     </ul>
   </nav>
 
