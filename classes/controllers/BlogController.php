@@ -33,26 +33,21 @@ class BlogController {
         $title = 'Blog list';
       
         $totalBlogs = $this->blogsTable->total();
-      
-        ob_start();
-      
-        include  __DIR__ . '/../../templates/blogs.html.php';
-      
-        $output = ob_get_clean();
 
-        return ['output' => $output, 'title' => $title];
+        return ['template' => 'blogs.html.php', 
+				'title' => $title, 
+				'variables' => [
+						'totalBlogs' => $totalBlogs,
+						'blogs' => $blogs
+					]
+				];
+        
     }
 
     public function home() {
         $title = 'Internet Blog Database';
 
-        ob_start();
-
-        include  __DIR__ . '/../../templates/home.html.php';
-
-        $output = ob_get_clean();
-
-        return ['output' => $output, 'title' => $title];
+        return ['template' => 'home.html.php', 'title' => $title];
     }
 
     
@@ -91,13 +86,14 @@ class BlogController {
 
             $title = 'Edit blog';
 
-            ob_start();
+            return ['template' => 'editblog.html.php', 
+                    'title' => $title,
+                    'variables' => [
+						'blog' => $blog
+					    ]
+                    ];
 
-            include  __DIR__ . '/../../templates/editblog.html.php';
 
-            $output = ob_get_clean();
-
-            return ['output' => $output, 'title' => $title];
 
         }
     }
@@ -136,13 +132,7 @@ class BlogController {
         else {
             $title = 'Add a new blog';
 
-            ob_start();
-
-            include  __DIR__ . '/../../templates/addblog.html.php';
-
-            $output = ob_get_clean();
-
-            return ['output' => $output, 'title' => $title];
+            return ['template' => 'addblog.html.php', 'title' => $title];
         }
     }
 
@@ -210,15 +200,16 @@ class BlogController {
             }
         }
 
-        $title = 'Whole Blog-test edit';
+        $title = 'Whole Blog';
 
-        ob_start();
-
-        include  __DIR__ . '/../../templates/wholeblog.html.php';
-
-        $output = ob_get_clean();
-
-        return ['output' => $output, 'title' => $title];
+        return ['template' => 'wholeblog.html.php',
+                'title' => $title,
+                'variables' => [
+                    'blogs' => $blogs,
+                    'comments' => $comments,
+                    'comment2edit' => $comment2edit
+                    ]
+                ];
 
 		
     }
