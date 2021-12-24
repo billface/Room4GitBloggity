@@ -50,6 +50,12 @@ class BlogController {
         return ['template' => 'home.html.php', 'title' => $title];
     }
 
+    public function about() {
+        $title = 'A rapper';
+
+        return ['template' => 'about.html.php', 'title' => $title];
+    }
+
     
 
     public function delete() {

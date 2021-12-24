@@ -12,6 +12,9 @@
     </header>
     <ul>
       <li><a href="index.php">Home</a></li>
+      <li><a href="index.php?action=about">About</a></li>
+      <li><a href="index.php?action=events">Events</a></li>
+      <li><a href="index.php?action=shop">Shop</a></li>
       <li><a href="index.php?action=list">Blog List</a></li>
       <li><a href="index.php?action=add">Add a new blog</a></li>
     </ul>
