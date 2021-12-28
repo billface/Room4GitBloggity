@@ -19,7 +19,7 @@ class BlogController {
 
     public function list() {
 
-        $page = $this->pageTable->findById($_GET['id']);
+        $page = $this->pageTable->findById(5);
 
         $result = $this->blogsTable->findAll();
 
@@ -54,7 +54,7 @@ class BlogController {
 
     public function home() {
 
-        $page = $this->pageTable->findById($_GET['id']);
+        $page = $this->pageTable->findById(1);
 
         $title = 'Internet Blog Database';
 
@@ -68,7 +68,7 @@ class BlogController {
 
     public function about() {
 
-        $page = $this->pageTable->findById($_GET['id']);
+        $page = $this->pageTable->findById(2);
 
 
         $title = 'About a rapper';
@@ -83,7 +83,7 @@ class BlogController {
 
     public function events() {
 
-        $page = $this->pageTable->findById($_GET['id']);
+        $page = $this->pageTable->findById(3);
 
 
         $title = 'Coming soon';
@@ -98,7 +98,7 @@ class BlogController {
 
     public function shop() {
 
-        $page = $this->pageTable->findById($_GET['id']);
+        $page = $this->pageTable->findById(4);
 
 
         $title = 'Roll up, roll up';

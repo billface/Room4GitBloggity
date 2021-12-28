@@ -23,7 +23,13 @@ try {
 
 	$action = $_GET['action'] ?? 'home';
 
-	$page = $blogController->$action();
+	if ($action == strtolower($action)) {
+		$page = $blogController->$action();
+	}
+	else {
+		http_response_code(301);
+		header('location: index.php?action=' . strtolower($action));
+	}
 
 	$title = $page['title'];
 
