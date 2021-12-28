@@ -1,0 +1,2 @@
+  <?php echo '<pre>'; print_r($comments); echo '</pre>'; ?>
+$blog = findById($pdo, 'blog', 'id', $_GET['id']);

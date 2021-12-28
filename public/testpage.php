@@ -12,6 +12,10 @@ try {
   $result = findById($pdo, 'blog', 'id', $_GET['id']);
   echo '<pre>'; print_r($result); echo '</pre>';
 
+  echo 'FIND BY ID';
+  $result = findById($pdo, 'page', 'id', $_GET['id']);
+  echo '<pre>'; print_r($result); echo '</pre>';
+
   echo 'FIND ALL';
   $result = findAll($pdo, 'blog');
   echo '<pre>'; print_r($result); echo '</pre>';

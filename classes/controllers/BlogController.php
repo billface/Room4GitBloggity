@@ -5,15 +5,22 @@ class BlogController {
     private $blogsTable;
     private $commentsTable;
     private $displayCommentsTable;
+    private $pageTable;
 
-    public function __construct(DatabaseTable $authorsTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable) {
+
+    public function __construct(DatabaseTable $authorsTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pageTable) {
 		$this->authorsTable = $authorsTable;
         $this->blogsTable = $blogsTable;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable;
+        $this->pageTable = $pageTable;
+
 	}
 
     public function list() {
+
+        $page = $this->pageTable->findById($_GET['id']);
+
         $result = $this->blogsTable->findAll();
 
         $blogs = [];
@@ -38,22 +45,70 @@ class BlogController {
 				'title' => $title, 
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
-						'blogs' => $blogs
+						'blogs' => $blogs,
+                        'page' => $page
 					]
 				];
         
     }
 
     public function home() {
+
+        $page = $this->pageTable->findById($_GET['id']);
+
         $title = 'Internet Blog Database';
 
-        return ['template' => 'home.html.php', 'title' => $title];
+        return ['template' => 'basic.html.php',
+                 'title' => $title,
+                 'variables' => [
+                    'page' => $page
+                    ]
+                ];
     }
 
     public function about() {
-        $title = 'A rapper';
 
-        return ['template' => 'about.html.php', 'title' => $title];
+        $page = $this->pageTable->findById($_GET['id']);
+
+
+        $title = 'About a rapper';
+
+        return ['template' => 'basic.html.php',
+                 'title' => $title,
+                 'variables' => [
+                    'page' => $page
+                    ]
+                ];
+    }
+
+    public function events() {
+
+        $page = $this->pageTable->findById($_GET['id']);
+
+
+        $title = 'Coming soon';
+
+        return ['template' => 'basic.html.php',
+                 'title' => $title,
+                 'variables' => [
+                    'page' => $page
+                    ]
+                ];
+    }
+
+    public function shop() {
+
+        $page = $this->pageTable->findById($_GET['id']);
+
+
+        $title = 'Roll up, roll up';
+
+        return ['template' => 'basic.html.php',
+                 'title' => $title,
+                 'variables' => [
+                    'page' => $page
+                    ]
+                ];
     }
 
     
@@ -90,7 +145,7 @@ class BlogController {
         else {
             $blog = $this->blogsTable->findById($_GET['id']);
 
-            $title = 'Edit blog';
+            $title = 'Edit bloggity';
 
             return ['template' => 'editblog.html.php', 
                     'title' => $title,

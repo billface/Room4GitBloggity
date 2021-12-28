@@ -1,3 +1,5 @@
+<h1><?=$page['heading'] ?></h1>
+
 <p><?=$totalBlogs?> blogs have been added to the site </p>
 <?php //echo '<pre>'; print_r($blogs); echo '</pre>'; ?>
 

@@ -16,8 +16,9 @@ try {
 	$authorsTable = new DatabaseTable($pdo, 'author', 'id');
 	$commentsTable = new DatabaseTable($pdo, 'comment', 'id');
     $displayCommentsTable = new DatabaseTable($pdo, 'comment', 'commBlogId');
+	$pageTable = new DatabaseTable($pdo, 'page', 'id');
 
-    $blogController = new BlogController($authorsTable, $blogsTable, $commentsTable, $displayCommentsTable);
+    $blogController = new BlogController($authorsTable, $blogsTable, $commentsTable, $displayCommentsTable, $pageTable);
 
 
 	$action = $_GET['action'] ?? 'home';

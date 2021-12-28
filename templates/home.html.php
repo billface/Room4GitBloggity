@@ -1,1 +1,2 @@
-<h1>This is the home page </h1>
+<h1><?=$page['heading'] ?? 'HomePage' ?></h1>
+<p>Some other stuff</p>
