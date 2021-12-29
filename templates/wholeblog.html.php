@@ -48,8 +48,8 @@
                 echo ' (<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
               }
               ?>)
-              <a href="index.php?action=wholeBlog&id=<?=$blog['id']?>&commentId=<?=$comment['id']?>">Edit</a></small>
-              <form action="index.php?action=deleteComment" method="post">
+              <a href="index.php?action=wholeblog&id=<?=$blog['id']?>&commentid=<?=$comment['id']?>">Edit</a></small>
+              <form action="index.php?action=deletecomment" method="post">
                 <input type="hidden" name="commId" value="<?=$comment['id']?>">
                 <input type="hidden" name="headerBlogId" value="<?=$blog['id']?>">
                 <input type="submit" value="Delete">
@@ -66,10 +66,10 @@
 
 
 
-if (isset($_GET['commentId'])) {
+if (isset($_GET['commentid'])) {
 
     echo
-		'<form action="index.php?action=editComment" method="post">
+		'<form action="index.php?action=editcomment" method="post">
 	    <input type="hidden" name="comment[id]" value="'.$comment2edit['id'].'">
       <input type="hidden" name="comment[commBlogId]" value="'.$comment2edit['commBlogId'].'">
       <label for="commText">Type your comment here:</label>

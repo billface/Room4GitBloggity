@@ -59,10 +59,10 @@ class BlogController {
     }
 
 
-    public function deleteComment() {
+    public function deletecomment() {
         $this->commentsTable->delete($_POST['commId']);
     
-        header('location: index.php?action=wholeBlog&id=' . $_POST['headerBlogId']);
+        header('location: index.php?action=wholeblog&id=' . $_POST['headerBlogId']);
     }
 
 
@@ -77,7 +77,7 @@ class BlogController {
 
             $this->blogsTable->save($blog);
 
-            header('location: index.php?action=wholeBlog&id=' . $blog['id']);
+            header('location: index.php?action=wholeblog&id=' . $blog['id']);
 
         }
 
@@ -98,7 +98,7 @@ class BlogController {
         }
     }
 
-    public function editComment() {
+    public function editcomment() {
         if (isset($_POST['comment'])) {
 
 			$comment = $_POST['comment'];
@@ -107,7 +107,7 @@ class BlogController {
 
 			$this->commentsTable->save($comment);
 
-        	header('location: index.php?action=wholeBlog&id=' . $comment['commBlogId']);  
+        	header('location: index.php?action=wholeblog&id=' . $comment['commBlogId']);  
 
 		}
 		else {
@@ -136,7 +136,7 @@ class BlogController {
         }
     }
 
-    public function wholeBlog() {
+    public function wholeblog() {
         $result = $this->blogsTable->findAllById($_GET['id']);
 
 		$blogs = [];
@@ -186,21 +186,21 @@ class BlogController {
             $this->commentsTable->save($comment);
         
             //head back to the current page after inserting comment
-            header('location: index.php?action=wholeBlog&id=' . $blog['id']);
+            header('location: index.php?action=wholeblog&id=' . $blog['id']);
             die;
 
         } 
         
         else {
 
-            if (isset($_GET['commentId'])) {
+            if (isset($_GET['commentid'])) {
             
-            $comment2edit = $this->commentsTable->findById($_GET['commentId']);
+            $comment2edit = $this->commentsTable->findById($_GET['commentid']);
 
             }
         }
 
-        $title = 'Whole Blog';
+        $title = 'Whole Bloggity';
 
         return ['template' => 'wholeblog.html.php',
                 'title' => $title,

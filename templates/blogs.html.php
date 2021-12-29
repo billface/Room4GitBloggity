@@ -19,7 +19,7 @@
 
   <a href="index.php?action=edit&id=<?=$blog['id']?>">Edit</a>
   <br>
-  <a href="index.php?action=wholeBlog&id=<?=$blog['id']?>">See more</a>
+  <a href="index.php?action=wholeblog&id=<?=$blog['id']?>">See more</a>
   <form action="index.php?action=delete" method="post">
     <input type="hidden" name="blogId" value="<?=$blog['id']?>">
     <input type="submit" value="Delete">
