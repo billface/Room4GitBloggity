@@ -8,7 +8,7 @@ class BlogController {
     private $pageTable;
 
 
-    public function __construct(DatabaseTable $authorsTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pageTable) {
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pageTable) {
 		$this->authorsTable = $authorsTable;
         $this->blogsTable = $blogsTable;
         $this->commentsTable = $commentsTable;
