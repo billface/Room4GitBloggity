@@ -1,5 +1,6 @@
 <form action="" method="post">
 	<input type="hidden" name="blog[id]" value="<?=$blog['id']?>">
+    <input type="hidden" name="headerBlogId" value="<?=$blog['id']?>">
     <label for="blogHeading">Type your blog heading here:</label>
     <textarea id="blogHeading" name="blog[blogHeading]" rows="1" cols="40"><?=$blog['blogHeading']?></textarea>
     <br>

@@ -5,110 +5,49 @@ class BlogController {
     private $blogsTable;
     private $commentsTable;
     private $displayCommentsTable;
-    private $pageTable;
 
-
-    public function __construct(DatabaseTable $authorsTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pageTable) {
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable) {
 		$this->authorsTable = $authorsTable;
         $this->blogsTable = $blogsTable;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable;
-        $this->pageTable = $pageTable;
-
 	}
 
     public function list() {
-
-        $page = $this->pageTable->findById(5);
-
         $result = $this->blogsTable->findAll();
 
         $blogs = [];
           foreach ($result as $blog) {
             $author = $this->authorsTable->findById($blog['authorId']);
       
-          $blogs[] = [
-                  'id' => $blog['id'],
-                  'blogHeading' => $blog['blogHeading'],
-                  'blogDate' => $blog['blogDate'],
-                  'name' => $author['name'],
-                  'email' => $author['email']
-              ];
+            $blogs[] = [
+                    'id' => $blog['id'],
+                    'blogHeading' => $blog['blogHeading'],
+                    'blogDate' => $blog['blogDate'],
+                    'name' => $author['name'],
+                    'email' => $author['email']
+                ];
       
           }
       
-        $title = 'Blog list';
-      
+        $title = 'Ye Olde Blog list';
+
         $totalBlogs = $this->blogsTable->total();
 
         return ['template' => 'blogs.html.php', 
 				'title' => $title, 
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
-						'blogs' => $blogs,
-                        'page' => $page
+						'blogs' => $blogs
 					]
 				];
         
     }
 
     public function home() {
+        $title = 'Internet Blogging Database';
 
-        $page = $this->pageTable->findById(1);
-
-        $title = 'Internet Blog Database';
-
-        return ['template' => 'basic.html.php',
-                 'title' => $title,
-                 'variables' => [
-                    'page' => $page
-                    ]
-                ];
-    }
-
-    public function about() {
-
-        $page = $this->pageTable->findById(2);
-
-
-        $title = 'About a rapper';
-
-        return ['template' => 'basic.html.php',
-                 'title' => $title,
-                 'variables' => [
-                    'page' => $page
-                    ]
-                ];
-    }
-
-    public function events() {
-
-        $page = $this->pageTable->findById(3);
-
-
-        $title = 'Coming soon';
-
-        return ['template' => 'basic.html.php',
-                 'title' => $title,
-                 'variables' => [
-                    'page' => $page
-                    ]
-                ];
-    }
-
-    public function shop() {
-
-        $page = $this->pageTable->findById(4);
-
-
-        $title = 'Roll up, roll up';
-
-        return ['template' => 'basic.html.php',
-                 'title' => $title,
-                 'variables' => [
-                    'page' => $page
-                    ]
-                ];
+        return ['template' => 'home.html.php', 'title' => $title];
     }
 
     
@@ -116,14 +55,14 @@ class BlogController {
     public function delete() {
         $this->blogsTable->delete($_POST['blogId']);
     
-        header('location: index.php?action=list');
+        header('location: index.php?route=blog/list');
     }
 
 
-    public function deleteComment() {
+    public function deletecomment() {
         $this->commentsTable->delete($_POST['commId']);
     
-        header('location: index.php?action=wholeBlog&id=' . $_POST['headerBlogId']);
+        header('location: index.php?route=blog/wholeblog&id=' . $_POST['headerBlogId']);
     }
 
 
@@ -138,14 +77,14 @@ class BlogController {
 
             $this->blogsTable->save($blog);
 
-            header('location: index.php?action=wholeBlog&id=' . $blog['id']);
+            header('location: index.php?route=blog/wholeblog&id=' . $blog['id']);
 
         }
 
         else {
             $blog = $this->blogsTable->findById($_GET['id']);
 
-            $title = 'Edit bloggity';
+            $title = 'Edit blog';
 
             return ['template' => 'editblog.html.php', 
                     'title' => $title,
@@ -159,7 +98,7 @@ class BlogController {
         }
     }
 
-    public function editComment() {
+    public function editcomment() {
         if (isset($_POST['comment'])) {
 
 			$comment = $_POST['comment'];
@@ -168,14 +107,10 @@ class BlogController {
 
 			$this->commentsTable->save($comment);
 
-        	header('location: index.php?action=wholeBlog&id=' . $comment['commBlogId']);  
+        	header('location: index.php?route=blog/wholeblog&id=' . $comment['commBlogId']);  
 
 		}
-		else {
-
-			$comment = $this->commentsTable->findById($_GET['id']);
-
-		}
+		
     }
 
     public function add() {
@@ -188,7 +123,7 @@ class BlogController {
 
             $this->blogsTable->save($blog);
 
-            header('location: index.php?action=list');
+            header('location: index.php?route=blog/list');
         }
         else {
             $title = 'Add a new blog';
@@ -197,7 +132,7 @@ class BlogController {
         }
     }
 
-    public function wholeBlog() {
+    public function wholeblog() {
         $result = $this->blogsTable->findAllById($_GET['id']);
 
 		$blogs = [];
@@ -247,21 +182,21 @@ class BlogController {
             $this->commentsTable->save($comment);
         
             //head back to the current page after inserting comment
-            header('location: index.php?action=wholeBlog&id=' . $blog['id']);
+            header('location: index.php?route=blog/wholeblog&id=' . $blog['id']);
             die;
 
         } 
         
         else {
 
-            if (isset($_GET['commentId'])) {
+            if (isset($_GET['commentid'])) {
             
-            $comment2edit = $this->commentsTable->findById($_GET['commentId']);
+            $comment2edit = $this->commentsTable->findById($_GET['commentid']);
 
             }
         }
 
-        $title = 'Whole Blog';
+        $title = 'Whole Blogger';
 
         return ['template' => 'wholeblog.html.php',
                 'title' => $title,

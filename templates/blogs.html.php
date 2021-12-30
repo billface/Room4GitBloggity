@@ -1,5 +1,3 @@
-<h1><?=$page['heading'] ?></h1>
-
 <p><?=$totalBlogs?> blogs have been added to the site </p>
 <?php //echo '<pre>'; print_r($blogs); echo '</pre>'; ?>
 
@@ -19,10 +17,10 @@
               echo $date->format('jS F Y');
               ?>)
 
-  <a href="index.php?action=edit&id=<?=$blog['id']?>">Edit</a>
+  <a href="index.php?route=blog/edit&id=<?=$blog['id']?>">Edit</a>
   <br>
-  <a href="index.php?action=wholeBlog&id=<?=$blog['id']?>">See more</a>
-  <form action="index.php?action=delete" method="post">
+  <a href="index.php?route=blog/wholeblog&id=<?=$blog['id']?>">See more</a>
+  <form action="index.php?route=blog/delete" method="post">
     <input type="hidden" name="blogId" value="<?=$blog['id']?>">
     <input type="submit" value="Delete">
   </form>

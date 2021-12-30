@@ -15,62 +15,62 @@ try {
 	$authorsTable = new DatabaseTable($pdo, 'author', 'id');
 	$commentsTable = new DatabaseTable($pdo, 'comment', 'id');
     $displayCommentsTable = new DatabaseTable($pdo, 'comment', 'commBlogId');
-	$pageTable = new DatabaseTable($pdo, 'page', 'id');
 
-    //$blogController = new BlogController($authorsTable, $blogsTable, $commentsTable, $displayCommentsTable, $pageTable);
-	//change this to page/home
+
 	$route = $_GET['route'] ?? 'blog/home'; //if no route variable is set, use 'blog/home'
 
-
 	if ($route == strtolower($route)) {
-
+		
 		if ($route === 'blog/list') {
 			include __DIR__ . '/../classes/controllers/BlogController.php';
-			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable, $pageTable);
+			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
 			$page = $controller->list();
 		}
 		else if ($route === 'blog/home') {
 			include __DIR__ . '/../classes/controllers/BlogController.php';
-			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable, $pageTable);
+			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
 			$page = $controller->home();
-		}
-		else if ($route === 'blog/about') {
-			include __DIR__ . '/../classes/controllers/BlogController.php';
-			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable, $pageTable);
-			$page = $controller->about();
-		}
-		else if ($route === 'blog/events') {
-			include __DIR__ . '/../classes/controllers/BlogController.php';
-			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable, $pageTable);
-			$page = $controller->events();
-		}
-		else if ($route === 'blog/shop') {
-			include __DIR__ . '/../classes/controllers/BlogController.php';
-			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable, $pageTable);
-			$page = $controller->shop();
 		}
 		else if ($route === 'blog/edit') {
 			include __DIR__ . '/../classes/controllers/BlogController.php';
-			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable, $pageTable);
+			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
 			$page = $controller->edit();
+		}
+		else if ($route === 'blog/add') {
+			include __DIR__ . '/../classes/controllers/BlogController.php';
+			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
+			$page = $controller->add();
 		}
 		else if ($route === 'blog/delete') {
 			include __DIR__ . '/../classes/controllers/BlogController.php';
-			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable, $pageTable);
+			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
 			$page = $controller->delete();
+		}
+		else if ($route === 'blog/wholeblog') {
+			include __DIR__ . '/../classes/controllers/BlogController.php';
+			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
+			$page = $controller->wholeblog();
+		}
+		else if ($route === 'blog/editcomment') {
+			include __DIR__ . '/../classes/controllers/BlogController.php';
+			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
+			$page = $controller->editcomment();
+		}
+		else if ($route === 'blog/deletecomment') {
+			include __DIR__ . '/../classes/controllers/BlogController.php';
+			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
+			$page = $controller->deletecomment();
 		}
 		else if ($route === 'register') {
 			include __DIR__ . '/../classes/controllers/RegisterController.php';
 			$controller = new RegisterController($authorsTable);
 			$page = $controller->showForm();
 		}
-}
-else {
-	http_response_code(301);
-	header('location: index.php?route=' . strtolower($route));
-}
-
-	
+	}
+	else {
+		http_response_code(301);
+		header('location: index.php?route=' . strtolower($route));
+	}
 
 	$title = $page['title'];
 

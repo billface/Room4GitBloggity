@@ -11,10 +11,7 @@
       <h1>Internet Blog Database</h1>
     </header>
     <ul>
-      <li><a href="index.php?route=blog/home">Home</a></li>
-      <li><a href="index.php?route=blog/about">About</a></li>
-      <li><a href="index.php?route=blog/events">Events</a></li>
-      <li><a href="index.php?route=blog/shop">Shop</a></li>
+      <li><a href="index.php">Home</a></li>
       <li><a href="index.php?route=blog/list">Blog List</a></li>
       <li><a href="index.php?route=blog/add">Add a new blog</a></li>
     </ul>
