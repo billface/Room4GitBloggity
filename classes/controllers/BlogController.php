@@ -55,14 +55,14 @@ class BlogController {
     public function delete() {
         $this->blogsTable->delete($_POST['blogId']);
     
-        header('location: index.php?route=blog/list');
+        header('location: /blog/list');
     }
 
 
     public function deletecomment() {
         $this->commentsTable->delete($_POST['commId']);
     
-        header('location: index.php?route=blog/wholeblog&id=' . $_POST['headerBlogId']);
+        header('location: /blog/wholeblog?id=' . $_POST['headerBlogId']);
     }
 
 
@@ -77,7 +77,7 @@ class BlogController {
 
             $this->blogsTable->save($blog);
 
-            header('location: index.php?route=blog/wholeblog&id=' . $blog['id']);
+            header('location: /blog/wholeblog?id=' . $blog['id']);
 
         }
 
@@ -107,7 +107,7 @@ class BlogController {
 
 			$this->commentsTable->save($comment);
 
-        	header('location: index.php?route=blog/wholeblog&id=' . $comment['commBlogId']);  
+        	header('location: /blog/wholeblog?id=' . $comment['commBlogId']);  
 
 		}
 		
@@ -123,7 +123,7 @@ class BlogController {
 
             $this->blogsTable->save($blog);
 
-            header('location: index.php?route=blog/list');
+            header('location: /blog/list');
         }
         else {
             $title = 'Add a new blog';
@@ -182,7 +182,7 @@ class BlogController {
             $this->commentsTable->save($comment);
         
             //head back to the current page after inserting comment
-            header('location: index.php?route=blog/wholeblog&id=' . $blog['id']);
+            header('location: /blog/wholeblog?id=' . $blog['id']);
             die;
 
         } 

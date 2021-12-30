@@ -1,2 +1,9 @@
-  <?php echo '<pre>'; print_r($comments); echo '</pre>'; ?>
-$blog = findById($pdo, 'blog', 'id', $_GET['id']);
+  <?php 
+  
+  
+echo '<pre>'; print_r($comments); echo '</pre>'; 
+
+
+
+//echoing back post array
+echo '<pre>'; print_r($_POST); echo '</pre>'; ?>
