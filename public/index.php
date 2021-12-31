@@ -26,7 +26,7 @@ try {
 			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
 			$page = $controller->list();
 		}
-		else if ($route === 'blog/home') {
+		else if ($route === '') {
 			include __DIR__ . '/../classes/controllers/BlogController.php';
 			$controller = new BlogController($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
 			$page = $controller->home();
@@ -69,7 +69,7 @@ try {
 	}
 	else {
 		http_response_code(301);
-		header('location: index.php?route=' . strtolower($route));
+		header('location: ' . strtolower($route));
 	}
 
 	$title = $page['title'];

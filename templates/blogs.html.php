@@ -17,10 +17,10 @@
               echo $date->format('jS F Y');
               ?>)
 
-  <a href="index.php?route=blog/edit&id=<?=$blog['id']?>">Edit</a>
+  <a href="/blog/edit?id=<?=$blog['id']?>">Edit</a>
   <br>
-  <a href="index.php?route=blog/wholeblog&id=<?=$blog['id']?>">See more</a>
-  <form action="index.php?route=blog/delete" method="post">
+  <a href="/blog/wholeblog?id=<?=$blog['id']?>">See more</a>
+  <form action="/blog/delete" method="post">
     <input type="hidden" name="blogId" value="<?=$blog['id']?>">
     <input type="submit" value="Delete">
   </form>

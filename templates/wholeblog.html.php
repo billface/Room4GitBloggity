@@ -19,8 +19,8 @@
                
               }
               ?>)
-              <a href="index.php?route=blog/edit&id=<?=$blog['id']?>">Edit</a>
-              <form action="index.php?route=blog/delete" method="post">
+              <a href="/blog/edit?id=<?=$blog['id']?>">Edit</a>
+              <form action="/blog/delete" method="post">
                 <input type="hidden" name="blogId" value="<?=$blog['id']?>">
                 <input type="submit" value="Delete">
               </form>
@@ -48,8 +48,8 @@
                 echo ' (<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
               }
               ?>)
-              <a href="index.php?route=blog/wholeblog&id=<?=$blog['id']?>&commentid=<?=$comment['id']?>">Edit</a></small>
-              <form action="index.php?route=blog/deletecomment" method="post">
+              <a href="/blog/wholeblog?id=<?=$blog['id']?>&commentid=<?=$comment['id']?>">Edit</a></small>
+              <form action="/blog/deletecomment" method="post">
                 <input type="hidden" name="commId" value="<?=$comment['id']?>">
                 <input type="hidden" name="headerBlogId" value="<?=$blog['id']?>">
                 <input type="submit" value="Delete">
@@ -69,7 +69,7 @@
 if (isset($_GET['commentid'])) {
 
     echo
-		'<form action="index.php?route=blog/editcomment" method="post">
+		'<form action="/blog/editcomment" method="post">
 	    <input type="hidden" name="comment[id]" value="'.$comment2edit['id'].'">
       <input type="hidden" name="comment[commBlogId]" value="'.$comment2edit['commBlogId'].'">
       <label for="commText">Type your comment here:</label>
