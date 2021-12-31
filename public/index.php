@@ -17,7 +17,7 @@ try {
     $displayCommentsTable = new DatabaseTable($pdo, 'comment', 'commBlogId');
 
 
-	$route = $_GET['route'] ?? 'blog/home'; //if no route variable is set, use 'blog/home'
+	$route = ltrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
 
 	if ($route == strtolower($route)) {
 		
