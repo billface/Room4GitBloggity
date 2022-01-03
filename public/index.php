@@ -1,8 +1,7 @@
 <?php
 
 try {
-	include __DIR__ . '/../classes/EntryPoint.php';
-	include __DIR__ . '/../classes/SiteRoutes.php';
+	include __DIR__ . '/../includes/autoload.php';
 
 	
 	$route = ltrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
@@ -16,5 +15,8 @@ catch (PDOException $e) {
 
 	$output = 'Database error: ' . $e->getMessage() . ' in ' .
 	$e->getFile() . ':' . $e->getLine();
+
+	include  __DIR__ . '/../templates/layout.html.php';
+
 }
 

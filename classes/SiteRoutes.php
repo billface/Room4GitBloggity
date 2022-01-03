@@ -4,7 +4,6 @@ class SiteRoutes {
 
     {
         include __DIR__ . '/../includes/DatabaseConnection.php';
-	    include __DIR__ . '/../classes/DatabaseTable.php';
 
         $blogsTable = new DatabaseTable($pdo, 'blog', 'id');
 	    $authorsTable = new DatabaseTable($pdo, 'author', 'id');
