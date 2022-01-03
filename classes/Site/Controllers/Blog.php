@@ -1,6 +1,8 @@
 <?php
+namespace Site\Controllers;
+use \Ninja\DatabaseTable;
 
-class BlogController {
+class Blog {
     private $authorsTable;
     private $blogsTable;
     private $commentsTable;
@@ -72,7 +74,7 @@ class BlogController {
             
             $blog = $_POST['blog'];
             //the above is from form, below is others
-            $blog['blogModDate'] = new DateTime();
+            $blog['blogModDate'] = new \DateTime();
             $blog['authorId'] = 2;
 
             $this->blogsTable->save($blog);
@@ -103,7 +105,7 @@ class BlogController {
 
 			$comment = $_POST['comment'];
 			$comment['authorId'] = 2;
-			$comment['commModDate'] = new DateTime();
+			$comment['commModDate'] = new \DateTime();
 
 			$this->commentsTable->save($comment);
 
@@ -118,7 +120,7 @@ class BlogController {
 
             $blog = $_POST['blog'];
             //the above is from form, below is others
-            $blog['blogDate'] = new Datetime();
+            $blog['blogDate'] = new \Datetime();
             $blog['authorId'] = 2;
 
             $this->blogsTable->save($blog);
@@ -176,7 +178,7 @@ class BlogController {
         
             $comment = $_POST['comment'];
             $comment['authorId'] = 2;
-            $comment['commDate'] = new Datetime();
+            $comment['commDate'] = new \Datetime();
     
 
             $this->commentsTable->save($comment);

@@ -1,4 +1,5 @@
 <?php
+namespace Ninja;
 
 class DatabaseTable
 {
@@ -9,7 +10,7 @@ class DatabaseTable
 
 	//METHODS
 	//a magic method that helps makes sure all the arguments are in the correct order and of the correct type
-	public function __construct(PDO $pdo, string $table, string $primaryKey){
+	public function __construct(\PDO $pdo, string $table, string $primaryKey){
 		$this->pdo = $pdo;
 		$this->table = $table;
 		$this->primaryKey = $primaryKey;
@@ -113,7 +114,7 @@ class DatabaseTable
 
 	private function processDates($fields) {
 		foreach ($fields as $key => $value) {
-			if ($value instanceof DateTime) {
+			if ($value instanceof \DateTime) {
 				$fields[$key] = $value->format('Y-m-d H:i:s');
 			}
 		}
@@ -128,7 +129,7 @@ class DatabaseTable
 			}
 			$this->insert($record);
 		}
-		catch (PDOException $e) {
+		catch (\PDOException $e) {
 			$this->update($record);
 		}
 	}
