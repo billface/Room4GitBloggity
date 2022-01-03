@@ -1,12 +1,13 @@
 <?php
-echo 'You are viewing ' . $_SERVER['REQUEST_URI']; 
-die;
+
 try {
 	include __DIR__ . '/../classes/EntryPoint.php';
+	include __DIR__ . '/../classes/SiteRoutes.php';
+
 	
 	$route = ltrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
 
-	$entryPoint = new EntryPoint($route);
+	$entryPoint = new EntryPoint($route, new SiteRoutes());
 	$entryPoint->run();
 }
 
