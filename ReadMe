@@ -2,4 +2,4 @@ If there’s a problem with the redirect check, you know to look in the checkURL
 If a template isn’t loading correctly, you know to look in the loadTemplate method. 
 If a URL isn’t displaying the page it should, you know to look in the callAction method.
 
-See page 395 (293pdf) for explanation of creating new site
+See page 395 (293pdf) & 421 (317pdf) q  for explanation of creating new site

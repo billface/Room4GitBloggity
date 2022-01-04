@@ -79,8 +79,8 @@ class Blog {
 
             $this->blogsTable->save($blog);
 
-            //header('location: /blog/wholeblog?id=' . $blog['id']);
-            header('location: /blog/list');
+            header('location: /blog/wholeblog?id=' . $blog['id']);
+            //header('location: /blog/list');
 
     }
 

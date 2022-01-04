@@ -1,7 +1,7 @@
 <?php
 namespace Site;
 
-class SiteRoutes {
+class SiteRoutes implements \Ninja\Routes {
 	public function getRoutes() 
 
     {
