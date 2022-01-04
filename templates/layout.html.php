@@ -13,7 +13,7 @@
     <ul>
       <li><a href="/">Home</a></li>
       <li><a href="/blog/list">Blog List</a></li>
-      <li><a href="/blog/add">Add a new blog</a></li>
+      <li><a href="/blog/addpage">Add a new blog</a></li>
     </ul>
   </nav>
 

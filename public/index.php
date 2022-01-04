@@ -6,7 +6,7 @@ try {
 	
 	$route = ltrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
 
-	$entryPoint = new \Ninja\EntryPoint($route, new \Site\SiteRoutes());
+	$entryPoint = new \Ninja\EntryPoint($route, $_SERVER['REQUEST_METHOD'], new \Site\SiteRoutes());
 	$entryPoint->run();
 }
 

@@ -81,7 +81,7 @@ if (isset($_GET['commentid'])) {
 
 } else {
   echo '
-    <form action="" method="post">
+    <form action="/blog/addcomment" method="post">
       
       <label for="commText">Type your comment here:</label>
       <textarea id="commText" name="comment[commText]" rows="3" cols="40"></textarea>

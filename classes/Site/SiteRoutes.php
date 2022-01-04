@@ -2,7 +2,7 @@
 namespace Site;
 
 class SiteRoutes {
-    public function callAction($route)
+	public function getRoutes() 
 
     {
 		include __DIR__ . '/../../includes/DatabaseConnection.php';
@@ -12,43 +12,75 @@ class SiteRoutes {
 	    $commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id');
         $displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId');   
 
-        if ($route === 'blog/list') {
-			$controller = new \Site\Controllers\Blog($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
-			$page = $controller->list();
-		}
-		else if ($route === '') {
-			$controller = new \Site\Controllers\Blog($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
-			$page = $controller->home();
-		}
-		else if ($route === 'blog/edit') {
-			$controller = new \Site\Controllers\Blog($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
-			$page = $controller->edit();
-		}
-		else if ($route === 'blog/add') {
-			$controller = new \Site\Controllers\Blog($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
-			$page = $controller->add();
-		}
-		else if ($route === 'blog/delete') {
-			$controller = new \Site\Controllers\Blog($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
-			$page = $controller->delete();
-		}
-		else if ($route === 'blog/wholeblog') {
-			$controller = new \Site\Controllers\Blog($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
-			$page = $controller->wholeblog();
-		}
-		else if ($route === 'blog/editcomment') {
-			$controller = new \Site\Controllers\Blog($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
-			$page = $controller->editcomment();
-		}
-		else if ($route === 'blog/deletecomment') {
-			$controller = new \Site\Controllers\Blog($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
-			$page = $controller->deletecomment();
-		}
-		else if ($route === 'register') {
-			$controller = new \Site\Controllers\Register($authorsTable);
-			$page = $controller->showForm();
-		}
+		$blogController = new \Site\Controllers\Blog($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
 
-        return $page;
+		$routes = [
+			'blog/edit' => [
+				'POST' => [
+					'controller' => $blogController,
+					'action' => 'saveEdit'
+				],
+				'GET' => [
+					'controller' => $blogController,
+					'action' => 'displayEdit'
+				]
+			],
+			'blog/delete' => [
+				'POST' => [
+					'controller' => $blogController,
+					'action' => 'delete'
+				]
+			],
+			'blog/list' => [
+				'GET' => [
+					'controller' => $blogController,
+					'action' => 'list'
+				]
+			],
+			'' => [
+				'GET' => [
+					'controller' => $blogController,
+					'action' => 'home'
+				]
+			],
+			'blog/addpage' => [
+				'GET' => [
+					'controller' => $blogController,
+					'action' => 'addpage'
+				]
+			],
+			'blog/add' => [
+				'POST' => [
+					'controller' => $blogController,
+					'action' => 'add'
+				]
+			],
+			'blog/wholeblog' => [
+				'GET' => [
+					'controller' => $blogController,
+					'action' => 'wholeblog'
+				]
+			],
+			'blog/addcomment' => [
+				'POST' => [
+					'controller' => $blogController,
+					'action' => 'addcomment'
+				]
+			],
+			'blog/editcomment' => [
+				'POST' => [
+					'controller' => $blogController,
+					'action' => 'editcomment'
+				]
+			],
+			'blog/deletecomment' => [
+				'POST' => [
+					'controller' => $blogController,
+					'action' => 'deletecomment'
+				]
+			]
+		];
+
+		return $routes;
     }
 }

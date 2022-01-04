@@ -32,7 +32,7 @@ class Blog {
       
           }
       
-        $title = 'Ye Olde Blog list';
+        $title = 'Blog list';
 
         $totalBlogs = $this->blogsTable->total();
 
@@ -69,8 +69,8 @@ class Blog {
 
 
 
-    public function edit() {
-        if (isset($_POST['blog'])) {
+    public function saveEdit() {
+      
             
             $blog = $_POST['blog'];
             //the above is from form, below is others
@@ -79,11 +79,13 @@ class Blog {
 
             $this->blogsTable->save($blog);
 
-            header('location: /blog/wholeblog?id=' . $blog['id']);
+            //header('location: /blog/wholeblog?id=' . $blog['id']);
+            header('location: /blog/list');
 
-        }
+    }
 
-        else {
+    public function displayEdit() {
+
             $blog = $this->blogsTable->findById($_GET['id']);
 
             $title = 'Edit blog';
@@ -94,10 +96,6 @@ class Blog {
 						'blog' => $blog
 					    ]
                     ];
-
-
-
-        }
     }
 
     public function editcomment() {
@@ -116,7 +114,6 @@ class Blog {
     }
 
     public function add() {
-        if (isset($_POST['blog'])) {
 
             $blog = $_POST['blog'];
             //the above is from form, below is others
@@ -126,12 +123,14 @@ class Blog {
             $this->blogsTable->save($blog);
 
             header('location: /blog/list');
-        }
-        else {
+    }
+
+    public function addpage() {
+
             $title = 'Add a new blog';
 
             return ['template' => 'addblog.html.php', 'title' => $title];
-        }
+        
     }
 
     public function wholeblog() {
@@ -171,31 +170,14 @@ class Blog {
 
             }
 
-        if (isset($_POST['comment'])) {
+        
         
 
-        // 1 currently represents the author id & blog id
-        
-            $comment = $_POST['comment'];
-            $comment['authorId'] = 2;
-            $comment['commDate'] = new \Datetime();
-    
-
-            $this->commentsTable->save($comment);
-        
-            //head back to the current page after inserting comment
-            header('location: /blog/wholeblog?id=' . $blog['id']);
-            die;
-
-        } 
-        
-        else {
-
-            if (isset($_GET['commentid'])) {
+        if (isset($_GET['commentid'])) {
             
             $comment2edit = $this->commentsTable->findById($_GET['commentid']);
 
-            }
+            
         }
 
         $title = 'Whole Blogger';
@@ -211,4 +193,21 @@ class Blog {
 
 		
     }
+
+    public function addcomment() {
+
+        // 1 currently represents the author id & blog id
+        
+            $comment = $_POST['comment'];
+            $comment['authorId'] = 2;
+            $comment['commDate'] = new \Datetime();
+    
+
+            $this->commentsTable->save($comment);
+        
+            //head back to the current page after inserting comment
+            header('location: /blog/wholeblog?id=' . $comment['commBlogId']);
+            die;
+
+    } 
 }

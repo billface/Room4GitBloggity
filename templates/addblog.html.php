@@ -1,4 +1,4 @@
-<form action="" method="post">
+<form action="/blog/add" method="post">
     <input type="hidden" name="blog[id]" value="<?=''?>">
     <label for="blogHeading">Type your blog heading here:</label>
     <textarea id="blogHeading" name="blog[blogHeading]" rows="1" cols="40"></textarea>
