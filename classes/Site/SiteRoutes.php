@@ -13,8 +13,26 @@ class SiteRoutes implements \Ninja\Routes {
         $displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId');   
 
 		$blogController = new \Site\Controllers\Blog($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
+		$authorController = new \Site\Controllers\Register($authorsTable);
 
+	
 		$routes = [
+			'author/register' => [
+				'GET' => [
+					'controller' => $authorController,
+					'action' => 'registrationForm'
+				],
+				'POST' => [
+					'controller' => $authorController,
+					'action' => 'registerUser'
+				]
+			],
+			'author/success' => [
+				'GET' => [
+					'controller' => $authorController,
+					'action' => 'success'
+				]
+			],
 			'blog/edit' => [
 				'POST' => [
 					'controller' => $blogController,
