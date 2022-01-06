@@ -20,6 +20,8 @@ class Authentication {
 			session_regenerate_id();
 			$_SESSION['username'] = $username;
 			$_SESSION['password'] = $user[0][$this->passwordColumn];
+			//0 returns the first record received (including email etc)
+
 			return true;
 		}
 		else {
@@ -36,7 +38,19 @@ class Authentication {
 		$user = $this->users->find($this->usernameColumn, strtolower($_SESSION['username']));
 
 		if (!empty($user) && $user[0][$this->passwordColumn] === $_SESSION['password']) {
+			//0 returns the first record received (including email etc)
+
 			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function getUser() {
+		if ($this->isLoggedIn()) {
+			return $this->users->find($this->usernameColumn, strtolower($_SESSION['username']))[0];
+			//0 returns the first record received (including email etc)
 		}
 		else {
 			return false;

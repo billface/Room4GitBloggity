@@ -4,27 +4,28 @@ namespace Site;
 class SiteRoutes implements \Ninja\Routes {
 	private $authorsTable;
 	private $blogsTable;
+	private $authentication;
 	private $commentsTable;
 	private $displayCommentsTable;
-	private $authentication;
+	
 
 	public function __construct() {
 		include __DIR__ . '/../../includes/DatabaseConnection.php';
 
         $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id');
 	    $this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id');
+		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
 	    $this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id');
         $this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId');   
-		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
 	
 	}
 
 
 		public function getRoutes() : array {
 
-			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->commentsTable, $this->displayCommentsTable);
+			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable);
 			$authorController = new \Site\Controllers\Register($this->authorsTable);
-			$loginController = new \Site\Controllers\Login();
+			$loginController = new \Site\Controllers\Login($this->authentication);
 
 		
 			$routes = [
@@ -121,6 +122,29 @@ class SiteRoutes implements \Ninja\Routes {
 					],
 					'login' => true
 
+				],
+				'login/success' => [
+					'GET' => [
+						'controller' => $loginController,
+						'action' => 'success'
+					],
+					'login' => true
+				],
+				'login' => [
+					'GET' => [
+						'controller' => $loginController,
+						'action' => 'loginForm'
+					],
+					'POST' => [
+						'controller' => $loginController,
+						'action' => 'processLogin'
+					]
+				],
+				'logout' => [
+					'GET' => [
+						'controller' => $loginController,
+						'action' => 'logout'
+					]
 				],
 				'login/error' => [
 					'GET' => [
