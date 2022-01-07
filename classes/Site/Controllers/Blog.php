@@ -62,6 +62,16 @@ class Blog {
     
 
     public function delete() {
+
+        $author = $this->authentication->getUser();
+
+        $blog = $this->blogsTable->findById($_POST['blogId']);
+
+        if ($blog['authorId'] != $author['id']) {
+			return;
+		}
+		
+
         $this->blogsTable->delete($_POST['blogId']);
     
         header('location: /blog/list');
@@ -69,6 +79,14 @@ class Blog {
 
 
     public function deletecomment() {
+
+        $author = $this->authentication->getUser();
+
+        $comment = $this->commentsTable->findById($_POST['commId']);
+
+        if ($comment['authorId'] != $author['id']) {
+			return;
+		}
         $this->commentsTable->delete($_POST['commId']);
     
         header('location: /blog/wholeblog?id=' . $_POST['headerBlogId']);
@@ -78,6 +96,15 @@ class Blog {
 
     public function saveEdit() {
             $author = $this->authentication->getUser();
+
+            //added security from Ninja pg 493 PDF 363
+            if (isset($_GET['id'])) {
+                $blog = $this->blogsTable->findById($_GET['id']);
+    
+                if ($blog['authorId'] != $author['id']) {
+                    return;
+                }
+            }
 
             $blog = $_POST['blog'];
             //the above is from form, below is others
@@ -92,23 +119,35 @@ class Blog {
     }
 
     public function displayEdit() {
+        
+        $author = $this->authentication->getUser();
 
-            $blog = $this->blogsTable->findById($_GET['id']);
+        $blog = $this->blogsTable->findById($_GET['id']);
 
-            $title = 'Edit blog';
+        $title = 'Edit blog';
 
-            return ['template' => 'editblog.html.php', 
-                    'title' => $title,
-                    'variables' => [
-						'blog' => $blog
-					    ]
-                    ];
+        return ['template' => 'editblog.html.php', 
+                'title' => $title,
+                'variables' => [
+                    'blog' => $blog,
+                    'userId' => $author['id'] ?? null
+                    ]
+                ];
     }
 
     public function editcomment() {
         if (isset($_POST['comment'])) {
 
             $author = $this->authentication->getUser();
+
+            //added security from Ninja pg 493 PDF 363
+            if (isset($_GET['commentid'])) {
+                $comment = $this->commentsTable->findById($_GET['commentid']);
+    
+                if ($comment['authorId'] != $author['id']) {
+                    return;
+                }
+            }
 
 
 			$comment = $_POST['comment'];
@@ -125,6 +164,8 @@ class Blog {
 
     public function add() {
             $author = $this->authentication->getUser();
+
+           //possible security flaw (see pg 493 PDF 363)
 
             $blog = $_POST['blog'];
             //the above is from form, below is others
@@ -198,7 +239,6 @@ class Blog {
         $title = 'Whole Blogger';
 
         $author = $this->authentication->getUser();
-
 
         return ['template' => 'wholeblog.html.php',
                 'title' => $title,

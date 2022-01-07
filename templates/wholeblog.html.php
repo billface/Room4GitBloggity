@@ -73,6 +73,7 @@
 
 
 if (isset($_GET['commentid'])) {
+  if ($userId == $comment['authorId']): 
 
     echo
 		'<form action="/blog/editcomment" method="post">
@@ -82,8 +83,13 @@ if (isset($_GET['commentid'])) {
       <textarea id="commText" name="comment[commText]" rows="3" cols="40">'.$comment2edit['commText'].'</textarea>
       <input type="submit" value="Save">
     </form>';
+     
+  else:
+    echo
 
-		
+    '<blockquote>You may only edit your own comments</blockquote>';
+		 
+  endif; 
 
 } else {
   echo '
