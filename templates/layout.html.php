@@ -10,6 +10,7 @@
     <header>
       <h1>Internet Blog Database</h1>
     </header>
+
     <ul>
       <li><a href="/">Home</a></li>
       <li><a href="/blog/list">Blog List</a></li>

@@ -30,7 +30,8 @@ class Blog {
                     'blogHeading' => $blog['blogHeading'],
                     'blogDate' => $blog['blogDate'],
                     'name' => $author['name'],
-                    'email' => $author['email']
+                    'email' => $author['email'],
+                    'authorId' => $author['id']
                 ];
       
           }
@@ -39,12 +40,15 @@ class Blog {
 
         $totalBlogs = $this->blogsTable->total();
 
+        $author = $this->authentication->getUser();
+
         return ['template' => 'blogs.html.php', 
 				'title' => $title, 
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
-						'blogs' => $blogs
-					]
+						'blogs' => $blogs,
+                        'userId' => $author['id'] ?? null
+                    ]
 				];
         
     }
@@ -154,7 +158,9 @@ class Blog {
 					'blogDate' => $blog['blogDate'],
 					'blogModDate' => $blog['blogModDate'],
 					'name' => $author['name'],
-					'email' => $author['email']
+					'email' => $author['email'],
+                    'authorId' => $author['id']
+
 				];
 
 			}
@@ -172,7 +178,9 @@ class Blog {
 					'commBlogId' => $comment['commBlogId'],
 					'commModDate' => $comment['commModDate'],
 					'name' => $author['name'],
-					'email' => $author['email']
+					'email' => $author['email'],
+                    'authorId' => $author['id']
+
 				];
 
             }
@@ -189,12 +197,16 @@ class Blog {
 
         $title = 'Whole Blogger';
 
+        $author = $this->authentication->getUser();
+
+
         return ['template' => 'wholeblog.html.php',
                 'title' => $title,
                 'variables' => [
                     'blogs' => $blogs,
                     'comments' => $comments,
-                    'comment2edit' => $comment2edit
+                    'comment2edit' => $comment2edit,
+                    'userId' => $author['id'] ?? null
                     ]
                 ];
 
