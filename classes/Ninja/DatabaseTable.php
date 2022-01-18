@@ -29,6 +29,18 @@ class DatabaseTable
 		return $row[0];
 	}
 
+	public function find($column, $value) {
+		$query = 'SELECT * FROM ' . $this->table . ' WHERE ' . $column . ' = :value';
+
+		$parameters = [
+			'value' => $value
+		];
+
+		$query = $this->query($query, $parameters);
+
+		return $query->fetchAll();
+	}
+
 	public function findById($value) {
 		$query = 'SELECT * FROM `' . $this->table . '` WHERE `' . $this->primaryKey . '` = :value';
 
