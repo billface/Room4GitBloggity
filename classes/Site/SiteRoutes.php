@@ -10,13 +10,33 @@ class SiteRoutes implements \Ninja\Routes {
         $blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id');
 	    $authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id');
 	    $commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id');
-        $displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId');   
+        $displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId');
+		$siteTable = new \Ninja\DatabaseTable($pdo, 'site', 'id');
+		$eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id');
+
+
 
 		$blogController = new \Site\Controllers\Blog($blogsTable, $authorsTable, $commentsTable, $displayCommentsTable);
 		$authorController = new \Site\Controllers\Register($authorsTable);
+		$siteController = new \Site\Controllers\Site($siteTable);
+		$eventController = new \Site\Controllers\Event($eventsTable, $authorsTable);
+
+
 
 	
 		$routes = [
+			'' => [
+				'GET' => [
+					'controller' => $siteController,
+					'action' => 'home'
+				]
+			],
+			'site/about' => [
+				'GET' => [
+					'controller' => $siteController,
+					'action' => 'about'
+				]
+			],
 			'author/register' => [
 				'GET' => [
 					'controller' => $authorController,
@@ -31,6 +51,12 @@ class SiteRoutes implements \Ninja\Routes {
 				'GET' => [
 					'controller' => $authorController,
 					'action' => 'success'
+				]
+			],
+			'site/about' => [
+				'GET' => [
+					'controller' => $siteController,
+					'action' => 'about'
 				]
 			],
 			'blog/edit' => [
@@ -53,12 +79,6 @@ class SiteRoutes implements \Ninja\Routes {
 				'GET' => [
 					'controller' => $blogController,
 					'action' => 'list'
-				]
-			],
-			'' => [
-				'GET' => [
-					'controller' => $blogController,
-					'action' => 'home'
 				]
 			],
 			'blog/addpage' => [
@@ -95,6 +115,12 @@ class SiteRoutes implements \Ninja\Routes {
 				'POST' => [
 					'controller' => $blogController,
 					'action' => 'deletecomment'
+				]
+			],
+			'event/list' => [
+				'GET' => [
+					'controller' => $eventController,
+					'action' => 'list'
 				]
 			]
 		];
