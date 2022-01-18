@@ -1,6 +1,8 @@
 <?php
 namespace Site\Controllers;
 use \Ninja\DatabaseTable;
+use \Ninja\Authentication;
+
 
 class Blog {
     private $authorsTable;
@@ -8,12 +10,13 @@ class Blog {
     private $commentsTable;
     private $displayCommentsTable;
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable) {
-		$this->authorsTable = $authorsTable;
-        $this->blogsTable = $blogsTable;
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable) {
+		$this->blogsTable = $blogsTable;
+        $this->authorsTable = $authorsTable;
+        $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
-        $this->displayCommentsTable = $displayCommentsTable;
-	}
+        $this->displayCommentsTable = $displayCommentsTable;    
+    }
 
     public function list() {
         $result = $this->blogsTable->findAll();
@@ -27,7 +30,8 @@ class Blog {
                     'blogHeading' => $blog['blogHeading'],
                     'blogDate' => $blog['blogDate'],
                     'name' => $author['name'],
-                    'email' => $author['email']
+                    'email' => $author['email'],
+                    'authorId' => $author['id']
                 ];
       
           }
@@ -36,12 +40,15 @@ class Blog {
 
         $totalBlogs = $this->blogsTable->total();
 
+        $author = $this->authentication->getUser();
+
         return ['template' => 'blogs.html.php', 
 				'title' => $title, 
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
-						'blogs' => $blogs
-					]
+						'blogs' => $blogs,
+                        'userId' => $author['id'] ?? null
+                    ]
 				];
         
     }
@@ -55,6 +62,16 @@ class Blog {
     
 
     public function delete() {
+
+        $author = $this->authentication->getUser();
+
+        $blog = $this->blogsTable->findById($_POST['blogId']);
+
+        if ($blog['authorId'] != $author['id']) {
+			return;
+		}
+		
+
         $this->blogsTable->delete($_POST['blogId']);
     
         header('location: /blog/list');
@@ -62,6 +79,14 @@ class Blog {
 
 
     public function deletecomment() {
+
+        $author = $this->authentication->getUser();
+
+        $comment = $this->commentsTable->findById($_POST['commId']);
+
+        if ($comment['authorId'] != $author['id']) {
+			return;
+		}
         $this->commentsTable->delete($_POST['commId']);
     
         header('location: /blog/wholeblog?id=' . $_POST['headerBlogId']);
@@ -70,12 +95,21 @@ class Blog {
 
 
     public function saveEdit() {
-      
-            
+            $author = $this->authentication->getUser();
+
+            //added security from Ninja pg 493 PDF 363
+            if (isset($_GET['id'])) {
+                $blog = $this->blogsTable->findById($_GET['id']);
+    
+                if ($blog['authorId'] != $author['id']) {
+                    return;
+                }
+            }
+
             $blog = $_POST['blog'];
             //the above is from form, below is others
             $blog['blogModDate'] = new \DateTime();
-            $blog['authorId'] = 2;
+            $blog['authorId'] = $author['id'];
 
             $this->blogsTable->save($blog);
 
@@ -85,24 +119,39 @@ class Blog {
     }
 
     public function displayEdit() {
+        
+        $author = $this->authentication->getUser();
 
-            $blog = $this->blogsTable->findById($_GET['id']);
+        $blog = $this->blogsTable->findById($_GET['id']);
 
-            $title = 'Edit blog';
+        $title = 'Edit blog';
 
-            return ['template' => 'editblog.html.php', 
-                    'title' => $title,
-                    'variables' => [
-						'blog' => $blog
-					    ]
-                    ];
+        return ['template' => 'editblog.html.php', 
+                'title' => $title,
+                'variables' => [
+                    'blog' => $blog,
+                    'userId' => $author['id'] ?? null
+                    ]
+                ];
     }
 
     public function editcomment() {
         if (isset($_POST['comment'])) {
 
+            $author = $this->authentication->getUser();
+
+            //added security from Ninja pg 493 PDF 363
+            if (isset($_GET['commentid'])) {
+                $comment = $this->commentsTable->findById($_GET['commentid']);
+    
+                if ($comment['authorId'] != $author['id']) {
+                    return;
+                }
+            }
+
+
 			$comment = $_POST['comment'];
-			$comment['authorId'] = 2;
+			$comment['authorId'] = $author['id'];
 			$comment['commModDate'] = new \DateTime();
 
 			$this->commentsTable->save($comment);
@@ -114,11 +163,14 @@ class Blog {
     }
 
     public function add() {
+            $author = $this->authentication->getUser();
+
+           //possible security flaw (see pg 493 PDF 363)
 
             $blog = $_POST['blog'];
             //the above is from form, below is others
             $blog['blogDate'] = new \Datetime();
-            $blog['authorId'] = 2;
+            $blog['authorId'] = $author['id'];
 
             $this->blogsTable->save($blog);
 
@@ -147,7 +199,9 @@ class Blog {
 					'blogDate' => $blog['blogDate'],
 					'blogModDate' => $blog['blogModDate'],
 					'name' => $author['name'],
-					'email' => $author['email']
+					'email' => $author['email'],
+                    'authorId' => $author['id']
+
 				];
 
 			}
@@ -165,7 +219,9 @@ class Blog {
 					'commBlogId' => $comment['commBlogId'],
 					'commModDate' => $comment['commModDate'],
 					'name' => $author['name'],
-					'email' => $author['email']
+					'email' => $author['email'],
+                    'authorId' => $author['id']
+
 				];
 
             }
@@ -182,12 +238,15 @@ class Blog {
 
         $title = 'Whole Blogger';
 
+        $author = $this->authentication->getUser();
+
         return ['template' => 'wholeblog.html.php',
                 'title' => $title,
                 'variables' => [
                     'blogs' => $blogs,
                     'comments' => $comments,
-                    'comment2edit' => $comment2edit
+                    'comment2edit' => $comment2edit,
+                    'userId' => $author['id'] ?? null
                     ]
                 ];
 
@@ -196,10 +255,10 @@ class Blog {
 
     public function addcomment() {
 
-        // 1 currently represents the author id & blog id
-        
+            $author = $this->authentication->getUser();
+
             $comment = $_POST['comment'];
-            $comment['authorId'] = 2;
+            $comment['authorId'] = $author['id'];
             $comment['commDate'] = new \Datetime();
     
 

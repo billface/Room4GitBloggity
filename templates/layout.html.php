@@ -10,12 +10,18 @@
     <header>
       <h1>Internet Blog Database</h1>
     </header>
+
     <ul>
       <li><a href="/">Home</a></li>
       <li><a href="/site/about">About</a></li>
       <li><a href="/blog/list">Blog List</a></li>
       <li><a href="/event/list">Calendar</a></li>
       <li><a href="/blog/addpage">Add a new blog</a></li>
+      <?php if ($loggedIn): ?>
+			<li><a href="/logout">Log out</a></li>
+			<?php else: ?>
+			<li><a href="/login">Log in</a></li>
+			<?php endif; ?>
     </ul>
   </nav>
 
