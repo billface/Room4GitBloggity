@@ -7,9 +7,12 @@
     <textarea id="eventText" name="event[eventText]" rows="3" cols="40">
     </textarea>
     <br>
+    <label for="eventDate">event date</label>
+    <input type="datetime-local" id="event[eventDate]" name="event[eventDate]">
+    <!--<br>
     <label for="eventDate">Event date:</label>
     <input type="datetime-local" id="eventDate"  name="event['eventDate']">
-       
+-->
     
     <input type="submit" value="Add">
     <br>

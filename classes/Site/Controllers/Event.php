@@ -27,29 +27,35 @@ class Event {
                     'eventText' => $event['eventText'],
                     'eventDate' => $event['eventDate'],
                     'name' => $author['name'],
-                    'email' => $author['email']
+                    'email' => $author['email'],
+                    'authorId' => $author['id']
+
                 ];
       
           }
       
         $title = 'Event list';
 
+        $author = $this->authentication->getUser();
 
         return ['template' => 'events.html.php', 
 				'title' => $title, 
 				'variables' => [
-						'events' => $events
+						'events' => $events,
+                        'userId' => $author['id'] ?? null
 					]
 				];
         
     }
 
     public function add() {
+        $author = $this->authentication->getUser();
 
         $event = $_POST['event'];
         //the above is from form, below is others
+        //$event['eventDate'] = new \Datetime();
 
-        $event['authorId'] = 2;
+        $event['authorId'] = $author['id'];;
 
         $this->eventsTable->save($event);
 

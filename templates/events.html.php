@@ -23,12 +23,16 @@
               echo htmlspecialchars($event['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
               echo htmlspecialchars($event['name'], ENT_QUOTES, 'UTF-8'); ?></a>)
 
+<?php if ($userId == $event['authorId']): ?>
+
   <a href="/event/edit?id=<?=$event['id']?>">Edit</a>
   <br>
   <form action="/event/delete" method="post">
     <input type="hidden" name="eventId" value="<?=$event['id']?>">
     <input type="submit" value="Delete">
   </form>
+  <?php endif; ?>
+
   </p>
 </blockquote>
 <?php endforeach; ?>
