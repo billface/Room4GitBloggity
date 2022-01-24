@@ -10,13 +10,21 @@
     <header>
       <h1>Internet Blog Database</h1>
     </header>
+
     <ul>
-      <li><a href="index.php?action=home&id=1">Home</a></li>
-      <li><a href="index.php?action=about&id=2">About</a></li>
-      <li><a href="index.php?action=events&id=3">Events</a></li>
-      <li><a href="index.php?action=shop&id=4">Shop</a></li>
-      <li><a href="index.php?action=list&id=5">Blog List</a></li>
-      <li><a href="index.php?action=add">Add a new blog</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/site/about">About</a></li>
+      <li><a href="/blog/list">Blog List</a></li>
+      <li><a href="/event/list">Calendar</a></li>
+      <li><a href="/site/list">Pages</a></li>
+      <li><a href="/blog/addpage">Add a new blog</a></li>
+      <li><a href="/event/addpage">Add a new event</a></li>
+
+      <?php if ($loggedIn): ?>
+			<li><a href="/logout">Log out</a></li>
+			<?php else: ?>
+			<li><a href="/login">Log in</a></li>
+			<?php endif; ?>
     </ul>
   </nav>
 

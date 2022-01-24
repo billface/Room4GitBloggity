@@ -1,2 +1,13 @@
-  <?php echo '<pre>'; print_r($comments); echo '</pre>'; ?>
-$blog = findById($pdo, 'blog', 'id', $_GET['id']);
+  <?php 
+  
+  
+echo '<pre>'; print_r($comments); echo '</pre>'; 
+
+
+
+//echoing back post array
+echo '<pre>'; print_r($_POST); echo '</pre>'; 
+
+//shows where url redirect is working properly (see https://www.sitepoint.com/community/t/url-rewriting-php-mysql-novice-to-ninja/290945/20)
+echo 'You are viewing ' . $_SERVER['REQUEST_URI']; 
+die;
