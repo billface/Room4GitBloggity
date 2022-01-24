@@ -11,7 +11,7 @@
     <h3>
     <?php
               $date = new DateTime($event['eventDate']);
-              echo $date->format('jS F Y');
+              echo $date->format('jS F Y H:i');
               ?>
               </h3>
               <p>

@@ -65,6 +65,13 @@ class DatabaseTable
 		return $query->fetchAll();
 	}
 
+	public function findAllFutureDates($column) {
+		$result = $this->query('SELECT * FROM `' . $this->table . '` WHERE `' . $column .
+		 '` > CURRENT_TIMESTAMP ORDER BY `'. $column . '`');
+		 		
+		return $result->fetchAll();
+	}
+
 	private function insert($fields) {
 		$query = 'INSERT INTO `' . $this->table . '` (';
 
@@ -123,6 +130,10 @@ class DatabaseTable
 
 		return $result->fetchAll();
 	}
+
+	
+
+
 
 	private function processDates($fields) {
 		foreach ($fields as $key => $value) {

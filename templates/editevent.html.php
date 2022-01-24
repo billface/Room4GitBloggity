@@ -7,6 +7,8 @@
     <br>
     <label for="eventText">Type your event here:</label>
     <textarea id="eventText" name="event[eventText]" rows="3" cols="40"><?=$event['eventText']?></textarea>
+    <br>
+    
     <input type="submit" value="Save">
 </form>
 <?php else: ?>

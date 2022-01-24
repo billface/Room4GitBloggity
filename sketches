@@ -11,12 +11,3 @@ echo '<pre>'; print_r($_POST); echo '</pre>';
 //shows where url redirect is working properly (see https://www.sitepoint.com/community/t/url-rewriting-php-mysql-novice-to-ninja/290945/20)
 echo 'You are viewing ' . $_SERVER['REQUEST_URI']; 
 die;
-
-
-temp
-
-<br>
-    <label for="eventDate">Event date:</label>
-    <input type="date"  name="event['eventDate']"
-       value="<?php echo date("Y/m/d") ?>"
-       min="<?php echo date("Y/m/d") ?>" max="2099-12-31">
