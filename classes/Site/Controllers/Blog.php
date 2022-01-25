@@ -71,7 +71,6 @@ class Blog {
 			return;
 		}
 		
-
         $this->blogsTable->delete($_POST['blogId']);
     
         header('location: /blog/list');
@@ -92,12 +91,44 @@ class Blog {
         header('location: /blog/wholeblog?id=' . $_POST['headerBlogId']);
     }
 
+    public function add() {
+        $author = $this->authentication->getUser();
+
+       //possible security flaw (see pg 493 PDF 363)
+
+        $blog = $_POST['blog'];
+        //the above is from form, below is others
+        $blog['blogDate'] = new \Datetime();
+
+        $blog['authorId'] = $author['id'];
+
+        $this->blogsTable->save($blog);
+
+        header('location: /blog/list');
+}
+
+public function addpage() {
+
+        $title = 'Add a new blog';
+
+        return ['template' => 'addblog.html.php', 'title' => $title];
+    
+}
+
 
 
     public function saveEdit() {
             $author = $this->authentication->getUser();
 
-            //added security from Ninja pg 493 PDF 363
+            $authorObject = new \Site\Entity\Author($this->blogsTable);
+
+            $authorObject->id = $author['id'];
+            $authorObject->name = $author['name'];
+            $authorObject->email = $author['email'];
+            $authorObject->password = $author['password'];
+
+
+            /*added security from Ninja pg 493 PDF 363
             if (isset($_GET['id'])) {
                 $blog = $this->blogsTable->findById($_GET['id']);
     
@@ -105,6 +136,7 @@ class Blog {
                     return;
                 }
             }
+            */
 
             $blog = $_POST['blog'];
             //the above is from form, below is others
@@ -162,28 +194,7 @@ class Blog {
 		
     }
 
-    public function add() {
-            $author = $this->authentication->getUser();
-
-           //possible security flaw (see pg 493 PDF 363)
-
-            $blog = $_POST['blog'];
-            //the above is from form, below is others
-            $blog['blogDate'] = new \Datetime();
-            $blog['authorId'] = $author['id'];
-
-            $this->blogsTable->save($blog);
-
-            header('location: /blog/list');
-    }
-
-    public function addpage() {
-
-            $title = 'Add a new blog';
-
-            return ['template' => 'addblog.html.php', 'title' => $title];
-        
-    }
+    
 
     public function wholeblog() {
         $result = $this->blogsTable->findAllById($_GET['id']);
