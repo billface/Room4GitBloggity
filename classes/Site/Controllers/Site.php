@@ -93,7 +93,7 @@ class Site {
         $page = $this->siteTable->findById(1);
 
         $title = 'The Home page';
-
+        $page['metaDescription'] = 'this isnt it';
         return ['template' => 'basic.html.php',
                  'title' => $title,
                  'variables' => [
