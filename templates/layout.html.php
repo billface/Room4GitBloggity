@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="blogs.css">
     <title><?=$title?></title>
-    <meta name="description" content="<?=$page['metaDescription'] ?>"/>
+    <meta name="description" content="<?=$metaDescription?>">
     </head>
   <body>
   <nav>

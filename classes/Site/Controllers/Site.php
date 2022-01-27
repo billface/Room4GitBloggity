@@ -19,14 +19,15 @@ class Site {
 	public function list() {
         $result = $this->siteTable->findAll();
 
-        $pages = [];
-          foreach ($result as $page) {
-            $author = $this->authorsTable->findById($page['authorId']);
+        $sites = [];
+          foreach ($result as $site) {
+            $author = $this->authorsTable->findById($site['authorId']);
       
-            $pages[] = [
-                    'id' => $page['id'],
-                    'pageHeading' => $page['pageHeading'],
-					'pageText' => $page['pageText'],
+            $sites[] = [
+                    'id' => $site['id'],
+                    'siteHeading' => $site['siteHeading'],
+					'siteText' => $site['siteText'],
+                    //'siteMetaDescription' => $site['siteMetaDescription'],
                     'name' => $author['name'],
                     'email' => $author['email'],
                     'authorId' => $author['id']
@@ -34,14 +35,14 @@ class Site {
       
           }
       
-        $title = 'Page list';
+        $title = 'Page List';
 
 		$author = $this->authentication->getUser();
 
-		return ['template' => 'pages.html.php', 
+		return ['template' => 'sites.html.php', 
 				'title' => $title, 
 				'variables' => [
-						'pages' => $pages,
+						'sites' => $sites,
                         'userId' => $author['id'] ?? null
                     ]
 				];
@@ -53,18 +54,18 @@ class Site {
 
         //added security from Ninja pg 493 PDF 363
         if (isset($_GET['id'])) {
-            $page = $this->siteTable->findById($_GET['id']);
+            $site = $this->siteTable->findById($_GET['id']);
 
-            if ($page['authorId'] != $author['id']) {
+            if ($site['authorId'] != $author['id']) {
                 return;
             }
         }
             
-        $page = $_POST['page'];
+        $site = $_POST['site'];
         //the above is from form, below is others
-        $page['authorId'] = $author['id'];
+        $site['authorId'] = $author['id'];
 
-        $this->siteTable->save($page);
+        $this->siteTable->save($site);
 
         header('location: /site/list');
 
@@ -74,14 +75,14 @@ class Site {
 
         $author = $this->authentication->getUser();
 
-        $page = $this->siteTable->findById($_GET['id']);
+        $site = $this->siteTable->findById($_GET['id']);
 
-        $title = 'Edit page';
+        $title = 'Edit site';
 
-        return ['template' => 'editpage.html.php', 
+        return ['template' => 'editsite.html.php', 
                 'title' => $title,
                 'variables' => [
-                    'page' => $page,
+                    'site' => $site,
                     'userId' => $author['id'] ?? null
                     ]
                 ];
@@ -90,28 +91,31 @@ class Site {
 
 	public function home() {
 
-        $page = $this->siteTable->findById(1);
+        $site = $this->siteTable->findById(1);
 
         $title = 'The Home page';
-        $page['metaDescription'] = 'this isnt it';
+        $metaDescription = $site['metaDescription'];
+
         return ['template' => 'basic.html.php',
                  'title' => $title,
+                 'metaDescription' => $metaDescription,
                  'variables' => [
-                    'page' => $page
+                    'site' => $site
                     ]
                 ];
     }
 
     public function about() {
 
-        $page = $this->siteTable->findById(2);
+        $site = $this->siteTable->findById(2);
+
 
         $title = 'About a rapper';
 
         return ['template' => 'basic.html.php',
                  'title' => $title,
                  'variables' => [
-                    'page' => $page
+                    'site' => $site
                     ]
                 ];
     }

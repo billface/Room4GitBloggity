@@ -9,16 +9,23 @@ class Blog {
     private $blogsTable;
     private $commentsTable;
     private $displayCommentsTable;
+    private $siteTable;
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable) {
+
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $siteTable) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable;    
+        $this->siteTable = $siteTable;
+
     }
 
     public function list() {
+
+        $site = $this->siteTable->findById(3);
+
         $result = $this->blogsTable->findAll();
 
         $blogs = [];
@@ -38,15 +45,19 @@ class Blog {
       
         $title = 'Blog list';
 
+        $metaDescription = $site['metaDescription'];
+
         $totalBlogs = $this->blogsTable->total();
 
         $author = $this->authentication->getUser();
 
         return ['template' => 'blogs.html.php', 
 				'title' => $title, 
+                'metaDescription' => $metaDescription,
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
 						'blogs' => $blogs,
+                        'site' => $site,
                         'userId' => $author['id'] ?? null
                     ]
 				];
@@ -71,7 +82,6 @@ class Blog {
 			return;
 		}
 		
-
         $this->blogsTable->delete($_POST['blogId']);
     
         header('location: /blog/list');
@@ -92,29 +102,43 @@ class Blog {
         header('location: /blog/wholeblog?id=' . $_POST['headerBlogId']);
     }
 
+    public function add() {
+        $author = $this->authentication->getUser();
+
+        $blog = $_POST['blog'];
+        //the above is from form, below is others
+        $blog['blogDate'] = new \Datetime();
 
 
-    public function saveEdit() {
-            $author = $this->authentication->getUser();
+        $author->addBlog($blog);
 
-            //added security from Ninja pg 493 PDF 363
-            if (isset($_GET['id'])) {
-                $blog = $this->blogsTable->findById($_GET['id']);
+        header('location: /blog/list');
+}
+
+public function addpage() {
+
+        $title = 'Add a new blog';
+
+        return ['template' => 'addblog.html.php', 'title' => $title];
     
-                if ($blog['authorId'] != $author['id']) {
-                    return;
-                }
-            }
+}
 
-            $blog = $_POST['blog'];
-            //the above is from form, below is others
-            $blog['blogModDate'] = new \DateTime();
-            $blog['authorId'] = $author['id'];
 
-            $this->blogsTable->save($blog);
 
-            header('location: /blog/wholeblog?id=' . $blog['id']);
-            //header('location: /blog/list');
+public function saveEdit() {
+        $author = $this->authentication->getUser();
+
+        
+
+        $blog = $_POST['blog'];
+        //the above is from form, below is others
+        $blog['blogModDate'] = new \DateTime();
+
+        $author->addBlog($blog);
+
+
+        header('location: /blog/wholeblog?id=' . $blog['id']);
+        //header('location: /blog/list');
 
     }
 
@@ -162,28 +186,7 @@ class Blog {
 		
     }
 
-    public function add() {
-            $author = $this->authentication->getUser();
-
-           //possible security flaw (see pg 493 PDF 363)
-
-            $blog = $_POST['blog'];
-            //the above is from form, below is others
-            $blog['blogDate'] = new \Datetime();
-            $blog['authorId'] = $author['id'];
-
-            $this->blogsTable->save($blog);
-
-            header('location: /blog/list');
-    }
-
-    public function addpage() {
-
-            $title = 'Add a new blog';
-
-            return ['template' => 'addblog.html.php', 'title' => $title];
-        
-    }
+    
 
     public function wholeblog() {
         $result = $this->blogsTable->findAllById($_GET['id']);

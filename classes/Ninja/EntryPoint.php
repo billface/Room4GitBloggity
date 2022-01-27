@@ -47,6 +47,8 @@ class EntryPoint {
 			$page = $controller->$action();
 
 			$title = $page['title'];
+			$metaDescription = $page['metaDescription'];
+
 
 			if (isset($page['variables'])) {
 				$output = $this->loadTemplate($page['template'], $page['variables']);
@@ -57,7 +59,11 @@ class EntryPoint {
 
 			echo $this->loadTemplate('layout.html.php', ['loggedIn' => $authentication->isLoggedIn(),
 														'output' => $output,
-														'title' => $title
+														'title' => $title,
+														'metaDescription' => $metaDescription
+												
+
+
 													]);		
 		}
 	}

@@ -27,7 +27,7 @@ class SiteRoutes implements \Ninja\Routes {
 
 		public function getRoutes() : array {
 
-			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable);
+			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable, $this->siteTable);
 			$authorController = new \Site\Controllers\Register($this->authorsTable);
 			$siteController = new \Site\Controllers\Site($this->siteTable, $this->authorsTable, $this->authentication);
 			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication);
