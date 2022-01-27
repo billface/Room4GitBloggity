@@ -19,22 +19,7 @@ class Blog {
     }
 
     public function list() {
-        $result = $this->blogsTable->findAll();
-
-        $blogs = [];
-          foreach ($result as $blog) {
-            $author = $this->authorsTable->findById($blog->authorId);
-      
-            $blogs[] = [
-                    'id' => $blog->id,
-                    'blogHeading' => $blog->blogHeading,
-                    'blogDate' => $blog->blogDate,
-                    'name' => $author->name,
-                    'email' => $author->email,
-                    'authorId' => $author->id
-                ];
-      
-          }
+        $blogs = $this->blogsTable->findAll();
       
         $title = 'Blog list';
 
@@ -67,7 +52,7 @@ class Blog {
 
         $blog = $this->blogsTable->findById($_POST['blogId']);
 
-        if ($blog['authorId'] != $author['id']) {
+        if ($blog->authorId != $author->id) {
 			return;
 		}
 		
