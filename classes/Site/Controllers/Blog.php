@@ -23,15 +23,15 @@ class Blog {
 
         $blogs = [];
           foreach ($result as $blog) {
-            $author = $this->authorsTable->findById($blog['authorId']);
+            $author = $this->authorsTable->findById($blog->authorId);
       
             $blogs[] = [
-                    'id' => $blog['id'],
-                    'blogHeading' => $blog['blogHeading'],
-                    'blogDate' => $blog['blogDate'],
-                    'name' => $author['name'],
-                    'email' => $author['email'],
-                    'authorId' => $author['id']
+                    'id' => $blog->id,
+                    'blogHeading' => $blog->blogHeading,
+                    'blogDate' => $blog->blogDate,
+                    'name' => $author->name,
+                    'email' => $author->email,
+                    'authorId' => $author->id
                 ];
       
           }
@@ -47,7 +47,7 @@ class Blog {
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
 						'blogs' => $blogs,
-                        'userId' => $author['id'] ?? null
+                        'userId' => $author->id ?? null
                     ]
 				];
         
