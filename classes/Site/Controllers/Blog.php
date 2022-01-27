@@ -128,7 +128,7 @@ public function saveEdit() {
                 'title' => $title,
                 'variables' => [
                     'blog' => $blog,
-                    'userId' => $author['id'] ?? null
+                    'userId' => $author->id ?? null
                     ]
                 ];
     }
