@@ -19,22 +19,7 @@ class Blog {
     }
 
     public function list() {
-        $result = $this->blogsTable->findAll();
-
-        $blogs = [];
-          foreach ($result as $blog) {
-            $author = $this->authorsTable->findById($blog['authorId']);
-      
-            $blogs[] = [
-                    'id' => $blog['id'],
-                    'blogHeading' => $blog['blogHeading'],
-                    'blogDate' => $blog['blogDate'],
-                    'name' => $author['name'],
-                    'email' => $author['email'],
-                    'authorId' => $author['id']
-                ];
-      
-          }
+        $blogs = $this->blogsTable->findAll();
       
         $title = 'Blog list';
 
@@ -47,7 +32,7 @@ class Blog {
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
 						'blogs' => $blogs,
-                        'userId' => $author['id'] ?? null
+                        'userId' => $author->id ?? null
                     ]
 				];
         
@@ -67,7 +52,7 @@ class Blog {
 
         $blog = $this->blogsTable->findById($_POST['blogId']);
 
-        if ($blog['authorId'] != $author['id']) {
+        if ($blog->authorId != $author->id) {
 			return;
 		}
 		
@@ -94,15 +79,12 @@ class Blog {
     public function add() {
         $author = $this->authentication->getUser();
 
-       //possible security flaw (see pg 493 PDF 363)
-
         $blog = $_POST['blog'];
         //the above is from form, below is others
         $blog['blogDate'] = new \Datetime();
 
-        $blog['authorId'] = $author['id'];
 
-        $this->blogsTable->save($blog);
+        $author->addBlog($blog);
 
         header('location: /blog/list');
 }
@@ -117,36 +99,20 @@ public function addpage() {
 
 
 
-    public function saveEdit() {
-            $author = $this->authentication->getUser();
+public function saveEdit() {
+        $author = $this->authentication->getUser();
 
-            $authorObject = new \Site\Entity\Author($this->blogsTable);
+        
 
-            $authorObject->id = $author['id'];
-            $authorObject->name = $author['name'];
-            $authorObject->email = $author['email'];
-            $authorObject->password = $author['password'];
+        $blog = $_POST['blog'];
+        //the above is from form, below is others
+        $blog['blogModDate'] = new \DateTime();
+
+        $author->addBlog($blog);
 
 
-            /*added security from Ninja pg 493 PDF 363
-            if (isset($_GET['id'])) {
-                $blog = $this->blogsTable->findById($_GET['id']);
-    
-                if ($blog['authorId'] != $author['id']) {
-                    return;
-                }
-            }
-            */
-
-            $blog = $_POST['blog'];
-            //the above is from form, below is others
-            $blog['blogModDate'] = new \DateTime();
-            $blog['authorId'] = $author['id'];
-
-            $this->blogsTable->save($blog);
-
-            header('location: /blog/wholeblog?id=' . $blog['id']);
-            //header('location: /blog/list');
+        header('location: /blog/wholeblog?id=' . $blog['id']);
+        //header('location: /blog/list');
 
     }
 
@@ -162,7 +128,7 @@ public function addpage() {
                 'title' => $title,
                 'variables' => [
                     'blog' => $blog,
-                    'userId' => $author['id'] ?? null
+                    'userId' => $author->id ?? null
                     ]
                 ];
     }
