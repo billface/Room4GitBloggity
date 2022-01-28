@@ -9,13 +9,16 @@ class Blog {
     private $blogsTable;
     private $commentsTable;
     private $displayCommentsTable;
+    private $eventsTable;
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable) {
+
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $eventsTable) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable;    
+        $this->eventsTable = $eventsTable;
     }
 
     public function list() {
@@ -71,7 +74,6 @@ class Blog {
 			return;
 		}
 		
-
         $this->blogsTable->delete($_POST['blogId']);
     
         header('location: /blog/list');
@@ -92,29 +94,54 @@ class Blog {
         header('location: /blog/wholeblog?id=' . $_POST['headerBlogId']);
     }
 
+    public function add() {
+        $author = $this->authentication->getUser();
+
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable);
+
+        $authorObject->id = $author['id'];
+        $authorObject->name = $author['name'];
+        $authorObject->email = $author['email'];
+        $authorObject->password = $author['password'];
+
+       //possible security flaw (see pg 493 PDF 363)
+
+        $blog = $_POST['blog'];
+        //the above is from form, below is others
+        $blog['blogDate'] = new \Datetime();
+        
+        $authorObject->addBlog($blog);
+
+        header('location: /blog/list');
+}
+
+public function addpage() {
+
+        $title = 'Add a new blog';
+
+        return ['template' => 'addblog.html.php', 'title' => $title];
+    
+}
+
 
 
     public function saveEdit() {
-            $author = $this->authentication->getUser();
+        $author = $this->authentication->getUser();
 
-            //added security from Ninja pg 493 PDF 363
-            if (isset($_GET['id'])) {
-                $blog = $this->blogsTable->findById($_GET['id']);
-    
-                if ($blog['authorId'] != $author['id']) {
-                    return;
-                }
-            }
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable);
 
-            $blog = $_POST['blog'];
-            //the above is from form, below is others
-            $blog['blogModDate'] = new \DateTime();
-            $blog['authorId'] = $author['id'];
+        $authorObject->id = $author['id'];
+        $authorObject->name = $author['name'];
+        $authorObject->email = $author['email'];
+        $authorObject->password = $author['password'];
 
-            $this->blogsTable->save($blog);
+        $blog = $_POST['blog'];
+        //the above is from form, below is others
+        $blog['blogModDate'] = new \DateTime();
 
-            header('location: /blog/wholeblog?id=' . $blog['id']);
-            //header('location: /blog/list');
+        $authorObject->addBlog($blog);
+        header('location: /blog/wholeblog?id=' . $blog['id']);
+        //header('location: /blog/list');
 
     }
 
@@ -162,28 +189,7 @@ class Blog {
 		
     }
 
-    public function add() {
-            $author = $this->authentication->getUser();
-
-           //possible security flaw (see pg 493 PDF 363)
-
-            $blog = $_POST['blog'];
-            //the above is from form, below is others
-            $blog['blogDate'] = new \Datetime();
-            $blog['authorId'] = $author['id'];
-
-            $this->blogsTable->save($blog);
-
-            header('location: /blog/list');
-    }
-
-    public function addpage() {
-
-            $title = 'Add a new blog';
-
-            return ['template' => 'addblog.html.php', 'title' => $title];
-        
-    }
+    
 
     public function wholeblog() {
         $result = $this->blogsTable->findAllById($_GET['id']);

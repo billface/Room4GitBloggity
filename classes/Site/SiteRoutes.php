@@ -7,6 +7,8 @@ class SiteRoutes implements \Ninja\Routes {
 	private $authentication;
 	private $commentsTable;
 	private $displayCommentsTable;
+	private $siteTable;
+	private $eventsTable;
 	
 
 	public function __construct() {
@@ -16,19 +18,52 @@ class SiteRoutes implements \Ninja\Routes {
 	    $this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id');
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
 	    $this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id');
-        $this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId');   
+        $this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId');  
+		$this->siteTable = new \Ninja\DatabaseTable($pdo, 'site', 'id');   
+		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id');    
 	
 	}
 
 
 		public function getRoutes() : array {
 
-			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable);
+			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable, $this->eventsTable);
 			$authorController = new \Site\Controllers\Register($this->authorsTable);
+			$siteController = new \Site\Controllers\Site($this->siteTable, $this->authorsTable, $this->authentication);
+			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication, $this->blogsTable);
 			$loginController = new \Site\Controllers\Login($this->authentication);
 
 		
 			$routes = [
+				'' => [
+					'GET' => [
+						'controller' => $siteController,
+						'action' => 'home'
+					]
+				],
+				'site/about' => [
+					'GET' => [
+						'controller' => $siteController,
+						'action' => 'about'
+					]
+				],
+				'site/list' => [
+					'GET' => [
+						'controller' => $siteController,
+						'action' => 'list'
+					]
+				],
+				'site/edit' => [
+					'POST' => [
+						'controller' => $siteController,
+						'action' => 'saveEdit'
+					],
+					'GET' => [
+						'controller' => $siteController,
+						'action' => 'displayEdit'
+					],
+					'login' => true
+				],
 				'author/register' => [
 					'GET' => [
 						'controller' => $authorController,
@@ -43,6 +78,12 @@ class SiteRoutes implements \Ninja\Routes {
 					'GET' => [
 						'controller' => $authorController,
 						'action' => 'success'
+					]
+				],
+				'blog/list' => [
+					'GET' => [
+						'controller' => $blogController,
+						'action' => 'list'
 					]
 				],
 				'blog/edit' => [
@@ -64,18 +105,6 @@ class SiteRoutes implements \Ninja\Routes {
 					],
 					'login' => true
 
-				],
-				'blog/list' => [
-					'GET' => [
-						'controller' => $blogController,
-						'action' => 'list'
-					]
-				],
-				'' => [
-					'GET' => [
-						'controller' => $blogController,
-						'action' => 'home'
-					]
 				],
 				'blog/addpage' => [
 					'GET' => [
@@ -151,7 +180,49 @@ class SiteRoutes implements \Ninja\Routes {
 						'controller' => $loginController,
 						'action' => 'error'
 					]
-				]
+				],
+				'event/list' => [
+					'GET' => [
+						'controller' => $eventController,
+						'action' => 'list'
+					]
+				],
+				'event/edit' => [
+					'POST' => [
+						'controller' => $eventController,
+						'action' => 'saveEdit'
+					],
+					'GET' => [
+						'controller' => $eventController,
+						'action' => 'displayEdit'
+					],
+					'login' => true
+				],
+				'event/delete' => [
+					'POST' => [
+						'controller' => $eventController,
+						'action' => 'delete'
+					],
+					'login' => true
+
+				],
+				'event/addpage' => [
+					'GET' => [
+						'controller' => $eventController,
+						'action' => 'addpage'
+					],
+					'login' => true
+
+				],
+				'event/add' => [
+					'POST' => [
+						'controller' => $eventController,
+						'action' => 'add'
+					],
+					'login' => true
+
+				],
+
 			];
 
 			return $routes;
