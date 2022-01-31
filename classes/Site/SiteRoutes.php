@@ -15,12 +15,12 @@ class SiteRoutes implements \Ninja\Routes {
 		include __DIR__ . '/../../includes/DatabaseConnection.php';
 
         $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id');
-	    $this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id');
+		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id');    
+		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [$this->blogsTable, $this->eventsTable]);
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
 	    $this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id');
         $this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId');  
 		$this->siteTable = new \Ninja\DatabaseTable($pdo, 'site', 'id');   
-		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id');    
 	
 	}
 

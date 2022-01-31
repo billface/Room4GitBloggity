@@ -7,13 +7,17 @@ class DatabaseTable
 	private $pdo;
 	private $table;
 	private $primaryKey;
+	private $className;
+	private $constructorArgs;
 
 	//METHODS
 	//a magic method that helps makes sure all the arguments are in the correct order and of the correct type
-	public function __construct(\PDO $pdo, string $table, string $primaryKey){
+	public function __construct(\PDO $pdo, string $table, string $primaryKey, string $className = '\stdClass', array $constructorArgs = []) {
 		$this->pdo = $pdo;
 		$this->table = $table;
 		$this->primaryKey = $primaryKey;
+		$this->className = $className;
+		$this->constructorArgs = $constructorArgs;
 	}
 	/* special query function that sets the $parameters variable to an empty array 
 	if no value is supplied */
@@ -38,7 +42,7 @@ class DatabaseTable
 
 		$query = $this->query($query, $parameters);
 
-		return $query->fetchAll();
+		return $query->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorArgs);
 	}
 
 	public function findById($value) {
@@ -50,7 +54,7 @@ class DatabaseTable
 
 		$query = $this->query($query, $parameters);
 
-		return $query->fetch();
+		return $query->fetchObject($this->className, $this->constructorArgs);
 	}
 
 	function findAllById($value) {
@@ -62,15 +66,15 @@ class DatabaseTable
 
 		$query = $this->query($query, $parameters);
 
-		return $query->fetchAll();
+		return $result->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorArgs);
 	}
 
 	public function findAllFutureDates($column) {
 		$result = $this->query('SELECT * FROM `' . $this->table . '` WHERE `' . $column .
 		 '` > CURRENT_TIMESTAMP ORDER BY `'. $column . '`');
 		 		
-		return $result->fetchAll();
-	}
+		 return $result->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorArgs);
+		}
 
 	private function insert($fields) {
 		$query = 'INSERT INTO `' . $this->table . '` (';
@@ -128,7 +132,7 @@ class DatabaseTable
 	public function findAll() {
 		$result = $this->query('SELECT * FROM `' . $this->table . '`');
 
-		return $result->fetchAll();
+		return $result->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorArgs);
 	}
 
 	

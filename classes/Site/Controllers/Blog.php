@@ -10,6 +10,7 @@ class Blog {
     private $commentsTable;
     private $displayCommentsTable;
     private $eventsTable;
+    
 
 
     public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $eventsTable) {
@@ -19,6 +20,7 @@ class Blog {
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable;    
         $this->eventsTable = $eventsTable;
+
     }
 
     public function list() {
@@ -97,20 +99,12 @@ class Blog {
     public function add() {
         $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable);
-
-        $authorObject->id = $author['id'];
-        $authorObject->name = $author['name'];
-        $authorObject->email = $author['email'];
-        $authorObject->password = $author['password'];
-
-       //possible security flaw (see pg 493 PDF 363)
-
         $blog = $_POST['blog'];
         //the above is from form, below is others
         $blog['blogDate'] = new \Datetime();
-        
-        $authorObject->addBlog($blog);
+
+
+        $author->addBlog($blog);
 
         header('location: /blog/list');
 }
@@ -125,21 +119,18 @@ public function addpage() {
 
 
 
-    public function saveEdit() {
+public function saveEdit() {
         $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable);
-
-        $authorObject->id = $author['id'];
-        $authorObject->name = $author['name'];
-        $authorObject->email = $author['email'];
-        $authorObject->password = $author['password'];
+        
 
         $blog = $_POST['blog'];
         //the above is from form, below is others
         $blog['blogModDate'] = new \DateTime();
 
-        $authorObject->addBlog($blog);
+        $author->addBlog($blog);
+
+
         header('location: /blog/wholeblog?id=' . $blog['id']);
         //header('location: /blog/list');
 

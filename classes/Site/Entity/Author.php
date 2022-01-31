@@ -1,6 +1,8 @@
 <?php
 namespace Site\Entity;
+
 use \Ninja\DatabaseTable;
+
 //see pg529 (pdf 390)
 
 class Author {
@@ -12,9 +14,10 @@ class Author {
 	private $eventsTable;
 
 
-	public function __construct(DatabaseTable $blogsTable, DatabaseTable $eventsTable) {
-		$this->blogsTable = $blogsTable;
+	public function __construct(DatabaseTable $blogTable, DatabaseTable $eventsTable) {
+		$this->blogsTable = $blogTable;
 		$this->eventsTable = $eventsTable;
+
 	}
 
 	public function getBlogs() {

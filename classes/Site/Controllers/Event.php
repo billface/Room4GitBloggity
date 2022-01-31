@@ -9,6 +9,7 @@ class Event {
     private $eventsTable;
     private $blogsTable;
 
+    
 
 	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable) {
         $this->authorsTable = $authorsTable;
@@ -58,18 +59,11 @@ class Event {
     public function add() {
         $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable);
-
-        $authorObject->id = $author['id'];
-        $authorObject->name = $author['name'];
-        $authorObject->email = $author['email'];
-        $authorObject->password = $author['password'];
-
         $event = $_POST['event'];
         //the above is from form, below is others
         //$event['eventDate'] = new \Datetime();
 
-        $authorObject->addEvent($event);
+        $author->addEvent($event);
 
         header('location: /event/list');
     }
@@ -100,17 +94,12 @@ class Event {
     public function saveEdit() {
         $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable);
-
-        $authorObject->id = $author['id'];
-        $authorObject->name = $author['name'];
-        $authorObject->email = $author['email'];
-        $authorObject->password = $author['password'];
+        
             
         $event = $_POST['event'];
         //the above is from form, below is others
 
-        $authorObject->addEvent($event);
+        $author->addEvent($event);
 
         header('location: /event/list');
 
