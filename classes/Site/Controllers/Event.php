@@ -7,11 +7,16 @@ use \Ninja\Authentication;
 class Event {
     private $authorsTable;
     private $eventsTable;
+    private $blogsTable;
 
-	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication) {
+    
+
+	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable) {
         $this->authorsTable = $authorsTable;
         $this->eventsTable = $eventsTable;
         $this->authentication = $authentication;
+        $this->blogsTable = $blogsTable;
+
 	}
 
     public function list() {
@@ -19,16 +24,16 @@ class Event {
 
         $events = [];
           foreach ($result as $event) {
-            $author = $this->authorsTable->findById($event['authorId']);
+            $author = $this->authorsTable->findById($event->authorId);
       
             $events[] = [
-                    'id' => $event['id'],
-                    'eventHeading' => $event['eventHeading'],
-                    'eventText' => $event['eventText'],
-                    'eventDate' => $event['eventDate'],
-                    'name' => $author['name'],
-                    'email' => $author['email'],
-                    'authorId' => $author['id']
+                    'id' => $event->id,
+                    'eventHeading' => $event->eventHeading,
+                    'eventText' => $event->eventText,
+                    'eventDate' => $event->eventDate,
+                    'name' => $author->name,
+                    'email' => $author->email,
+                    'authorId' => $author->id
 
                 ];
 
@@ -45,7 +50,7 @@ class Event {
 				'title' => $title, 
 				'variables' => [
 						'events' => $events,
-                        'userId' => $author['id'] ?? null
+                        'userId' => $author->id ?? null
 					]
 				];
         
@@ -58,9 +63,7 @@ class Event {
         //the above is from form, below is others
         //$event['eventDate'] = new \Datetime();
 
-        $event['authorId'] = $author['id'];;
-
-        $this->eventsTable->save($event);
+        $author->addEvent($event);
 
         header('location: /event/list');
     }
@@ -79,7 +82,7 @@ class Event {
 
         $event = $this->eventsTable->findById($_POST['eventId']);
 
-        if ($event['authorId'] != $author['id']) {
+        if ($event->authorId != $author->id) {
             return;
         }
         
@@ -91,20 +94,12 @@ class Event {
     public function saveEdit() {
         $author = $this->authentication->getUser();
 
-        //added security from Ninja pg 493 PDF 363
-        if (isset($_GET['id'])) {
-            $event = $this->eventsTable->findById($_GET['id']);
-
-            if ($event['authorId'] != $author['id']) {
-                return;
-            }
-        }
+        
             
         $event = $_POST['event'];
         //the above is from form, below is others
-        $event['authorId'] = $author['id'];
 
-        $this->eventsTable->save($event);
+        $author->addEvent($event);
 
         header('location: /event/list');
 
