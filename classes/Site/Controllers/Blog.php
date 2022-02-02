@@ -9,13 +9,18 @@ class Blog {
     private $blogsTable;
     private $commentsTable;
     private $displayCommentsTable;
+    private $eventsTable;
+    
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable) {
+
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $eventsTable) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable;    
+        $this->eventsTable = $eventsTable;
+
     }
 
     public function list() {
@@ -128,7 +133,7 @@ public function saveEdit() {
                 'title' => $title,
                 'variables' => [
                     'blog' => $blog,
-                    'userId' => $author->id ?? null
+                    'userId' => $author['id'] ?? null
                     ]
                 ];
     }
