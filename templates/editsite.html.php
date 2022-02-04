@@ -1,12 +1,12 @@
-<?php if ($userId == $page['authorId']): ?>
+<?php if ($userId == $site['authorId']): ?>
 
 <form action="" method="post">
-	<input type="hidden" name="page[id]" value="<?=$page['id']?>">
-    <label for="pageHeading">Type your page heading here:</label>
-    <textarea id="pageHeading" name="page[pageHeading]" rows="1" cols="40"><?=$page['pageHeading']?></textarea>
+	<input type="hidden" name="site[id]" value="<?=$site['id']?>">
+    <label for="siteHeading">Type your page heading here:</label>
+    <textarea id="siteHeading" name="site[siteHeading]" rows="1" cols="40"><?=$site['siteHeading']?></textarea>
     <br>
-    <label for="pageText">Type your page text here:</label>
-    <textarea id="pageText" name="page[pageText]" rows="3" cols="40"><?=$page['pageText']?></textarea>
+    <label for="siteText">Type your page text here:</label>
+    <textarea id="siteText" name="site[siteText]" rows="3" cols="40"><?=$site['siteText']?></textarea>
     <br>
     
     <input type="submit" value="Save">
