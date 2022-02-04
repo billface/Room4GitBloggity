@@ -9,15 +9,19 @@ class Event {
     private $eventsTable;
     private $blogsTable;
     private $pagesTable;
+    private $commentsTable;
 
 
 
-	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable, DatabaseTable $pagesTable) {
+
+	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable, DatabaseTable $pagesTable, DatabaseTable $commentsTable) {
         $this->authorsTable = $authorsTable;
         $this->eventsTable = $eventsTable;
         $this->authentication = $authentication;
         $this->blogsTable = $blogsTable;
         $this->pagesTable = $pagesTable;
+        $this->commentsTable = $commentsTable;
+
 
 
 	}
@@ -62,7 +66,7 @@ class Event {
     public function add() {
         $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable);
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable, $this->commentsTable);
 
         $authorObject->id = $author['id'];
         $authorObject->name = $author['name'];
@@ -103,8 +107,8 @@ class Event {
 
     public function saveEdit() {
         $author = $this->authentication->getUser();
-        /*
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable);
+        
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable, $this->commentsTable);
 
         $authorObject->id = $author['id'];
         $authorObject->name = $author['name'];
@@ -115,20 +119,7 @@ class Event {
         //the above is from form, below is others
 
         $authorObject->addEvent($event);
-        */
-        if (isset($_GET['id'])) {
-            $site = $this->siteTable->findById($_GET['id']);
 
-            if ($site['authorId'] != $author['id']) {
-                return;
-            }
-        }
-            
-        $site = $_POST['site'];
-        //the above is from form, below is others
-        $site['authorId'] = $author['id'];
-
-        $this->siteTable->save($site);
 
 
         header('location: /event/list');

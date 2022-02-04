@@ -102,7 +102,7 @@ class Blog {
     public function add() {
         $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable);
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable, $this->commentsTable);
 
         $authorObject->id = $author['id'];
         $authorObject->name = $author['name'];
@@ -170,23 +170,19 @@ public function addpage() {
     public function editcomment() {
         if (isset($_POST['comment'])) {
 
-            $author = $this->authentication->getUser();
+            $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable, $this->commentsTable);
 
-            //added security from Ninja pg 493 PDF 363
-            if (isset($_GET['commentid'])) {
-                $comment = $this->commentsTable->findById($_GET['commentid']);
-    
-                if ($comment['authorId'] != $author['id']) {
-                    return;
-                }
-            }
+            $authorObject->id = $author['id'];
+            $authorObject->name = $author['name'];
+            $authorObject->email = $author['email'];
+            $authorObject->password = $author['password'];
 
 
 			$comment = $_POST['comment'];
-			$comment['authorId'] = $author['id'];
-			$comment['commModDate'] = new \DateTime();
 
-			$this->commentsTable->save($comment);
+            $comment['commModDate'] = new \DateTime();
+
+            $authorObject->addComment($comment);
 
         	header('location: /blog/wholeblog?id=' . $comment['commBlogId']);  
 
@@ -274,12 +270,18 @@ public function addpage() {
 
             $author = $this->authentication->getUser();
 
+            $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable, $this->commentsTable);
+
+            $authorObject->id = $author['id'];
+            $authorObject->name = $author['name'];
+            $authorObject->email = $author['email'];
+            $authorObject->password = $author['password'];
+
             $comment = $_POST['comment'];
-            $comment['authorId'] = $author['id'];
             $comment['commDate'] = new \Datetime();
     
 
-            $this->commentsTable->save($comment);
+            $authorObject->addComment($comment);
         
             //head back to the current page after inserting comment
             header('location: /blog/wholeblog?id=' . $comment['commBlogId']);
