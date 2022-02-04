@@ -8,11 +8,14 @@
     <br>
     <label for="blogText">Type your blog here:</label>
     <textarea id="blogText" name="blog[blogText]" rows="3" cols="40"><?=$blog['blogText']?></textarea>
+    <br>
+    <label for="metaDescription">Type your metaDescription here:</label>
+    <textarea id="metaDescription" name="blog[metaDescription]" rows="3" cols="40"><?=$blog['metaDescription']?></textarea>
     <input type="submit" value="Save">
 </form>
 <?php else: ?>
 
-<p>You may only edit jokes that you posted.</p>
+<p>You may only edit blogs that you posted.</p>
 <?php endif; ?>
 
 

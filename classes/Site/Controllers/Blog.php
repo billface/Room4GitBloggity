@@ -9,23 +9,24 @@ class Blog {
     private $blogsTable;
     private $commentsTable;
     private $displayCommentsTable;
-    private $siteTable;
+    private $eventsTable;
+    private $pagesTable;
 
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $siteTable) {
+
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication, 
+                                DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $eventsTable, DatabaseTable $pagesTable) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable;    
-        $this->siteTable = $siteTable;
+        $this->eventsTable = $eventsTable;
+        $this->pagesTable = $pagesTable;
 
     }
 
     public function list() {
-
-        $site = $this->siteTable->findById(3);
-
         $result = $this->blogsTable->findAll();
 
         $blogs = [];
@@ -45,19 +46,15 @@ class Blog {
       
         $title = 'Blog list';
 
-        $metaDescription = $site['metaDescription'];
-
         $totalBlogs = $this->blogsTable->total();
 
         $author = $this->authentication->getUser();
 
         return ['template' => 'blogs.html.php', 
 				'title' => $title, 
-                'metaDescription' => $metaDescription,
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
 						'blogs' => $blogs,
-                        'site' => $site,
                         'userId' => $author['id'] ?? null
                     ]
 				];
@@ -105,12 +102,20 @@ class Blog {
     public function add() {
         $author = $this->authentication->getUser();
 
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable);
+
+        $authorObject->id = $author['id'];
+        $authorObject->name = $author['name'];
+        $authorObject->email = $author['email'];
+        $authorObject->password = $author['password'];
+
+       //possible security flaw (see pg 493 PDF 363)
+
         $blog = $_POST['blog'];
         //the above is from form, below is others
         $blog['blogDate'] = new \Datetime();
-
-
-        $author->addBlog($blog);
+        
+        $authorObject->addBlog($blog);
 
         header('location: /blog/list');
 }
@@ -125,18 +130,21 @@ public function addpage() {
 
 
 
-public function saveEdit() {
+    public function saveEdit() {
         $author = $this->authentication->getUser();
 
-        
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable);
+
+        $authorObject->id = $author['id'];
+        $authorObject->name = $author['name'];
+        $authorObject->email = $author['email'];
+        $authorObject->password = $author['password'];
 
         $blog = $_POST['blog'];
         //the above is from form, below is others
         $blog['blogModDate'] = new \DateTime();
 
-        $author->addBlog($blog);
-
-
+        $authorObject->addBlog($blog);
         header('location: /blog/wholeblog?id=' . $blog['id']);
         //header('location: /blog/list');
 
@@ -201,13 +209,16 @@ public function saveEdit() {
 					'blogText' => $blog['blogText'],
 					'blogDate' => $blog['blogDate'],
 					'blogModDate' => $blog['blogModDate'],
+                    'metaDescription' => $blog['metaDescription'],
 					'name' => $author['name'],
 					'email' => $author['email'],
-                    'authorId' => $author['id']
+                    'authorId' => $author['id'],
+                    
 
 				];
 
 			}
+
 		
 		$resultComm = $this->displayCommentsTable->findAllById($_GET['id']);
 
@@ -239,12 +250,15 @@ public function saveEdit() {
             
         }
 
+
         $title = 'Whole Blogger';
+        $metaDescription = $blog['metaDescription'];
 
         $author = $this->authentication->getUser();
 
         return ['template' => 'wholeblog.html.php',
                 'title' => $title,
+                'metaDescription' => $metaDescription,
                 'variables' => [
                     'blogs' => $blogs,
                     'comments' => $comments,

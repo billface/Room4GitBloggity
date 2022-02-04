@@ -1,4 +1,4 @@
-<h1><?=$site['siteHeading'] ?></h1>
-<p><?=$site['siteText'] ?? '' ?></p>
+<h1><?=$page['pageHeading'] ?></h1>
+<p><?=$page['pageText'] ?? '' ?></p>
 
-<p><?=$site['metaDescription'] ?></p>
+<p><?=$page['metaDescription'] ?></p>
