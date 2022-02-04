@@ -7,12 +7,15 @@ use \Ninja\Authentication;
 class Site {
 	private $siteTable;
 	private $authorsTable;
+    private $blogsTable;
 
 
-	public function __construct(DatabaseTable $siteTable, DatabaseTable $authorsTable, Authentication $authentication) {
+
+	public function __construct(DatabaseTable $siteTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable) {
 		$this->siteTable = $siteTable;
 		$this->authorsTable = $authorsTable;
 		$this->authentication = $authentication;
+        $this->blogsTable = $blogsTable;
 
 	}
 
@@ -51,20 +54,17 @@ class Site {
 	public function saveEdit() {
         $author = $this->authentication->getUser();
 
-        //added security from Ninja pg 493 PDF 363
-        if (isset($_GET['id'])) {
-            $site = $this->siteTable->findById($_GET['id']);
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->siteTable);
 
-            if ($site['authorId'] != $author['id']) {
-                return;
-            }
-        }
+        $authorObject->id = $author['id'];
+        $authorObject->name = $author['name'];
+        $authorObject->email = $author['email'];
+        $authorObject->password = $author['password'];
             
         $site = $_POST['site'];
         //the above is from form, below is others
-        $site['authorId'] = $author['id'];
 
-        $this->siteTable->save($site);
+        $authorObject->addSite($site);
 
         header('location: /site/list');
 

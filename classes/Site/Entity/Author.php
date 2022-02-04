@@ -1,6 +1,8 @@
 <?php
 namespace Site\Entity;
 use \Ninja\DatabaseTable;
+
+
 //see pg529 (pdf 390)
 
 class Author {
@@ -9,19 +11,20 @@ class Author {
 	public $email;
 	public $password;
     private $blogsTable;
-	private $eventsTable;
+	private $siteTable;
 
 
-	public function __construct(DatabaseTable $blogsTable, DatabaseTable $eventsTable) {
-		$this->blogsTable = $blogsTable;
-		$this->eventsTable = $eventsTable;
+	public function __construct(DatabaseTable $blogTable, DatabaseTable $siteTable) {
+		$this->blogsTable = $blogTable;
+		$this->siteTable = $siteTable;
 	}
 
-	public function getBlogs() {
+	public function getblogs() {
 		return $this->blogsTable->find('authorId', $this->id);
 	}
-	public function getEvents() {
-		return $this->eventsTable->find('authorId', $this->id);
+
+	public function getSites() {
+		return $this->siteTable->find('authorId', $this->id);
 	}
 
     public function addBlog($blog) {
@@ -31,10 +34,10 @@ class Author {
 		$this->blogsTable->save($blog);
 	}
 
-	public function addEvent($event) {
+	public function addSite($site) {
 
-		$event['authorId'] = $this->id;
+		$blog['authorId'] = $this->id;
 
-		$this->eventsTable->save($event);
+		$this->siteTable->save($site);
 	}
 }

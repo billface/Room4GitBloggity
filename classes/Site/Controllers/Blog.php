@@ -9,16 +9,17 @@ class Blog {
     private $blogsTable;
     private $commentsTable;
     private $displayCommentsTable;
-    private $eventsTable;
+    private $siteTable;
 
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $eventsTable) {
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $siteTable) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
-        $this->displayCommentsTable = $displayCommentsTable;    
-        $this->eventsTable = $eventsTable;
+        $this->displayCommentsTable = $displayCommentsTable; 
+        $this->siteTable = $siteTable;
+
     }
 
     public function list() {
@@ -97,19 +98,17 @@ class Blog {
     public function add() {
         $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable);
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->siteTable);
 
         $authorObject->id = $author['id'];
         $authorObject->name = $author['name'];
         $authorObject->email = $author['email'];
         $authorObject->password = $author['password'];
 
-       //possible security flaw (see pg 493 PDF 363)
-
         $blog = $_POST['blog'];
         //the above is from form, below is others
         $blog['blogDate'] = new \Datetime();
-        
+
         $authorObject->addBlog($blog);
 
         header('location: /blog/list');
@@ -126,22 +125,34 @@ public function addpage() {
 
 
     public function saveEdit() {
-        $author = $this->authentication->getUser();
+            $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable);
+            $authorObject = new \Site\Entity\Author($this->blogsTable, $this->siteTable);
 
-        $authorObject->id = $author['id'];
-        $authorObject->name = $author['name'];
-        $authorObject->email = $author['email'];
-        $authorObject->password = $author['password'];
+            $authorObject->id = $author['id'];
+            $authorObject->name = $author['name'];
+            $authorObject->email = $author['email'];
+            $authorObject->password = $author['password'];
 
-        $blog = $_POST['blog'];
-        //the above is from form, below is others
-        $blog['blogModDate'] = new \DateTime();
 
-        $authorObject->addBlog($blog);
-        header('location: /blog/wholeblog?id=' . $blog['id']);
-        //header('location: /blog/list');
+            /*added security from Ninja pg 493 PDF 363
+            if (isset($_GET['id'])) {
+                $blog = $this->blogsTable->findById($_GET['id']);
+    
+                if ($blog['authorId'] != $author['id']) {
+                    return;
+                }
+            }
+            */
+
+            $blog = $_POST['blog'];
+            //the above is from form, below is others
+            $blog['blogModDate'] = new \DateTime();
+
+            $authorObject->addBlog($blog);
+
+            header('location: /blog/wholeblog?id=' . $blog['id']);
+            //header('location: /blog/list');
 
     }
 
