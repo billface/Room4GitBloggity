@@ -44,25 +44,20 @@ class EntryPoint {
 			$controller = $routes[$this->route][$this->method]['controller'];
 			$action = $routes[$this->route][$this->method]['action'];
 
-			//changed $page to $display
-			$display = $controller->$action();
+			$page = $controller->$action();
 
-			$title = $display['title'];
-			$metaDescription = $display['metaDescription'];
+			$title = $page['title'];
 
-
-			if (isset($display['variables'])) {
-				$output = $this->loadTemplate($display['template'], $display['variables']);
+			if (isset($page['variables'])) {
+				$output = $this->loadTemplate($page['template'], $page['variables']);
 			}
 			else {
-				$output = $this->loadTemplate($display['template']);
+				$output = $this->loadTemplate($page['template']);
 			}
 
 			echo $this->loadTemplate('layout.html.php', ['loggedIn' => $authentication->isLoggedIn(),
 														'output' => $output,
-														'title' => $title,
-														'metaDescription' => $metaDescription
-
+														'title' => $title
 													]);		
 		}
 	}

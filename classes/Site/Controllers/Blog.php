@@ -9,19 +9,15 @@ class Blog {
     private $blogsTable;
     private $commentsTable;
     private $displayCommentsTable;
-    private $eventsTable;
     private $pagesTable;
 
 
-
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication, 
-                                DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $eventsTable, DatabaseTable $pagesTable) {
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
-        $this->displayCommentsTable = $displayCommentsTable;    
-        $this->eventsTable = $eventsTable;
+        $this->displayCommentsTable = $displayCommentsTable; 
         $this->pagesTable = $pagesTable;
 
     }
@@ -102,19 +98,17 @@ class Blog {
     public function add() {
         $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable, $this->commentsTable);
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable);
 
         $authorObject->id = $author['id'];
         $authorObject->name = $author['name'];
         $authorObject->email = $author['email'];
         $authorObject->password = $author['password'];
 
-       //possible security flaw (see pg 493 PDF 363)
-
         $blog = $_POST['blog'];
         //the above is from form, below is others
         $blog['blogDate'] = new \Datetime();
-        
+
         $authorObject->addBlog($blog);
 
         header('location: /blog/list');
@@ -131,22 +125,34 @@ public function addpage() {
 
 
     public function saveEdit() {
-        $author = $this->authentication->getUser();
+            $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable);
+            $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable);
 
-        $authorObject->id = $author['id'];
-        $authorObject->name = $author['name'];
-        $authorObject->email = $author['email'];
-        $authorObject->password = $author['password'];
+            $authorObject->id = $author['id'];
+            $authorObject->name = $author['name'];
+            $authorObject->email = $author['email'];
+            $authorObject->password = $author['password'];
 
-        $blog = $_POST['blog'];
-        //the above is from form, below is others
-        $blog['blogModDate'] = new \DateTime();
 
-        $authorObject->addBlog($blog);
-        header('location: /blog/wholeblog?id=' . $blog['id']);
-        //header('location: /blog/list');
+            /*added security from Ninja pg 493 PDF 363
+            if (isset($_GET['id'])) {
+                $blog = $this->blogsTable->findById($_GET['id']);
+    
+                if ($blog['authorId'] != $author['id']) {
+                    return;
+                }
+            }
+            */
+
+            $blog = $_POST['blog'];
+            //the above is from form, below is others
+            $blog['blogModDate'] = new \DateTime();
+
+            $authorObject->addBlog($blog);
+
+            header('location: /blog/wholeblog?id=' . $blog['id']);
+            //header('location: /blog/list');
 
     }
 
@@ -170,19 +176,23 @@ public function addpage() {
     public function editcomment() {
         if (isset($_POST['comment'])) {
 
-            $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable, $this->commentsTable);
+            $author = $this->authentication->getUser();
 
-            $authorObject->id = $author['id'];
-            $authorObject->name = $author['name'];
-            $authorObject->email = $author['email'];
-            $authorObject->password = $author['password'];
+            //added security from Ninja pg 493 PDF 363
+            if (isset($_GET['commentid'])) {
+                $comment = $this->commentsTable->findById($_GET['commentid']);
+    
+                if ($comment['authorId'] != $author['id']) {
+                    return;
+                }
+            }
 
 
 			$comment = $_POST['comment'];
+			$comment['authorId'] = $author['id'];
+			$comment['commModDate'] = new \DateTime();
 
-            $comment['commModDate'] = new \DateTime();
-
-            $authorObject->addComment($comment);
+			$this->commentsTable->save($comment);
 
         	header('location: /blog/wholeblog?id=' . $comment['commBlogId']);  
 
@@ -205,16 +215,13 @@ public function addpage() {
 					'blogText' => $blog['blogText'],
 					'blogDate' => $blog['blogDate'],
 					'blogModDate' => $blog['blogModDate'],
-                    'metaDescription' => $blog['metaDescription'],
 					'name' => $author['name'],
 					'email' => $author['email'],
-                    'authorId' => $author['id'],
-                    
+                    'authorId' => $author['id']
 
 				];
 
 			}
-
 		
 		$resultComm = $this->displayCommentsTable->findAllById($_GET['id']);
 
@@ -246,15 +253,12 @@ public function addpage() {
             
         }
 
-
         $title = 'Whole Blogger';
-        $metaDescription = $blog['metaDescription'];
 
         $author = $this->authentication->getUser();
 
         return ['template' => 'wholeblog.html.php',
                 'title' => $title,
-                'metaDescription' => $metaDescription,
                 'variables' => [
                     'blogs' => $blogs,
                     'comments' => $comments,
@@ -270,18 +274,12 @@ public function addpage() {
 
             $author = $this->authentication->getUser();
 
-            $authorObject = new \Site\Entity\Author($this->blogsTable, $this->eventsTable, $this->pagesTable, $this->commentsTable);
-
-            $authorObject->id = $author['id'];
-            $authorObject->name = $author['name'];
-            $authorObject->email = $author['email'];
-            $authorObject->password = $author['password'];
-
             $comment = $_POST['comment'];
+            $comment['authorId'] = $author['id'];
             $comment['commDate'] = new \Datetime();
     
 
-            $authorObject->addComment($comment);
+            $this->commentsTable->save($comment);
         
             //head back to the current page after inserting comment
             header('location: /blog/wholeblog?id=' . $comment['commBlogId']);

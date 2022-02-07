@@ -5,9 +5,6 @@
     <br>
     <label for="blogText">Type your blog content here:</label>
     <textarea id="blogText" name="blog[blogText]" rows="3" cols="40"></textarea>
-    <br>
-    <label for="metaDescription">Type your metaDescription here:</label>
-    <textarea id="metaDescription" name="blog[metaDescription]" rows="3" cols="40"></textarea>
     <input type="submit" value="Add">
     <br>
 </form>

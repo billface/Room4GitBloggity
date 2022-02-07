@@ -5,23 +5,17 @@ use \Ninja\Authentication;
 
 
 class Page {
+	private $pagesTable;
 	private $authorsTable;
-    private $pagesTable;
     private $blogsTable;
-    private $eventsTable;
-    private $commentsTable;
 
 
 
-
-	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable) {
-        $this->authorsTable = $authorsTable;
-        $this->pagesTable = $pagesTable;
+	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable) {
+		$this->pagesTable = $pagesTable;
+		$this->authorsTable = $authorsTable;
 		$this->authentication = $authentication;
         $this->blogsTable = $blogsTable;
-        $this->eventsTable = $eventsTable;
-        $this->commentsTable = $commentsTable;
-
 
 	}
 
@@ -60,8 +54,7 @@ class Page {
 	public function saveEdit() {
         $author = $this->authentication->getUser();
 
-        
-        $authorObject = new \Site\Entity\Author($this->pagesTable, $this->blogsTable, $this->eventsTable, $this->commentsTable);
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable);
 
         $authorObject->id = $author['id'];
         $authorObject->name = $author['name'];
@@ -72,22 +65,6 @@ class Page {
         //the above is from form, below is others
 
         $authorObject->addPage($page);
-        /*
-        if (isset($_GET['id'])) {
-            $page = $this->pagesTable->findById($_GET['id']);
-
-            if ($page['authorId'] != $author['id']) {
-                return;
-            }
-        }
-            
-        $page = $_POST['page'];
-        //the above is from form, below is others
-        $page['authorId'] = $author['id'];
-
-        $this->pagesTable->save($page);
-
-        */
 
         header('location: /page/list');
 
@@ -115,11 +92,10 @@ class Page {
 
         $page = $this->pagesTable->findById(1);
 
-        $title = 'The Home page';
-        $metaDescription = $page['metaDescription'];
+        $title = 'The Home site';
+        $page['metaDescription'] = 'this isnt it';
         return ['template' => 'basic.html.php',
                  'title' => $title,
-                 'metaDescription' => $metaDescription,
                  'variables' => [
                     'page' => $page
                     ]
@@ -131,11 +107,9 @@ class Page {
         $page = $this->pagesTable->findById(2);
 
         $title = 'About a rapper';
-        $metaDescription = $page['metaDescription'];
 
         return ['template' => 'basic.html.php',
                  'title' => $title,
-                 'metaDescription' => $metaDescription,
                  'variables' => [
                     'page' => $page
                     ]

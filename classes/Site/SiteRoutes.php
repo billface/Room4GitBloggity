@@ -15,23 +15,22 @@ class SiteRoutes implements \Ninja\Routes {
 		include __DIR__ . '/../../includes/DatabaseConnection.php';
 
         $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id');
-		$this->pagesTable = new \Ninja\DatabaseTable($pdo, 'page', 'id');   
-		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id');
 	    $this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id');
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
 	    $this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id');
         $this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId');  
-		    
+		$this->pagesTable = new \Ninja\DatabaseTable($pdo, 'page', 'id');   
+		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id');    
 	
 	}
 
 
 		public function getRoutes() : array {
 
-			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable, $this->eventsTable, $this->pagesTable);
-			$pageController = new \Site\Controllers\Page($this->pagesTable, $this->authorsTable, $this->authentication, $this->eventsTable, $this->blogsTable, $this->commentsTable);
-			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->pagesTable, $this->commentsTable);
+			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable, $this->pagesTable);
 			$authorController = new \Site\Controllers\Register($this->authorsTable);
+			$pageController = new \Site\Controllers\Page($this->pagesTable, $this->authorsTable, $this->authentication, $this->blogsTable);
+			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication);
 			$loginController = new \Site\Controllers\Login($this->authentication);
 
 		
