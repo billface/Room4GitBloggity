@@ -44,7 +44,6 @@ class EntryPoint {
 			$controller = $routes[$this->route][$this->method]['controller'];
 			$action = $routes[$this->route][$this->method]['action'];
 
-			//changed $page to $display
 			$display = $controller->$action();
 
 			$title = $display['title'];
@@ -62,7 +61,6 @@ class EntryPoint {
 														'output' => $output,
 														'title' => $title,
 														'metaDescription' => $metaDescription
-
 													]);		
 		}
 	}
