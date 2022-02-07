@@ -44,15 +44,15 @@ class EntryPoint {
 			$controller = $routes[$this->route][$this->method]['controller'];
 			$action = $routes[$this->route][$this->method]['action'];
 
-			$page = $controller->$action();
+			$display = $controller->$action();
 
-			$title = $page['title'];
+			$title = $display['title'];
 
-			if (isset($page['variables'])) {
-				$output = $this->loadTemplate($page['template'], $page['variables']);
+			if (isset($display['variables'])) {
+				$output = $this->loadTemplate($display['template'], $display['variables']);
 			}
 			else {
-				$output = $this->loadTemplate($page['template']);
+				$output = $this->loadTemplate($display['template']);
 			}
 
 			echo $this->loadTemplate('layout.html.php', ['loggedIn' => $authentication->isLoggedIn(),
