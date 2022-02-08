@@ -5,21 +5,24 @@ use \Ninja\Authentication;
 
 
 class Blog {
-    private $authorsTable;
     private $blogsTable;
+    private $authorsTable;
     private $commentsTable;
     private $displayCommentsTable;
+    private $pagesTable;
     private $eventsTable;
-    
 
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $eventsTable) {
+
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
-        $this->displayCommentsTable = $displayCommentsTable;    
+        $this->displayCommentsTable = $displayCommentsTable; 
+        $this->pagesTable = $pagesTable;
         $this->eventsTable = $eventsTable;
+
 
     }
 
@@ -103,7 +106,6 @@ class Blog {
         //the above is from form, below is others
         $blog['blogDate'] = new \Datetime();
 
-
         $author->addBlog($blog);
 
         header('location: /blog/list');
@@ -119,20 +121,17 @@ public function addpage() {
 
 
 
-public function saveEdit() {
-        $author = $this->authentication->getUser();
+    public function saveEdit() {
+            $author = $this->authentication->getUser();
 
-        
+            $blog = $_POST['blog'];
+            //the above is from form, below is others
+            $blog['blogModDate'] = new \DateTime();
 
-        $blog = $_POST['blog'];
-        //the above is from form, below is others
-        $blog['blogModDate'] = new \DateTime();
+            $author->addBlog($blog);
 
-        $author->addBlog($blog);
-
-
-        header('location: /blog/wholeblog?id=' . $blog['id']);
-        //header('location: /blog/list');
+            header('location: /blog/wholeblog?id=' . $blog['id']);
+            //header('location: /blog/list');
 
     }
 
@@ -158,21 +157,11 @@ public function saveEdit() {
 
             $author = $this->authentication->getUser();
 
-            //added security from Ninja pg 493 PDF 363
-            if (isset($_GET['commentid'])) {
-                $comment = $this->commentsTable->findById($_GET['commentid']);
-    
-                if ($comment['authorId'] != $author['id']) {
-                    return;
-                }
-            }
-
-
-			$comment = $_POST['comment'];
-			$comment['authorId'] = $author['id'];
+            $comment = $_POST['comment'];
 			$comment['commModDate'] = new \DateTime();
+    
 
-			$this->commentsTable->save($comment);
+            $author->addComment($comment);
 
         	header('location: /blog/wholeblog?id=' . $comment['commBlogId']);  
 
@@ -195,6 +184,7 @@ public function saveEdit() {
 					'blogText' => $blog['blogText'],
 					'blogDate' => $blog['blogDate'],
 					'blogModDate' => $blog['blogModDate'],
+                    'metaDescription' => $blog['metaDescription'],
 					'name' => $author['name'],
 					'email' => $author['email'],
                     'authorId' => $author['id']
@@ -234,11 +224,14 @@ public function saveEdit() {
         }
 
         $title = 'Whole Blogger';
+        $metaDescription = $blog['metaDescription'];
+
 
         $author = $this->authentication->getUser();
 
         return ['template' => 'wholeblog.html.php',
                 'title' => $title,
+                'metaDescription' => $metaDescription,
                 'variables' => [
                     'blogs' => $blogs,
                     'comments' => $comments,
@@ -254,12 +247,12 @@ public function saveEdit() {
 
             $author = $this->authentication->getUser();
 
+
             $comment = $_POST['comment'];
-            $comment['authorId'] = $author['id'];
             $comment['commDate'] = new \Datetime();
     
 
-            $this->commentsTable->save($comment);
+            $author->addComment($comment);
         
             //head back to the current page after inserting comment
             header('location: /blog/wholeblog?id=' . $comment['commBlogId']);

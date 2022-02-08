@@ -5,17 +5,21 @@ use \Ninja\Authentication;
 
 
 class Event {
-    private $authorsTable;
     private $eventsTable;
+    private $authorsTable;
+    private $pagesTable;
     private $blogsTable;
+    private $commentsTable;
 
     
 
-	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable) {
-        $this->authorsTable = $authorsTable;
+	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $pagesTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable) {
         $this->eventsTable = $eventsTable;
+        $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
+        $this->pagesTable = $pagesTable;
         $this->blogsTable = $blogsTable;
+        $this->commentsTable = $commentsTable;
 
 	}
 
@@ -61,7 +65,6 @@ class Event {
 
         $event = $_POST['event'];
         //the above is from form, below is others
-        //$event['eventDate'] = new \Datetime();
 
         $author->addEvent($event);
 
@@ -94,9 +97,8 @@ class Event {
     public function saveEdit() {
         $author = $this->authentication->getUser();
 
-        
-            
         $event = $_POST['event'];
+            
         //the above is from form, below is others
 
         $author->addEvent($event);

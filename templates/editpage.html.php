@@ -8,7 +8,9 @@
     <label for="pageText">Type your page text here:</label>
     <textarea id="pageText" name="page[pageText]" rows="3" cols="40"><?=$page['pageText']?></textarea>
     <br>
-    
+    <label for="metaDescription">Type your metaDescription here:</label>
+    <textarea id="metaDescription" name="page[metaDescription]" rows="3" cols="40"><?=$page['metaDescription']?></textarea>
+    <br>
     <input type="submit" value="Save">
 </form>
 <?php else: ?>
