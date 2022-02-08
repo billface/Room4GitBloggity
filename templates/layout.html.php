@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="blogs.css">
     <title><?=$title?></title>
-    <meta name="description" content="<?=$page['metaDescription'] ?>"/>
+    <meta name="description" content="<?=$metaDescription?>">
     </head>
   <body>
   <nav>
@@ -14,10 +14,10 @@
 
     <ul>
       <li><a href="/">Home</a></li>
-      <li><a href="/site/about">About</a></li>
+      <li><a href="/page/about">About</a></li>
       <li><a href="/blog/list">Blog List</a></li>
       <li><a href="/event/list">Calendar</a></li>
-      <li><a href="/site/list">Pages</a></li>
+      <li><a href="/page/list">Pages</a></li>
       <li><a href="/blog/addpage">Add a new blog</a></li>
       <li><a href="/event/addpage">Add a new event</a></li>
 

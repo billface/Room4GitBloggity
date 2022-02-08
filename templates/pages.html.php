@@ -17,7 +17,7 @@
             <a href="/page/wholepage?id=<?=$page['id']?>">See more</a>
 
     <?php if ($userId == $page['authorId']): ?>
-      <a href="/site/edit?id=<?=$page['id']?>">Edit</a>
+      <a href="/page/edit?id=<?=$page['id']?>">Edit</a>
       <br>
     <?php endif; ?>
 

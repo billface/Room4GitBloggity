@@ -4,32 +4,40 @@ use \Ninja\DatabaseTable;
 use \Ninja\Authentication;
 
 
-class Site {
-	private $siteTable;
+class Page {
+	private $pagesTable;
 	private $authorsTable;
+    private $blogsTable;
+    private $eventsTable;
+    private $commentsTable;
 
 
-	public function __construct(DatabaseTable $siteTable, DatabaseTable $authorsTable, Authentication $authentication) {
-		$this->siteTable = $siteTable;
+
+
+	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable) {
+		$this->pagesTable = $pagesTable;
 		$this->authorsTable = $authorsTable;
 		$this->authentication = $authentication;
+        $this->blogsTable = $blogsTable;
+        $this->eventsTable = $eventsTable;
+        $this->commentsTable = $commentsTable;
 
 	}
 
 	public function list() {
-        $result = $this->siteTable->findAll();
+        $result = $this->pagesTable->findAll();
 
         $pages = [];
           foreach ($result as $page) {
-            $author = $this->authorsTable->findById($page['authorId']);
+            $author = $this->authorsTable->findById($page->authorId);
       
             $pages[] = [
-                    'id' => $page['id'],
-                    'pageHeading' => $page['pageHeading'],
-					'pageText' => $page['pageText'],
-                    'name' => $author['name'],
-                    'email' => $author['email'],
-                    'authorId' => $author['id']
+                    'id' => $page->id,
+                    'pageHeading' => $page->pageHeading,
+					'pageText' => $page->pageText,
+                    'name' => $author->name,
+                    'email' => $author->email,
+                    'authorId' => $author->id
                 ];
       
           }
@@ -42,7 +50,7 @@ class Site {
 				'title' => $title, 
 				'variables' => [
 						'pages' => $pages,
-                        'userId' => $author['id'] ?? null
+                        'userId' => $author->id ?? null
                     ]
 				];
         
@@ -50,23 +58,13 @@ class Site {
 
 	public function saveEdit() {
         $author = $this->authentication->getUser();
-
-        //added security from Ninja pg 493 PDF 363
-        if (isset($_GET['id'])) {
-            $page = $this->siteTable->findById($_GET['id']);
-
-            if ($page['authorId'] != $author['id']) {
-                return;
-            }
-        }
             
         $page = $_POST['page'];
         //the above is from form, below is others
-        $page['authorId'] = $author['id'];
 
-        $this->siteTable->save($page);
+        $author->addPage($page);
 
-        header('location: /site/list');
+        header('location: /page/list');
 
     }
 
@@ -74,7 +72,7 @@ class Site {
 
         $author = $this->authentication->getUser();
 
-        $page = $this->siteTable->findById($_GET['id']);
+        $page = $this->pagesTable->findById($_GET['id']);
 
         $title = 'Edit page';
 
@@ -90,12 +88,14 @@ class Site {
 
 	public function home() {
 
-        $page = $this->siteTable->findById(1);
+        $page = $this->pagesTable->findById(1);
 
-        $title = 'The Home page';
-        $page['metaDescription'] = 'this isnt it';
+        $title = 'The Home site';
+        $metaDescription = $page->metaDescription;
+
         return ['template' => 'basic.html.php',
                  'title' => $title,
+                 'metaDescription' => $metaDescription,
                  'variables' => [
                     'page' => $page
                     ]
@@ -104,12 +104,14 @@ class Site {
 
     public function about() {
 
-        $page = $this->siteTable->findById(2);
+        $page = $this->pagesTable->findById(2);
 
         $title = 'About a rapper';
+        $metaDescription = $page->metaDescription;
 
         return ['template' => 'basic.html.php',
                  'title' => $title,
+                 'metaDescription' => $metaDescription,
                  'variables' => [
                     'page' => $page
                     ]

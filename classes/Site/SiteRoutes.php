@@ -7,7 +7,7 @@ class SiteRoutes implements \Ninja\Routes {
 	private $authentication;
 	private $commentsTable;
 	private $displayCommentsTable;
-	private $siteTable;
+	private $pagesTable;
 	private $eventsTable;
 	
 
@@ -15,51 +15,52 @@ class SiteRoutes implements \Ninja\Routes {
 		include __DIR__ . '/../../includes/DatabaseConnection.php';
 
         $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id');
-		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id');    
-		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [$this->blogsTable, $this->eventsTable]);
+		$this->pagesTable = new \Ninja\DatabaseTable($pdo, 'page', 'id');   
+		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id');  
+		$this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id');
+		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [$this->blogsTable, $this->pagesTable, $this->eventsTable, $this->commentsTable]);
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
-	    $this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id');
         $this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId');  
-		$this->siteTable = new \Ninja\DatabaseTable($pdo, 'site', 'id');   
+  
 	
 	}
 
 
 		public function getRoutes() : array {
 
-			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable, $this->eventsTable);
+			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable, $this->pagesTable, $this->eventsTable);
 			$authorController = new \Site\Controllers\Register($this->authorsTable);
-			$siteController = new \Site\Controllers\Site($this->siteTable, $this->authorsTable, $this->authentication);
-			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication, $this->blogsTable);
+			$pageController = new \Site\Controllers\Page($this->pagesTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->eventsTable, $this->commentsTable);
+			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->pagesTable, $this->commentsTable);
 			$loginController = new \Site\Controllers\Login($this->authentication);
 
 		
 			$routes = [
 				'' => [
 					'GET' => [
-						'controller' => $siteController,
+						'controller' => $pageController,
 						'action' => 'home'
 					]
 				],
-				'site/about' => [
+				'page/about' => [
 					'GET' => [
-						'controller' => $siteController,
+						'controller' => $pageController,
 						'action' => 'about'
 					]
 				],
-				'site/list' => [
+				'page/list' => [
 					'GET' => [
-						'controller' => $siteController,
+						'controller' => $pageController,
 						'action' => 'list'
 					]
 				],
-				'site/edit' => [
+				'page/edit' => [
 					'POST' => [
-						'controller' => $siteController,
+						'controller' => $pageController,
 						'action' => 'saveEdit'
 					],
 					'GET' => [
-						'controller' => $siteController,
+						'controller' => $pageController,
 						'action' => 'displayEdit'
 					],
 					'login' => true
