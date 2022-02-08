@@ -9,14 +9,17 @@ class Event {
     private $authorsTable;
     private $pagesTable;
     private $blogsTable;
+    private $commentsTable;
+
     
 
-	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $pagesTable, DatabaseTable $blogsTable) {
+	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $pagesTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable) {
         $this->eventsTable = $eventsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
         $this->pagesTable = $pagesTable;
         $this->blogsTable = $blogsTable;
+        $this->commentsTable = $commentsTable;
 
 	}
 
@@ -60,7 +63,7 @@ class Event {
     public function add() {
         $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable, $this->eventsTable);
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable, $this->eventsTable, $this->commentsTable);
 
         $authorObject->id = $author['id'];
         $authorObject->name = $author['name'];
@@ -101,7 +104,7 @@ class Event {
     public function saveEdit() {
         $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable, $this->eventsTable);
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable, $this->eventsTable, $this->commentsTable);
 
         $authorObject->id = $author['id'];
         $authorObject->name = $author['name'];

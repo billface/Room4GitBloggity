@@ -9,16 +9,18 @@ class Page {
 	private $authorsTable;
     private $blogsTable;
     private $eventsTable;
+    private $commentsTable;
 
 
 
 
-	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable, DatabaseTable $eventsTable) {
+	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable) {
 		$this->pagesTable = $pagesTable;
 		$this->authorsTable = $authorsTable;
 		$this->authentication = $authentication;
         $this->blogsTable = $blogsTable;
         $this->eventsTable = $eventsTable;
+        $this->commentsTable = $commentsTable;
 
 	}
 
@@ -57,7 +59,7 @@ class Page {
 	public function saveEdit() {
         $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable, $this->eventsTable);
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable, $this->eventsTable, $this->commentsTable);
 
         $authorObject->id = $author['id'];
         $authorObject->name = $author['name'];
