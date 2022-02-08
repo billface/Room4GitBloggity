@@ -5,20 +5,24 @@ use \Ninja\Authentication;
 
 
 class Blog {
-    private $authorsTable;
     private $blogsTable;
+    private $authorsTable;
     private $commentsTable;
     private $displayCommentsTable;
     private $pagesTable;
+    private $eventsTable;
 
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable) {
+
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable; 
         $this->pagesTable = $pagesTable;
+        $this->eventsTable = $eventsTable;
+
 
     }
 
@@ -98,7 +102,7 @@ class Blog {
     public function add() {
         $author = $this->authentication->getUser();
 
-        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable);
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable, $this->eventsTable);
 
         $authorObject->id = $author['id'];
         $authorObject->name = $author['name'];
@@ -127,7 +131,7 @@ public function addpage() {
     public function saveEdit() {
             $author = $this->authentication->getUser();
 
-            $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable);
+            $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable, $this->eventsTable);
 
             $authorObject->id = $author['id'];
             $authorObject->name = $author['name'];

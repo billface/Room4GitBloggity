@@ -12,19 +12,27 @@ class Author {
 	public $password;
     private $blogsTable;
 	private $pagesTable;
+	private $eventsTable;
 
 
-	public function __construct(DatabaseTable $blogTable, DatabaseTable $pagesTable) {
-		$this->blogsTable = $blogTable;
+
+	public function __construct(DatabaseTable $blogsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable) {
+		$this->blogsTable = $blogsTable; 
 		$this->pagesTable = $pagesTable;
+		$this->eventsTable = $eventsTable;
+
 	}
 
-	public function getblogs() {
+	public function getBlogs() {
 		return $this->blogsTable->find('authorId', $this->id);
 	}
 
 	public function getPages() {
 		return $this->pagesTable->find('authorId', $this->id);
+	}
+
+	public function getEvents() {
+		return $this->eventsTable->find('authorId', $this->id);
 	}
 
     public function addBlog($blog) {
@@ -36,8 +44,15 @@ class Author {
 
 	public function addPage($page) {
 
-		$blog['authorId'] = $this->id;
+		$page['authorId'] = $this->id;
 
 		$this->pagesTable->save($page);
+	}
+
+	public function addEvent($event) {
+
+		$event['authorId'] = $this->id;
+
+		$this->eventsTable->save($event);
 	}
 }

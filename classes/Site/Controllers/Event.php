@@ -5,13 +5,19 @@ use \Ninja\Authentication;
 
 
 class Event {
-    private $authorsTable;
     private $eventsTable;
+    private $authorsTable;
+    private $pagesTable;
+    private $blogsTable;
+    
 
-	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication) {
-        $this->authorsTable = $authorsTable;
+	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $pagesTable, DatabaseTable $blogsTable) {
         $this->eventsTable = $eventsTable;
+        $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
+        $this->pagesTable = $pagesTable;
+        $this->blogsTable = $blogsTable;
+
 	}
 
     public function list() {
@@ -54,13 +60,17 @@ class Event {
     public function add() {
         $author = $this->authentication->getUser();
 
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable, $this->eventsTable);
+
+        $authorObject->id = $author['id'];
+        $authorObject->name = $author['name'];
+        $authorObject->email = $author['email'];
+        $authorObject->password = $author['password'];
+
         $event = $_POST['event'];
         //the above is from form, below is others
-        //$event['eventDate'] = new \Datetime();
 
-        $event['authorId'] = $author['id'];;
-
-        $this->eventsTable->save($event);
+        $authorObject->addEvent($event);
 
         header('location: /event/list');
     }
@@ -91,20 +101,18 @@ class Event {
     public function saveEdit() {
         $author = $this->authentication->getUser();
 
-        //added security from Ninja pg 493 PDF 363
-        if (isset($_GET['id'])) {
-            $event = $this->eventsTable->findById($_GET['id']);
+        $authorObject = new \Site\Entity\Author($this->blogsTable, $this->pagesTable, $this->eventsTable);
 
-            if ($event['authorId'] != $author['id']) {
-                return;
-            }
-        }
-            
+        $authorObject->id = $author['id'];
+        $authorObject->name = $author['name'];
+        $authorObject->email = $author['email'];
+        $authorObject->password = $author['password'];
+
         $event = $_POST['event'];
+            
         //the above is from form, below is others
-        $event['authorId'] = $author['id'];
 
-        $this->eventsTable->save($event);
+        $authorObject->addEvent($event);
 
         header('location: /event/list');
 
