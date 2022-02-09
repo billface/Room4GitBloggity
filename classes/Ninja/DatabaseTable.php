@@ -66,7 +66,7 @@ class DatabaseTable
 
 		$query = $this->query($query, $parameters);
 
-		return $result->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorArgs);
+		return $query->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorArgs);
 	}
 
 	public function findAllFutureDates($column) {

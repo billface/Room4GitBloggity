@@ -25,22 +25,7 @@ class Page {
 	}
 
 	public function list() {
-        $result = $this->pagesTable->findAll();
-
-        $pages = [];
-          foreach ($result as $page) {
-            $author = $this->authorsTable->findById($page['authorId']);
-      
-            $pages[] = [
-                    'id' => $page['id'],
-                    'pageHeading' => $page['pageHeading'],
-					'pageText' => $page['pageText'],
-                    'name' => $author['name'],
-                    'email' => $author['email'],
-                    'authorId' => $author['id']
-                ];
-      
-          }
+        $pages = $this->pagesTable->findAll();
       
         $title = 'Page list';
 
@@ -50,7 +35,7 @@ class Page {
 				'title' => $title, 
 				'variables' => [
 						'pages' => $pages,
-                        'userId' => $author['id'] ?? null
+                        'userId' => $author->id ?? null
                     ]
 				];
         
@@ -91,7 +76,7 @@ class Page {
         $page = $this->pagesTable->findById(1);
 
         $title = 'The Home site';
-        $metaDescription = $page['metaDescription'];
+        $metaDescription = $page->metaDescription;
 
         return ['template' => 'basic.html.php',
                  'title' => $title,
@@ -107,7 +92,7 @@ class Page {
         $page = $this->pagesTable->findById(2);
 
         $title = 'About a rapper';
-        $metaDescription = $page['metaDescription'];
+        $metaDescription = $page->metaDescription;
 
         return ['template' => 'basic.html.php',
                  'title' => $title,

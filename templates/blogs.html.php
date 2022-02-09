@@ -7,24 +7,24 @@
 
   <!--hidden form field so as not to display id of each blog
       form and input tags aren't outside the blockquote to simplify CSS -->
-  <?=htmlspecialchars($blog['blogHeading'], ENT_QUOTES, 'UTF-8')?>
+  <?=htmlspecialchars($blog->blogHeading, ENT_QUOTES, 'UTF-8')?>
 
   (by <a href="mailto:<?php
-              echo htmlspecialchars($blog['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
-              echo htmlspecialchars($blog['name'], ENT_QUOTES, 'UTF-8'); ?></a> 
+              echo htmlspecialchars($blog->getAuthor()->email, ENT_QUOTES, 'UTF-8'); ?>"><?php
+              echo htmlspecialchars($blog->getAuthor()->name, ENT_QUOTES, 'UTF-8'); ?></a> 
               on 
               <?php
-              $date = new DateTime($blog['blogDate']);
+              $date = new DateTime($blog->blogDate);
               echo $date->format('jS F Y');
               ?>)
             
-            <a href="/blog/wholeblog?id=<?=$blog['id']?>">See more</a>
+            <a href="/blog/wholeblog?id=<?=$blog->id?>">See more</a>
 
-    <?php if ($userId == $blog['authorId']): ?>
-      <a href="/blog/edit?id=<?=$blog['id']?>">Edit</a>
+    <?php if ($userId == $blog->authorId): ?>
+      <a href="/blog/edit?id=<?=$blog->id?>">Edit</a>
       <br>
       <form action="/blog/delete" method="post">
-        <input type="hidden" name="blogId" value="<?=$blog['id']?>">
+        <input type="hidden" name="blogId" value="<?=$blog->id?>">
         <input type="submit" value="Delete">
       </form>
     <?php endif; ?>

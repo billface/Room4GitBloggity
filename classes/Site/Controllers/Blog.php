@@ -27,22 +27,7 @@ class Blog {
     }
 
     public function list() {
-        $result = $this->blogsTable->findAll();
-
-        $blogs = [];
-          foreach ($result as $blog) {
-            $author = $this->authorsTable->findById($blog['authorId']);
-      
-            $blogs[] = [
-                    'id' => $blog['id'],
-                    'blogHeading' => $blog['blogHeading'],
-                    'blogDate' => $blog['blogDate'],
-                    'name' => $author['name'],
-                    'email' => $author['email'],
-                    'authorId' => $author['id']
-                ];
-      
-          }
+        $blogs = $this->blogsTable->findAll();
       
         $title = 'Blog list';
 
@@ -55,16 +40,10 @@ class Blog {
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
 						'blogs' => $blogs,
-                        'userId' => $author['id'] ?? null
+                        'userId' => $author->id ?? null
                     ]
 				];
         
-    }
-
-    public function home() {
-        $title = 'Internet Blogging Database';
-
-        return ['template' => 'home.html.php', 'title' => $title];
     }
 
     
@@ -147,7 +126,7 @@ public function addpage() {
                 'title' => $title,
                 'variables' => [
                     'blog' => $blog,
-                    'userId' => $author['id'] ?? null
+                    'userId' => $author->id ?? null
                     ]
                 ];
     }
@@ -172,46 +151,11 @@ public function addpage() {
     
 
     public function wholeblog() {
-        $result = $this->blogsTable->findAllById($_GET['id']);
+        $blog = $this->blogsTable->findById($_GET['id']);
 
-		$blogs = [];
-			foreach ($result as $blog) {
-				$author = $this->authorsTable->findById($blog['authorId']);
+		$comments = $this->displayCommentsTable->findAllById($_GET['id']);
 
-			$blogs[] = [
-					'id' => $blog['id'],
-					'blogHeading' => $blog['blogHeading'],
-					'blogText' => $blog['blogText'],
-					'blogDate' => $blog['blogDate'],
-					'blogModDate' => $blog['blogModDate'],
-                    'metaDescription' => $blog['metaDescription'],
-					'name' => $author['name'],
-					'email' => $author['email'],
-                    'authorId' => $author['id']
-
-				];
-
-			}
 		
-		$resultComm = $this->displayCommentsTable->findAllById($_GET['id']);
-
-		$comments = [];
-			foreach ($resultComm as $comment) {
-				$author = $this->authorsTable->findById($comment['authorId']);
-
-			$comments[] = [
-					'id' => $comment['id'],
-					'commText' => $comment['commText'],
-					'commDate' => $comment['commDate'],
-					'commBlogId' => $comment['commBlogId'],
-					'commModDate' => $comment['commModDate'],
-					'name' => $author['name'],
-					'email' => $author['email'],
-                    'authorId' => $author['id']
-
-				];
-
-            }
 
         
         
@@ -224,7 +168,7 @@ public function addpage() {
         }
 
         $title = 'Whole Blogger';
-        $metaDescription = $blog['metaDescription'];
+        $metaDescription = $blog->metaDescription;
 
 
         $author = $this->authentication->getUser();
@@ -233,10 +177,10 @@ public function addpage() {
                 'title' => $title,
                 'metaDescription' => $metaDescription,
                 'variables' => [
-                    'blogs' => $blogs,
+                    'blog' => $blog,
                     'comments' => $comments,
                     'comment2edit' => $comment2edit,
-                    'userId' => $author['id'] ?? null
+                    'userId' => $author->id ?? null
                     ]
                 ];
 

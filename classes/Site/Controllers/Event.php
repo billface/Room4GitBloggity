@@ -24,28 +24,8 @@ class Event {
 	}
 
     public function list() {
-        $result = $this->eventsTable->findAllFutureDates('eventDate');
+        $events = $this->eventsTable->findAllFutureDates('eventDate');
 
-        $events = [];
-          foreach ($result as $event) {
-            $author = $this->authorsTable->findById($event['authorId']);
-      
-            $events[] = [
-                    'id' => $event['id'],
-                    'eventHeading' => $event['eventHeading'],
-                    'eventText' => $event['eventText'],
-                    'eventDate' => $event['eventDate'],
-                    'name' => $author['name'],
-                    'email' => $author['email'],
-                    'authorId' => $author['id']
-
-                ];
-
-                
-
-          }
-
-         
         $title = 'Event list';
 
         $author = $this->authentication->getUser();
@@ -54,7 +34,7 @@ class Event {
 				'title' => $title, 
 				'variables' => [
 						'events' => $events,
-                        'userId' => $author['id'] ?? null
+                        'userId' => $author->id ?? null
 					]
 				];
         

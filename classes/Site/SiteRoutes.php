@@ -14,13 +14,14 @@ class SiteRoutes implements \Ninja\Routes {
 	public function __construct() {
 		include __DIR__ . '/../../includes/DatabaseConnection.php';
 
-        $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id');
-		$this->pagesTable = new \Ninja\DatabaseTable($pdo, 'page', 'id');   
-		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id');  
-		$this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id');
-		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [$this->blogsTable, $this->pagesTable, $this->eventsTable, $this->commentsTable]);
+        $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id', '\Site\Entity\Blog', [&$this->authorsTable]);
+		$this->pagesTable = new \Ninja\DatabaseTable($pdo, 'page', 'id', '\Site\Entity\Page', [&$this->authorsTable]);   
+		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id', '\Site\Entity\Event', [&$this->authorsTable]);    
+		$this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id', '\Site\Entity\Comment', [&$this->authorsTable]);
+		$this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId', '\Site\Entity\Comment', [&$this->authorsTable]); 
+		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [&$this->blogsTable, &$this->pagesTable, &$this->eventsTable, &$this->commentsTable]);
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
-        $this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId');  
+         
   
 	
 	}
