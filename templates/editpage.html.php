@@ -1,14 +1,16 @@
-<?php if ($userId == $page['authorId']): ?>
+<?php if ($userId == $page->authorId): ?>
 
 <form action="" method="post">
-	<input type="hidden" name="page[id]" value="<?=$page['id']?>">
+	<input type="hidden" name="page[id]" value="<?=$page->id?>">
     <label for="pageHeading">Type your page heading here:</label>
-    <textarea id="pageHeading" name="page[pageHeading]" rows="1" cols="40"><?=$page['pageHeading']?></textarea>
+    <textarea id="pageHeading" name="page[pageHeading]" rows="1" cols="40"><?=$page->pageHeading?></textarea>
     <br>
     <label for="pageText">Type your page text here:</label>
-    <textarea id="pageText" name="page[pageText]" rows="3" cols="40"><?=$page['pageText']?></textarea>
+    <textarea id="pageText" name="page[pageText]" rows="3" cols="40"><?=$page->pageText?></textarea>
     <br>
-    
+    <label for="metaDescription">Type your metaDescription here:</label>
+    <textarea id="metaDescription" name="page[metaDescription]" rows="3" cols="40"><?=$page->metaDescription?></textarea>
+    <br>
     <input type="submit" value="Save">
 </form>
 <?php else: ?>
