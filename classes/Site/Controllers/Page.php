@@ -10,6 +10,8 @@ class Page {
     private $blogsTable;
     private $eventsTable;
     private $commentsTable;
+    private $authentication;
+
 
 
 

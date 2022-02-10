@@ -11,17 +11,21 @@ class Blog {
     private $displayCommentsTable;
     private $pagesTable;
     private $eventsTable;
+    private $blogCategoriesTable;
+    private $authentication;
 
 
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable) {
+
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, DatabaseTable $blogCategoriesTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
-        $this->authentication = $authentication;
+        $this->blogCategoriesTable = $blogCategoriesTable;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable; 
         $this->pagesTable = $pagesTable;
         $this->eventsTable = $eventsTable;
+        $this->authentication = $authentication;
 
 
     }
@@ -117,6 +121,8 @@ public function addpage() {
     public function displayEdit() {
         
         $author = $this->authentication->getUser();
+        $blogCategories = $this->blogCategoriesTable->findAll();
+
 
         $blog = $this->blogsTable->findById($_GET['id']);
 
@@ -126,7 +132,9 @@ public function addpage() {
                 'title' => $title,
                 'variables' => [
                     'blog' => $blog,
-                    'userId' => $author->id ?? null
+                    'userId' => $author->id ?? null,
+                    'blogCategories' => $blogCategories
+
                     ]
                 ];
     }

@@ -10,6 +10,8 @@ class Event {
     private $pagesTable;
     private $blogsTable;
     private $commentsTable;
+    private $authentication;
+
 
     
 

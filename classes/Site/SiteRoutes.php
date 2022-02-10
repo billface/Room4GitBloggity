@@ -9,6 +9,8 @@ class SiteRoutes implements \Ninja\Routes {
 	private $displayCommentsTable;
 	private $pagesTable;
 	private $eventsTable;
+	private $categoriesTable;
+
 	
 
 	public function __construct() {
@@ -20,6 +22,7 @@ class SiteRoutes implements \Ninja\Routes {
 		$this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id', '\Site\Entity\Comment', [&$this->authorsTable]);
 		$this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId', '\Site\Entity\Comment', [&$this->authorsTable]); 
 		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [&$this->blogsTable, &$this->pagesTable, &$this->eventsTable, &$this->commentsTable]);
+		$this->blogCategoriesTable = new \Ninja\DatabaseTable($pdo, 'blogcategory', 'id');
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
          
   
@@ -29,11 +32,12 @@ class SiteRoutes implements \Ninja\Routes {
 
 		public function getRoutes() : array {
 
-			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable, $this->pagesTable, $this->eventsTable);
+			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->blogCategoriesTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable, $this->pagesTable, $this->eventsTable);
 			$authorController = new \Site\Controllers\Register($this->authorsTable);
 			$pageController = new \Site\Controllers\Page($this->pagesTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->eventsTable, $this->commentsTable);
 			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->pagesTable, $this->commentsTable);
 			$loginController = new \Site\Controllers\Login($this->authentication);
+			$blogcategoryController = new \Site\Controllers\Blogcategory($this->blogCategoriesTable);
 
 		
 			$routes = [
@@ -153,6 +157,31 @@ class SiteRoutes implements \Ninja\Routes {
 					],
 					'login' => true
 
+				],
+				'blogcategory/edit' => [
+					'POST' => [
+						'controller' => $blogcategoryController,
+						'action' => 'saveEdit'
+					],
+					'GET' => [
+						'controller' => $blogcategoryController,
+						'action' => 'edit'
+					],
+					'login' => true
+				],
+				'blogcategory/list' => [
+					'GET' => [
+						'controller' => $blogcategoryController,
+						'action' => 'list'
+					],
+					'login' => true
+				],
+				'blogcategory/delete' => [
+					'POST' => [
+						'controller' => $blogcategoryController,
+						'action' => 'delete'
+					],
+					'login' => true
 				],
 				'login/success' => [
 					'GET' => [
