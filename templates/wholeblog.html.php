@@ -36,8 +36,8 @@
   <?php foreach($comments as $comment): ?>
  <small> <?=htmlspecialchars($comment->commText, ENT_QUOTES, 'UTF-8')?>
  (by <a href="mailto:<?php
-              echo htmlspecialchars($comment->getAuthor()->email, ENT_QUOTES, 'UTF-8'); ?>"><?php
-              echo htmlspecialchars($comment->getAuthor()->name, ENT_QUOTES, 'UTF-8'); ?></a>
+              echo htmlspecialchars($comment->getAuthor()->email, ENT_QUOTES, 'UTF-8') ?? 'deleted user'; ?>"><?php
+              echo htmlspecialchars($comment->getAuthor()->name, ENT_QUOTES, 'UTF-8') ?? 'deleted user'; ?></a>
               on 
               <?php
               $date = new DateTime($comment->commDate);
