@@ -8,10 +8,13 @@ class Blog {
 	public $blogtext;
 	private $authorsTable;
 	private $author;
+	private $blogJoinCategoriesTable;
 
 
-	public function __construct(\Ninja\DatabaseTable $authorsTable) {
+
+	public function __construct(\Ninja\DatabaseTable $authorsTable, \Ninja\DatabaseTable $blogJoinCategoriesTable) {
 		$this->authorsTable = $authorsTable;
+		$this->blogJoinCategoriesTable = $blogJoinCategoriesTable;
 	}
 
 	public function getAuthor() {
@@ -20,4 +23,10 @@ class Blog {
 		}
 		
 		return $this->author;	}
+	
+	public function addBlogCategory($blogCategoryId) {
+		$blogCat = ['blogId' => $this->id, 'blogCategoryId' => $blogCategoryId];
+
+		$this->blogJoinCategoriesTable->save($blogCat);
+	}
 }

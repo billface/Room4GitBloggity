@@ -9,20 +9,23 @@ class SiteRoutes implements \Ninja\Routes {
 	private $displayCommentsTable;
 	private $pagesTable;
 	private $eventsTable;
-	private $categoriesTable;
+	private $blogCategoriesTable;
+	private $blogJoinCategoriesTable;
+
 
 	
 
 	public function __construct() {
 		include __DIR__ . '/../../includes/DatabaseConnection.php';
 
-        $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id', '\Site\Entity\Blog', [&$this->authorsTable]);
+        $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id', '\Site\Entity\Blog', [&$this->authorsTable, &$this->blogJoinCategoriesTable]);
 		$this->pagesTable = new \Ninja\DatabaseTable($pdo, 'page', 'id', '\Site\Entity\Page', [&$this->authorsTable]);   
 		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id', '\Site\Entity\Event', [&$this->authorsTable]);    
 		$this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id', '\Site\Entity\Comment', [&$this->authorsTable]);
 		$this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId', '\Site\Entity\Comment', [&$this->authorsTable]); 
-		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [&$this->blogsTable, &$this->pagesTable, &$this->eventsTable, &$this->commentsTable]);
 		$this->blogCategoriesTable = new \Ninja\DatabaseTable($pdo, 'blogcategory', 'id');
+		$this->blogJoinCategoriesTable = new \Ninja\DatabaseTable($pdo, 'blog_join_category', 'blogCategoryId');
+		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [&$this->blogsTable, &$this->pagesTable, &$this->eventsTable, &$this->commentsTable]);
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
          
   

@@ -89,16 +89,26 @@ class Blog {
         //the above is from form, below is others
         $blog['blogDate'] = new \Datetime();
 
-        $author->addBlog($blog);
+        $blogEntity = $author->addBlog($blog);
+
+        foreach ($_POST['blogCategory'] as $blogCategoryId) {
+            $blogEntity->addBlogCategory($blogCategoryId);
+        }
 
         header('location: /blog/list');
 }
 
 public function addpage() {
+        $blogCategories = $this->blogCategoriesTable->findAll();
 
         $title = 'Add a new blog';
 
-        return ['template' => 'addblog.html.php', 'title' => $title];
+        return ['template' => 'addblog.html.php', 
+                'title' => $title,
+                'variables' => [
+                    'blogCategories' => $blogCategories
+                ]
+                ];
     
 }
 
@@ -111,7 +121,11 @@ public function addpage() {
             //the above is from form, below is others
             $blog['blogModDate'] = new \DateTime();
 
-            $author->addBlog($blog);
+            $blogEntity = $author->addBlog($blog);
+
+            foreach ($_POST['blogCategory'] as $blogCategoryId) {
+                $blogEntity->addBlogCategory($blogCategoryId);
+            }
 
             header('location: /blog/wholeblog?id=' . $blog['id']);
             //header('location: /blog/list');
