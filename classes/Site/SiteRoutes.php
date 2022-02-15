@@ -9,6 +9,8 @@ class SiteRoutes implements \Ninja\Routes {
 	private $displayCommentsTable;
 	private $pagesTable;
 	private $eventsTable;
+	private $categoriesTable;
+
 	
 
 	public function __construct() {
@@ -20,6 +22,7 @@ class SiteRoutes implements \Ninja\Routes {
 		$this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id', '\Site\Entity\Comment', [&$this->authorsTable]);
 		$this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId', '\Site\Entity\Comment', [&$this->authorsTable]); 
 		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [&$this->blogsTable, &$this->pagesTable, &$this->eventsTable, &$this->commentsTable]);
+		$this->categoriesTable = new \Ninja\DatabaseTable($pdo, 'category', 'id');
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
          
   
@@ -34,6 +37,7 @@ class SiteRoutes implements \Ninja\Routes {
 			$pageController = new \Site\Controllers\Page($this->pagesTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->eventsTable, $this->commentsTable);
 			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->pagesTable, $this->commentsTable);
 			$loginController = new \Site\Controllers\Login($this->authentication);
+			$categoryController = new \Site\Controllers\Category($this->categoriesTable);
 
 		
 			$routes = [
@@ -224,7 +228,31 @@ class SiteRoutes implements \Ninja\Routes {
 					'login' => true
 
 				],
-
+				'category/edit' => [
+					'POST' => [
+						'controller' => $categoryController,
+						'action' => 'saveEdit'
+					],
+					'GET' => [
+						'controller' => $categoryController,
+						'action' => 'edit'
+					],
+					'login' => true
+				],
+				'category/delete' => [
+					'POST' => [
+						'controller' => $categoryController,
+						'action' => 'delete'
+					],
+					'login' => true
+				],
+				'category/list' => [
+					'GET' => [
+						'controller' => $categoryController,
+						'action' => 'list'
+					],
+					'login' => true
+				]
 			];
 
 			return $routes;
