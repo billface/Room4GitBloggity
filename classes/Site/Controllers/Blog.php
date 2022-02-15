@@ -11,21 +11,21 @@ class Blog {
     private $displayCommentsTable;
     private $pagesTable;
     private $eventsTable;
-    private $blogCategoriesTable;
-    private $authentication;
+    private $categoriesTable;
+	private $authentication;
 
 
 
-
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, DatabaseTable $blogCategoriesTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable) {
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $categoriesTable, Authentication $authentication) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
-        $this->blogCategoriesTable = $blogCategoriesTable;
+        $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable; 
         $this->pagesTable = $pagesTable;
         $this->eventsTable = $eventsTable;
-        $this->authentication = $authentication;
+        $this->categoriesTable = $categoriesTable;
+		$this->authentication = $authentication;
 
 
     }
@@ -95,10 +95,16 @@ class Blog {
 }
 
 public function addpage() {
+        $categories = $this->categoriesTable->findAll();
+
 
         $title = 'Add a new blog';
 
-        return ['template' => 'addblog.html.php', 'title' => $title];
+        return ['template' => 'addblog.html.php',
+                'title' => $title,
+                'variables' => [
+                    'categories' => $categories
+                ]];
     
 }
 
@@ -121,8 +127,7 @@ public function addpage() {
     public function displayEdit() {
         
         $author = $this->authentication->getUser();
-        $blogCategories = $this->blogCategoriesTable->findAll();
-
+        $categories = $this->categoriesTable->findAll();
 
         $blog = $this->blogsTable->findById($_GET['id']);
 
@@ -133,8 +138,7 @@ public function addpage() {
                 'variables' => [
                     'blog' => $blog,
                     'userId' => $author->id ?? null,
-                    'blogCategories' => $blogCategories
-
+                    'categories' => $categories
                     ]
                 ];
     }

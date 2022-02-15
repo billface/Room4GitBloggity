@@ -9,6 +9,13 @@
     <label for="metaDescription">Type your metaDescription here:</label>
     <textarea id="metaDescription" name="blog[metaDescription]" rows="3" cols="40"></textarea>
     <br>
+    <p>Select categories for this joke:</p>
+    <?php foreach ($categories as $category): ?>
+    <input type="checkbox" name="category[]" value="<?=$category->id?>" /> <label><?=$category->name?></label>
+
+
+    <?php endforeach; ?>
+    <br>
     <input type="submit" value="Add">
     <br>
 </form>
