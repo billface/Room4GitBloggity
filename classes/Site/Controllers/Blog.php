@@ -31,8 +31,16 @@ class Blog {
     }
 
     public function list() {
-        $blogs = $this->blogsTable->findAll();
-      
+
+        if (isset($_GET['category']))
+		{
+			$category = $this->categoriesTable->findById($_GET['category']);
+			$blogs = $category->getBlogs();
+		}
+        else
+        {
+            $blogs = $this->blogsTable->findAll();
+        }
         $title = 'Blog list';
 
         $totalBlogs = $this->blogsTable->total();
@@ -44,7 +52,8 @@ class Blog {
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
 						'blogs' => $blogs,
-                        'userId' => $author->id ?? null
+                        'userId' => $author->id ?? null,
+                        'categories' => $this->categoriesTable->findAll()
                     ]
 				];
         
@@ -89,7 +98,14 @@ class Blog {
         //the above is from form, below is others
         $blog['blogDate'] = new \Datetime();
 
-        $author->addBlog($blog);
+        $blogEntity = $author->addBlog($blog); 
+
+        foreach ($_POST['category'] as $categoryId) {
+            $blogEntity->addCategory($categoryId);
+        }
+
+        echo '<pre>'; print_r($blogEntity); echo '</pre>'; 
+
 
         header('location: /blog/list');
 }
@@ -104,7 +120,8 @@ public function addpage() {
                 'title' => $title,
                 'variables' => [
                     'categories' => $categories
-                ]];
+                ]
+            ];
     
 }
 
@@ -117,8 +134,11 @@ public function addpage() {
             //the above is from form, below is others
             $blog['blogModDate'] = new \DateTime();
 
-            $author->addBlog($blog);
+            $blogEntity = $author->addBlog($blog);
 
+            foreach ($_POST['category'] as $categoryId) {
+                $blogEntity->addCategory($categoryId);
+            }
             header('location: /blog/wholeblog?id=' . $blog['id']);
             //header('location: /blog/list');
 

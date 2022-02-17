@@ -44,28 +44,28 @@ class Author {
 
 		$blog['authorId'] = $this->id;
 
-		$this->blogsTable->save($blog);
+		return $this->blogsTable->save($blog);
 	}
 
 	public function addPage($page) {
 
 		$page['authorId'] = $this->id;
 
-		$this->pagesTable->save($page);
+		return $this->pagesTable->save($page);
 	}
 
 	public function addEvent($event) {
 
 		$event['authorId'] = $this->id;
 
-		$this->eventsTable->save($event);
+		return $this->eventsTable->save($event);
 	}
 	
 	public function addComment($comment) {
 
 		$comment['authorId'] = $this->id;
 
-		$this->commentsTable->save($comment);
+		return $this->commentsTable->save($comment);
 	}
 
 }

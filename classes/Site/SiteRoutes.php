@@ -4,26 +4,29 @@ namespace Site;
 class SiteRoutes implements \Ninja\Routes {
 	private $authorsTable;
 	private $blogsTable;
-	private $authentication;
 	private $commentsTable;
 	private $displayCommentsTable;
 	private $pagesTable;
 	private $eventsTable;
 	private $categoriesTable;
+	private $blogCategoriesTable;
+	private $authentication;
+
+
 
 	
 
 	public function __construct() {
 		include __DIR__ . '/../../includes/DatabaseConnection.php';
 
-        $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id', '\Site\Entity\Blog', [&$this->authorsTable]);
+        $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id', '\Site\Entity\Blog', [&$this->authorsTable, &$this->blogCategoriesTable]);
 		$this->pagesTable = new \Ninja\DatabaseTable($pdo, 'page', 'id', '\Site\Entity\Page', [&$this->authorsTable]);   
 		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id', '\Site\Entity\Event', [&$this->authorsTable]);    
 		$this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id', '\Site\Entity\Comment', [&$this->authorsTable]);
 		$this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId', '\Site\Entity\Comment', [&$this->authorsTable]); 
-		$this->categoriesTable = new \Ninja\DatabaseTable($pdo, 'category', 'id');
 		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [&$this->blogsTable, &$this->pagesTable, &$this->eventsTable, &$this->commentsTable]);
-
+		$this->categoriesTable = new \Ninja\DatabaseTable($pdo, 'category', 'id', '\Site\Entity\Category', [&$this->blogsTable, &$this->blogCategoriesTable]);
+		$this->blogCategoriesTable = new \Ninja\DatabaseTable($pdo, 'blog_category', 'categoryId');
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
          
   
@@ -34,9 +37,9 @@ class SiteRoutes implements \Ninja\Routes {
 		public function getRoutes() : array {
 
 			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->commentsTable, $this->displayCommentsTable, $this->pagesTable, $this->eventsTable, $this->categoriesTable, $this->authentication);
-			$authorController = new \Site\Controllers\Register($this->authorsTable);
 			$pageController = new \Site\Controllers\Page($this->pagesTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->eventsTable, $this->commentsTable);
 			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->pagesTable, $this->commentsTable);
+			$authorController = new \Site\Controllers\Register($this->authorsTable);
 			$loginController = new \Site\Controllers\Login($this->authentication);
 			$categoryController = new \Site\Controllers\Category($this->categoriesTable);
 

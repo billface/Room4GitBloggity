@@ -96,15 +96,15 @@ class DatabaseTable
 
 		$query .= ')';
 
-		$fields =$this->processDates($fields);
+		$fields = $this->processDates($fields);
 
 		$this->query($query, $fields);
+
+		return $this->pdo->lastInsertId();
 	}
 
 	private function update($fields) {
-
 		$query = ' UPDATE `' . $this->table .'` SET ';
-
 
 		foreach ($fields as $key => $value) {
 			$query .= '`' . $key . '` = :' . $key . ',';
@@ -115,7 +115,7 @@ class DatabaseTable
 		$query .= ' WHERE `' . $this->primaryKey . '` = :primaryKey';
 
 		//Set the :primaryKey variable
-		$fields['primaryKey'] = $fields['id'];
+		$fields['primaryKey'] = $fields[$this->primaryKey];
 
 		$fields = $this->processDates($fields);
 
@@ -150,14 +150,26 @@ class DatabaseTable
 	}
 
 	public function save($record) {
+		$entity = new $this->className(...$this->constructorArgs);
+
 		try {
 			if ($record[$this->primaryKey] == '') {
 				$record[$this->primaryKey] = null;
 			}
-			$this->insert($record);
+			$insertId = $this->insert($record);
+
+			$entity->{$this->primaryKey} = $insertId;
 		}
 		catch (\PDOException $e) {
 			$this->update($record);
 		}
+
+		foreach ($record as $key => $value) {
+			if (!empty($value)) {
+				$entity->$key = $value;	
+			}			
+		}
+
+		return $entity;	
 	}
 }
