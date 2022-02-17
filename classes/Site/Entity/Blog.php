@@ -30,4 +30,16 @@ class Blog {
 
 		$this->blogCategoriesTable->save($blogCat);
 	}
+	public function hasCategory($categoryId) {
+		$blogCategories = $this->blogCategoriesTable->find('blogId', $this->id);
+
+		foreach ($blogCategories as $blogCategory) {
+			if ($blogCategory->categoryId == $categoryId) {
+				return true;
+			}
+		}
+	}
+	public function clearCategories() {
+		$this->blogCategoriesTable->deleteWhere('blogId', $this->id);
+	}
 }

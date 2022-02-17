@@ -12,18 +12,24 @@
     <label for="metaDescription">Type your metaDescription here:</label>
     <textarea id="metaDescription" name="blog[metaDescription]" rows="3" cols="40"><?=$blog->metaDescription?></textarea>
     <br>
-    <p>Select categories for this joke:</p>
+
+    <p>Select categories for this blog:</p>
     <?php foreach ($categories as $category): ?>
-    <input type="checkbox" name="category[]" value="<?=$category->id?>" /> <label><?=$category->name?></label>
 
+    <?php if ($blog && $blog->hasCategory($category->id)): ?>
+    <input type="checkbox" checked name="category[]" value="<?=$category->id?>" />
+    <?php else: ?>
+    <input type="checkbox" name="category[]" value="<?=$category->id?>" /> 
+    <?php endif; ?>
 
+    <label><?=$category->name?></label>
     <?php endforeach; ?>
     <br>
     <input type="submit" value="Save">
 </form>
 <?php else: ?>
 
-<p>You may only edit jokes that you posted.</p>
+<p>You may only edit blogs that you posted.</p>
 <?php endif; ?>
 
 

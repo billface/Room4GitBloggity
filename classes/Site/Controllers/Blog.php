@@ -104,9 +104,6 @@ class Blog {
             $blogEntity->addCategory($categoryId);
         }
 
-        echo '<pre>'; print_r($blogEntity); echo '</pre>'; 
-
-
         header('location: /blog/list');
 }
 
@@ -135,6 +132,8 @@ public function addpage() {
             $blog['blogModDate'] = new \DateTime();
 
             $blogEntity = $author->addBlog($blog);
+
+            $blogEntity->clearCategories();
 
             foreach ($_POST['category'] as $categoryId) {
                 $blogEntity->addCategory($categoryId);
