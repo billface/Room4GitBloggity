@@ -90,6 +90,28 @@ class SiteRoutes implements \Ninja\Routes {
 						'action' => 'success'
 					]
 				],
+				'author/permissions' => [
+					'GET' => [
+						'controller' => $authorController,
+						'action' => 'permissions'
+					],
+					'POST' => [
+						'controller' => $authorController,
+						'action' => 'savePermissions'
+					],
+					'login' => true,
+					'permissions' => \Site\Entity\Author::EDIT_USER_ACCESS
+
+				],
+				'author/list' => [
+					'GET' => [
+						'controller' => $authorController,
+						'action' => 'list'
+					],
+					'login' => true,
+					'permissions' => \Site\Entity\Author::EDIT_USER_ACCESS
+
+				],
 				'blog/list' => [
 					'GET' => [
 						'controller' => $blogController,

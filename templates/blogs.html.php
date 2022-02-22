@@ -26,13 +26,17 @@
             
             <a href="/blog/wholeblog?id=<?=$blog->id?>">See more</a>
 
-    <?php if ($userId == $blog->authorId): ?>
+    <?php if ($user): ?>
+      <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::EDIT_BLOGS)): ?>
       <a href="/blog/edit?id=<?=$blog->id?>">Edit</a>
+      <?php endif; ?>
       <br>
+      <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::DELETE_BLOGS)): ?>
       <form action="/blog/delete" method="post">
         <input type="hidden" name="blogId" value="<?=$blog->id?>">
         <input type="submit" value="Delete">
       </form>
+    <?php endif; ?>
     <?php endif; ?>
 
 </p>

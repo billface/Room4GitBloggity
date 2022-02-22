@@ -52,7 +52,7 @@ class Blog {
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
 						'blogs' => $blogs,
-                        'userId' => $author->id ?? null,
+                        'user' => $author, //previously 'userId' => $author->id ?? null,
                         'categories' => $this->categoriesTable->findAll()
                     ]
 				];
@@ -67,7 +67,7 @@ class Blog {
 
         $blog = $this->blogsTable->findById($_POST['blogId']);
 
-        if ($blog->authorId != $author->id) {
+        if ($blog->authorId != $author->id && !$author->hasPermission(\Site\Entity\Author::DELETE_BLOGS) ) {
 			return;
 		}
 		
@@ -156,7 +156,7 @@ public function addpage() {
                 'title' => $title,
                 'variables' => [
                     'blog' => $blog,
-                    'userId' => $author->id ?? null,
+                    'user' => $author, //previously 'userId' => $author->id ?? null,
                     'categories' => $categories
                     ]
                 ];
