@@ -102,4 +102,22 @@ class Page {
                     ]
                 ];
     }
+
+    public function admin() {
+
+        //$page = $this->pagesTable->findById(7);
+
+        $title = 'About a rapper';
+        $metaDescription = 'Admin Page';
+
+        return ['template' => 'admin.html.php',
+                 'title' => $title,
+                 'metaDescription' => $metaDescription,
+                 'variables' => [
+                    'user' => $author
+                    ]
+                 
+                 
+                ];
+    }
 }

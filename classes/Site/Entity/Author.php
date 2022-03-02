@@ -7,12 +7,9 @@ use \Ninja\DatabaseTable;
 
 class Author {
 
-	const EDIT_BLOGS = 1;
-	const DELETE_BLOGS = 2;
-	const ADD_CATEGORIES = 4;
-	const EDIT_CATEGORIES = 8;
-	const REMOVE_CATEGORIES = 16;
-	const EDIT_USER_ACCESS = 32;
+	const ADMIN = 1;
+	const SUPERUSER = 2;
+	const GOD = 4; 
 
 	public $id;
 	public $name;

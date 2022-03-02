@@ -4,8 +4,14 @@
 </h2>
   <?=htmlspecialchars($blog->blogText, ENT_QUOTES, 'UTF-8')?><br>
   (by <a href="mailto:
-              <?php echo htmlspecialchars($blog->getAuthor()->email, ENT_QUOTES, 'UTF-8'); ?>">
-              <?php echo htmlspecialchars($blog->getAuthor()->name, ENT_QUOTES, 'UTF-8'); ?></a>
+              <?php 
+              $author = $blog->getAuthor();
+              echo htmlspecialchars($author ? $author->email : 'deleted user', ENT_QUOTES, 'UTF-8');
+              ?>">
+              <?php 
+              $author = $blog->getAuthor();
+              echo htmlspecialchars($author ? $author->name : 'deleted user', ENT_QUOTES, 'UTF-8');
+              ?></a>
               on 
               <?php
               $date = new DateTime($blog->blogDate);
@@ -18,13 +24,18 @@
                
               }
               ?>)
-                  <?php if ($userId == $blog->authorId): ?>
-              <a href="/blog/edit?id=<?=$blog->id?>">Edit</a>
-              <form action="/blog/delete" method="post">
-                <input type="hidden" name="blogId" value="<?=$blog->id?>">
-                <input type="submit" value="Delete">
-              </form>
-              <?php endif; ?>
+                  <?php if ($user): ?>
+      <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
+      <a href="/blog/edit?id=<?=$blog->id?>">Edit</a>
+      <?php endif; ?>
+      <br>
+      <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
+      <form action="/blog/delete" method="post">
+        <input type="hidden" name="blogId" value="<?=$blog->id?>">
+        <input type="submit" value="Delete">
+      </form>
+    <?php endif; ?>
+    <?php endif; ?>
 
               
   
@@ -35,9 +46,10 @@
   
   <?php foreach($comments as $comment): ?>
  <small> <?=htmlspecialchars($comment->commText, ENT_QUOTES, 'UTF-8')?>
- (by <a href="mailto:<?php
-              echo htmlspecialchars($comment->getAuthor()->email, ENT_QUOTES, 'UTF-8') ?? 'deleted user'; ?>"><?php
-              echo htmlspecialchars($comment->getAuthor()->name, ENT_QUOTES, 'UTF-8') ?? 'deleted user'; ?></a>
+ (by <?php
+              $author = $comment->getAuthor();
+              echo htmlspecialchars($author ? $author->name : 'deleted user', ENT_QUOTES, 'UTF-8');
+              //echo htmlspecialchars($comment->getAuthor()->name, ENT_QUOTES, 'UTF-8') ?? 'deleted user'; ?></a>
               on 
               <?php
               $date = new DateTime($comment->commDate);
@@ -48,14 +60,16 @@
                 echo ' (<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
               }
               ?>)</small>
-                  <?php if ($userId == $comment->authorId): ?>
-
+              <?php if ($user): ?>
+                  <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::ADMIN)): ?>
               <a href="/blog/wholeblog?id=<?=$blog->id?>&commentid=<?=$comment->id?>">Edit</a>
+              
               <form action="/blog/deletecomment" method="post">
                 <input type="hidden" name="commId" value="<?=$comment->id?>">
                 <input type="hidden" name="headerBlogId" value="<?=$blog->id?>">
                 <input type="submit" value="Delete">
               </form>
+              <?php endif; ?>
               <?php endif; ?>
 
               <br>

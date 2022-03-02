@@ -211,7 +211,7 @@ public function addpage() {
                     'blog' => $blog,
                     'comments' => $comments,
                     'comment2edit' => $comment2edit,
-                    'userId' => $author->id ?? null
+                    'user' => $author
                     ]
                 ];
 

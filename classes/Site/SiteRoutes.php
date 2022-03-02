@@ -56,12 +56,23 @@ class SiteRoutes implements \Ninja\Routes {
 						'controller' => $pageController,
 						'action' => 'about'
 					]
+				], 
+				'page/admin' => [
+					'GET' => [
+						'controller' => $pageController,
+						'action' => 'admin'
+					],
+					'login' => true,
+					'permissions' => \Site\Entity\Author::SUPERUSER
 				],
 				'page/list' => [
 					'GET' => [
 						'controller' => $pageController,
 						'action' => 'list'
-					]
+					],
+					'login' => true,
+					'permissions' => \Site\Entity\Author::GOD
+
 				],
 				'page/edit' => [
 					'POST' => [
@@ -100,7 +111,7 @@ class SiteRoutes implements \Ninja\Routes {
 						'action' => 'savePermissions'
 					],
 					'login' => true,
-					'permissions' => \Site\Entity\Author::EDIT_USER_ACCESS
+					'permissions' => \Site\Entity\Author::GOD
 
 				],
 				'author/list' => [
@@ -109,7 +120,7 @@ class SiteRoutes implements \Ninja\Routes {
 						'action' => 'list'
 					],
 					'login' => true,
-					'permissions' => \Site\Entity\Author::EDIT_USER_ACCESS
+					'permissions' => \Site\Entity\Author::GOD
 
 				],
 				'blog/list' => [
@@ -143,7 +154,9 @@ class SiteRoutes implements \Ninja\Routes {
 						'controller' => $blogController,
 						'action' => 'addpage'
 					],
-					'login' => true
+					'login' => true,
+					'permissions' => \Site\Entity\Author::SUPERUSER
+
 
 				],
 				'blog/add' => [
@@ -151,7 +164,8 @@ class SiteRoutes implements \Ninja\Routes {
 						'controller' => $blogController,
 						'action' => 'add'
 					],
-					'login' => true
+					'login' => true,
+
 
 				],
 				'blog/wholeblog' => [
@@ -249,7 +263,8 @@ class SiteRoutes implements \Ninja\Routes {
 						'controller' => $eventController,
 						'action' => 'addpage'
 					],
-					'login' => true
+					'login' => true,
+					'permissions' => \Site\Entity\Author::SUPERUSER
 
 				],
 				'event/add' => [
@@ -270,7 +285,7 @@ class SiteRoutes implements \Ninja\Routes {
 						'action' => 'edit'
 					],
 					'login' => true,
-					'permissions' => \Site\Entity\Author::EDIT_CATEGORIES
+					'permissions' => \Site\Entity\Author::SUPERUSER
 
 				],
 				'category/delete' => [
@@ -279,7 +294,7 @@ class SiteRoutes implements \Ninja\Routes {
 						'action' => 'delete'
 					],
 					'login' => true,
-					'permissions' => \Site\Entity\Author::REMOVE_CATEGORIES
+					'permissions' => \Site\Entity\Author::SUPERUSER
 
 				],
 				'category/list' => [
@@ -288,7 +303,7 @@ class SiteRoutes implements \Ninja\Routes {
 						'action' => 'list'
 					],
 					'login' => true,
-					'permissions' => \Site\Entity\Author::EDIT_CATEGORIES
+					'permissions' => \Site\Entity\Author::SUPERUSER
 
 				]
 			];

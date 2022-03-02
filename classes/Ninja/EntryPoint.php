@@ -53,6 +53,7 @@ class EntryPoint {
 			$metaDescription = $display['metaDescription'];
 
 
+
 			if (isset($display['variables'])) {
 				$output = $this->loadTemplate($display['template'], $display['variables']);
 			}
@@ -61,9 +62,11 @@ class EntryPoint {
 			}
 
 			echo $this->loadTemplate('layout.html.php', ['loggedIn' => $authentication->isLoggedIn(),
+															'user' => $authentication->getUser(),
+
 														'output' => $output,
 														'title' => $title,
-														'metaDescription' => $metaDescription
+														'metaDescription' => $metaDescription,
 													]);		
 		}
 	}
