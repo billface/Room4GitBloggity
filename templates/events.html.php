@@ -20,18 +20,30 @@
 </p>
 
   (by <a href="mailto:<?php
-              echo htmlspecialchars($event->getAuthor()->email, ENT_QUOTES, 'UTF-8'); ?>"><?php
-              echo htmlspecialchars($event->getAuthor()->name, ENT_QUOTES, 'UTF-8'); ?></a>)
 
-<?php if ($userId == $event->authorId): ?>
+              $author = $event->getAuthor();
+              echo htmlspecialchars($author ? $author->email : 'deleted user', ENT_QUOTES, 'UTF-8');
+              ?>">
+              <?php
+              $author = $event->getAuthor();
+              echo htmlspecialchars($author ? $author->name : 'deleted user', ENT_QUOTES, 'UTF-8');
+               ?></a>)
 
+
+<?php if ($user): ?>
+  <?php if ($user->id == $event->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
   <a href="/event/edit?id=<?=$event->id?>">Edit</a>
+  <?php endif; ?>
+
   <br>
-  <form action="/event/delete" method="post">
+  <?php if ($user->id == $event->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
+    <form action="/event/delete" method="post">
     <input type="hidden" name="eventId" value="<?=$event->id?>">
     <input type="submit" value="Delete">
   </form>
   <?php endif; ?>
+  <?php endif; ?>
+
 
   </p>
 </blockquote>

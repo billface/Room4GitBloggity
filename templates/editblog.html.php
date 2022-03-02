@@ -1,4 +1,4 @@
-<?php if (empty($blog->id) || $user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::EDIT_BLOGS)) : ?>
+<?php if (empty($blog->id) || $user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)) : ?>
 
 <form action="" method="post">
 	<input type="hidden" name="blog[id]" value="<?=$blog->id?>">

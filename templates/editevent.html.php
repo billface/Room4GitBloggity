@@ -1,4 +1,4 @@
-<?php if ($userId == $event->authorId): ?>
+<?php if (empty($event->id) || $user->id == $event->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)) : ?>
 
 <form action="" method="post">
 	<input type="hidden" name="event[id]" value="<?=$event->id?>">

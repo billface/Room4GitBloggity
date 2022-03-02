@@ -34,7 +34,7 @@ class Event {
 				'title' => $title, 
 				'variables' => [
 						'events' => $events,
-                        'userId' => $author->id ?? null
+                        'user' => $author //previously 'userId' => $author->id ?? null,
 					]
 				];
         
@@ -99,8 +99,7 @@ class Event {
                 'title' => $title,
                 'variables' => [
                     'event' => $event,
-                    'userId' => $author->id ?? null
-                    ]
+                    'user' => $author                    ]
                 ];
     }
 
