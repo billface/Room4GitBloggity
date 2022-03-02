@@ -99,7 +99,8 @@ class Event {
                 'title' => $title,
                 'variables' => [
                     'event' => $event,
-                    'user' => $author                    ]
+                    'user' => $author 
+                    ]
                 ];
     }
 

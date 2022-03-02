@@ -1,4 +1,4 @@
-<?php if ($userId == $page->authorId): ?>
+<?php if ($user->id == $page->authorId || $user->hasPermission(\Site\Entity\Author::GOD)): ?>
 
 <form action="" method="post">
 	<input type="hidden" name="page[id]" value="<?=$page->id?>">

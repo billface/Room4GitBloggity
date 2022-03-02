@@ -35,7 +35,7 @@ class Page {
 				'title' => $title, 
 				'variables' => [
 						'pages' => $pages,
-                        'userId' => $author->id ?? null
+                        'user' => $author
                     ]
 				];
         
@@ -65,7 +65,7 @@ class Page {
                 'title' => $title,
                 'variables' => [
                     'page' => $page,
-                    'userId' => $author->id ?? null
+                    'user' => $author
                     ]
                 ];
     }
@@ -109,6 +109,8 @@ class Page {
 
         $title = 'About a rapper';
         $metaDescription = 'Admin Page';
+
+        $author = $this->authentication->getUser();
 
         return ['template' => 'admin.html.php',
                  'title' => $title,

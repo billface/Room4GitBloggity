@@ -22,7 +22,6 @@
               ?>">
               <?php 
               $author = $blog->getAuthor();
-              echo htmlspecialchars($author ? $author->name : 'deleted user', ENT_QUOTES, 'UTF-8');
               ?></a>
               on 
               <?php
