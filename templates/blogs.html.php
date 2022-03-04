@@ -8,12 +8,13 @@
 
 <?php foreach($blogs as $blog): ?>
 <blockquote>
-  <p>
   
 
   <!--hidden form field so as not to display id of each blog
       form and input tags aren't outside the blockquote to simplify CSS -->
-  <?=htmlspecialchars($blog->blogHeading, ENT_QUOTES, 'UTF-8')?>
+  
+  <?=(new \Ninja\Markdown($blog->blogHeading))->toHtml()?>
+
 
   (by <a href="mailto:<?php
               
@@ -22,6 +23,7 @@
               ?>">
               <?php 
               $author = $blog->getAuthor();
+              echo htmlspecialchars($author ? $author->name : 'deleted user', ENT_QUOTES, 'UTF-8');
               ?></a>
               on 
               <?php
@@ -44,6 +46,6 @@
     <?php endif; ?>
     <?php endif; ?>
 
-</p>
+
 </blockquote>
 <?php endforeach; ?>

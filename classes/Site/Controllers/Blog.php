@@ -39,7 +39,7 @@ class Blog {
 		}
         else
         {
-            $blogs = $this->blogsTable->findAll();
+            $blogs = $this->blogsTable->findAll('blogdate DESC');
         }
         $title = 'Blog list';
 

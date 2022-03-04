@@ -26,6 +26,20 @@ class Category {
 			}			
 		}
 
+		usort($blogs, [$this, 'sortBlogs']);
+
+
 		return $blogs;
+	}
+
+	private function sortBlogs($a, $b) {
+		$aDate = new \DateTime($a->blogDate);
+		$bDate = new \DateTime($b->blogDate);
+
+		if ($aDate->getTimestamp() == $bDate->getTimestamp()) {
+			return 0;
+		}
+
+		return $aDate->getTimestamp() > $bDate->getTimestamp() ? -1 : 1;
 	}
 }

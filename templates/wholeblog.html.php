@@ -1,8 +1,9 @@
 <blockquote>
 <h2>
-  <?=htmlspecialchars($blog->blogHeading, ENT_QUOTES, 'UTF-8')?>
+<?=(new \Ninja\Markdown($blog->blogHeading))->toHtml()?>
 </h2>
-  <?=htmlspecialchars($blog->blogText, ENT_QUOTES, 'UTF-8')?><br>
+<?=(new \Ninja\Markdown($blog->blogText))->toHtml()?>
+
   (by <a href="mailto:
               <?php 
               $author = $blog->getAuthor();
@@ -45,7 +46,13 @@
 
   
   <?php foreach($comments as $comment): ?>
- <small> <?=htmlspecialchars($comment->commText, ENT_QUOTES, 'UTF-8')?>
+ <small> 
+   -
+ <?=
+ htmlspecialchars($comment->commText, ENT_QUOTES, 'UTF-8')
+ //(new \Ninja\Markdown($comment->commText))->toHtml()
+
+ ?>
  (by <?php
               $author = $comment->getAuthor();
               echo htmlspecialchars($author ? $author->name : 'deleted user', ENT_QUOTES, 'UTF-8');
@@ -59,7 +66,7 @@
               $date = new DateTime($comment->commModDate);
                 echo ' (<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
               }
-              ?>)</small>
+              ?>)<br></small>
               <?php if ($user): ?>
                   <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::ADMIN)): ?>
               <a href="/blog/wholeblog?id=<?=$blog->id?>&commentid=<?=$comment->id?>">Edit</a>
