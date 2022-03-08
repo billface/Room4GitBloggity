@@ -32,6 +32,10 @@ class Blog {
 
     public function list() {
 
+        $index = $_GET['index'] ?? 1;
+
+		$offset = ($index-1)*10;
+
         if (isset($_GET['category']))
 		{
 			$category = $this->categoriesTable->findById($_GET['category']);
@@ -39,8 +43,9 @@ class Blog {
 		}
         else
         {
-            $blogs = $this->blogsTable->findAll('blogdate DESC');
+            $blogs = $this->blogsTable->findAll('blogdate DESC', 10, $offset);
         }
+
         $title = 'Blog list';
 
         $totalBlogs = $this->blogsTable->total();
@@ -53,7 +58,8 @@ class Blog {
 						'totalBlogs' => $totalBlogs,
 						'blogs' => $blogs,
                         'user' => $author, //previously 'userId' => $author->id ?? null,
-                        'categories' => $this->categoriesTable->findAll()
+                        'categories' => $this->categoriesTable->findAll(),
+                        'currentIndex' => $index
                     ]
 				];
         

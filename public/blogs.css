@@ -1,0 +1,2 @@
+.currentindex:before { content: "["; }
+.currentindex:after { content: "]"; }

@@ -49,3 +49,18 @@
 
 </blockquote>
 <?php endforeach; ?>
+
+Select page: 
+
+<?php
+
+$numIndex = ceil($totalBlogs/10);
+
+for ($i = 1; $i <= $numIndex; $i++):
+  if ($i == $currentIndex):
+?>
+  <a class="currentindex" href="/blog/list?index=<?=$i?>"><?=$i?></a>
+<?php else: ?>
+  <a href="/blog/list?index=<?=$i?>"><?=$i?></a>
+<?php endif; ?>
+<?php endfor; ?>

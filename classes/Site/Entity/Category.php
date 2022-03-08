@@ -40,6 +40,7 @@ class Category {
 			return 0;
 		}
 
+		//change the direction of the arrow to sort the other way
 		return $aDate->getTimestamp() > $bDate->getTimestamp() ? -1 : 1;
 	}
 }

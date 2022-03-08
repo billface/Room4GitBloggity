@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="blogs.css">
+    <link rel="stylesheet" href="/blogs.css">
     <title><?=$title?></title>
     <meta name="description" content="<?=$metaDescription?>">
     </head>
