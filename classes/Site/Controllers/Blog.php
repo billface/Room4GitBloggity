@@ -19,7 +19,6 @@ class Blog {
     public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $categoriesTable, Authentication $authentication) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
-        $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable; 
         $this->pagesTable = $pagesTable;
@@ -39,16 +38,19 @@ class Blog {
         if (isset($_GET['category']))
 		{
 			$category = $this->categoriesTable->findById($_GET['category']);
-			$blogs = $category->getBlogs();
+			$blogs = $category->getBlogs(10, $offset);
+            $totalBlogs = $category->getNumBlogs();
+
 		}
         else
         {
             $blogs = $this->blogsTable->findAll('blogdate DESC', 10, $offset);
+            $totalBlogs = $this->blogsTable->total();
+
         }
 
         $title = 'Blog list';
 
-        $totalBlogs = $this->blogsTable->total();
 
         $author = $this->authentication->getUser();
 
@@ -59,7 +61,8 @@ class Blog {
 						'blogs' => $blogs,
                         'user' => $author, //previously 'userId' => $author->id ?? null,
                         'categories' => $this->categoriesTable->findAll(),
-                        'currentIndex' => $index
+                        'currentIndex' => $index,
+                        'categoryId' => $_GET['category'] ?? null
                     ]
 				];
         

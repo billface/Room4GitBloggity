@@ -27,8 +27,16 @@ class DatabaseTable
 		return $query;
 	}
 	//shows how many blogs have been added
-	public function total() {
-		$query = $this->query('SELECT COUNT(*) FROM `' . $this->table . '`');
+	public function total($field = null, $value = null) {
+		$sql = 'SELECT COUNT(*) FROM `' . $this->table . '`';
+		$parameters = [];
+
+		if (!empty($field)) {
+			$sql .= ' WHERE `' . $field . '` = :value';
+			$parameters = ['value' => $value];
+		}
+		
+		$query = $this->query($sql, $parameters);
 		$row = $query->fetch();
 		return $row[0];
 	}

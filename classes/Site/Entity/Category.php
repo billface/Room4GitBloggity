@@ -14,8 +14,8 @@ class Category {
 		$this->blogCategoriesTable = $blogCategoriesTable;
 	}
 
-	public function getBlogs() {
-		$blogCategories = $this->blogCategoriesTable->find('categoryId', $this->id);
+	public function getBlogs($limit = null, $offset = null) {
+		$blogCategories = $this->blogCategoriesTable->find('categoryId', $this->id, null, $limit, $offset);
 
 		$blogs = [];
 
@@ -30,6 +30,10 @@ class Category {
 
 
 		return $blogs;
+	}
+
+	public function getNumBlogs() {
+		return $this->blogCategoriesTable->total('categoryId', $this->id);
 	}
 
 	private function sortBlogs($a, $b) {

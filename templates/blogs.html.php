@@ -59,8 +59,8 @@ $numIndex = ceil($totalBlogs/10);
 for ($i = 1; $i <= $numIndex; $i++):
   if ($i == $currentIndex):
 ?>
-  <a class="currentindex" href="/blog/list?index=<?=$i?>"><?=$i?></a>
+  <a class="currentindex" href="/blog/list?index=<?=$i?><?=!empty($categoryId) ? '&category=' . $categoryId : '' ?>"><?=$i?></a>
 <?php else: ?>
-  <a href="/blog/list?index=<?=$i?>"><?=$i?></a>
+  <a href="/blog/list?index=<?=$i?><?=!empty($categoryId) ? '&category=' . $categoryId : '' ?>"><?=$i?></a>
 <?php endif; ?>
 <?php endfor; ?>
