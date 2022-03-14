@@ -2,6 +2,9 @@
 <h2>
 <?=(new \Ninja\Markdown($blog->blogHeading))->toHtml()?>
 </h2>
+<?php if ($blog->blogVideo !== null) 
+  echo '<iframe width="718" height="531" src="https://www.youtube.com/embed/'. $blog->blogVideo .'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br>';
+       ?>
 <?=(new \Ninja\Markdown($blog->blogText))->toHtml()?>
 
   (by <a href="mailto:
