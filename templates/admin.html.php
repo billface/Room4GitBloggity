@@ -2,6 +2,7 @@
     
     <li><a href="/page/list">Pages</a></li>
     <li><a href="/event/addpage">Add a new event</a></li>
+    <li><a href="/item/addpage">Add a new item</a></li>
     <li><a href="/blog/addpage">Add a new blog</a></li>
     <li><a href="/category/list">Blog categories</a></li>
     <?php  if ( $user->hasPermission(\Site\Entity\Author::GOD)): ?>

@@ -4,38 +4,39 @@ use \Ninja\DatabaseTable;
 use \Ninja\Authentication;
 
 
-class Event {
-    private $eventsTable;
+class Item {
+    private $itemsTable;
     private $authorsTable;
     private $pagesTable;
-    private $itemsTable;
     private $blogsTable;
     private $commentsTable;
+    private $eventsTable;
 
     
 
-	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $pagesTable, DatabaseTable $itemsTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable) {
-        $this->eventsTable = $eventsTable;
+	public function __construct(DatabaseTable $itemsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $pagesTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable, DatabaseTable $eventsTable) {
+        $this->itemsTable = $itemsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
         $this->pagesTable = $pagesTable;
-        $this->itemsTable = $itemsTable;
         $this->blogsTable = $blogsTable;
         $this->commentsTable = $commentsTable;
+        $this->eventsTable = $eventsTable;
+
 
 	}
 
     public function list() {
-        $events = $this->eventsTable->findAllFutureDates('eventDate');
+        $items = $this->itemsTable->findAll();
 
-        $title = 'Event list';
+        $title = 'Items List';
 
         $author = $this->authentication->getUser();
 
-        return ['template' => 'events.html.php', 
+        return ['template' => 'items.html.php', 
 				'title' => $title, 
 				'variables' => [
-						'events' => $events,
+						'items' => $items,
                         'user' => $author //previously 'userId' => $author->id ?? null,
 					]
 				];
@@ -45,19 +46,19 @@ class Event {
     public function add() {
         $author = $this->authentication->getUser();
 
-        $event = $_POST['event'];
+        $item = $_POST['item'];
         //the above is from form, below is others
 
-        $author->addEvent($event);
+        $author->addItem($item);
 
-        header('location: /event/list');
+        header('location: /item/list');
     }
     //brings up form
     public function addpage() {
 
-            $title = 'Add a new event';
+            $title = 'Add a new item';
 
-            return ['template' => 'addevent.html.php', 'title' => $title];
+            return ['template' => 'additem.html.php', 'title' => $title];
         
     }
 
@@ -65,27 +66,27 @@ class Event {
 
         $author = $this->authentication->getUser();
 
-        $event = $this->eventsTable->findById($_POST['eventId']);
+        $item = $this->itemsTable->findById($_POST['itemId']);
 
-        if ($event->authorId != $author->id) {
+        if ($item->authorId != $author->id) {
             return;
         }
         
-        $this->eventsTable->delete($_POST['eventId']);
+        $this->itemsTable->delete($_POST['itemId']);
     
-        header('location: /event/list');
+        header('location: /item/list');
     }
 
     public function saveEdit() {
         $author = $this->authentication->getUser();
 
-        $event = $_POST['event'];
+        $item = $_POST['item'];
             
         //the above is from form, below is others
 
-        $author->addEvent($event);
+        $author->addItem($item);
 
-        header('location: /event/list');
+        header('location: /item/list');
 
     }
 
@@ -93,14 +94,14 @@ class Event {
 
         $author = $this->authentication->getUser();
 
-        $event = $this->eventsTable->findById($_GET['id']);
+        $item = $this->itemsTable->findById($_GET['id']);
 
-        $title = 'Edit event';
+        $title = 'Edit item';
 
-        return ['template' => 'editevent.html.php', 
+        return ['template' => 'edititem.html.php', 
                 'title' => $title,
                 'variables' => [
-                    'event' => $event,
+                    'item' => $item,
                     'user' => $author 
                     ]
                 ];

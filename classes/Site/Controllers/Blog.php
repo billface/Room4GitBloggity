@@ -11,18 +11,20 @@ class Blog {
     private $displayCommentsTable;
     private $pagesTable;
     private $eventsTable;
+    private $itemsTable;
     private $categoriesTable;
 	private $authentication;
 
 
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $categoriesTable, Authentication $authentication) {
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $itemsTable, DatabaseTable $categoriesTable, Authentication $authentication) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable; 
         $this->pagesTable = $pagesTable;
         $this->eventsTable = $eventsTable;
+        $this->itemsTable = $itemsTable;
         $this->categoriesTable = $categoriesTable;
 		$this->authentication = $authentication;
 

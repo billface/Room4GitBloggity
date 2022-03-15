@@ -8,6 +8,7 @@ class SiteRoutes implements \Ninja\Routes {
 	private $displayCommentsTable;
 	private $pagesTable;
 	private $eventsTable;
+	private $itemsTable;
 	private $categoriesTable;
 	private $blogCategoriesTable;
 	private $authentication;
@@ -22,9 +23,10 @@ class SiteRoutes implements \Ninja\Routes {
         $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id', '\Site\Entity\Blog', [&$this->authorsTable, &$this->blogCategoriesTable]);
 		$this->pagesTable = new \Ninja\DatabaseTable($pdo, 'page', 'id', '\Site\Entity\Page', [&$this->authorsTable]);   
 		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id', '\Site\Entity\Event', [&$this->authorsTable]);    
+		$this->itemsTable = new \Ninja\DatabaseTable($pdo, 'item', 'id', '\Site\Entity\Item', [&$this->authorsTable]);    
 		$this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id', '\Site\Entity\Comment', [&$this->authorsTable]);
 		$this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId', '\Site\Entity\Comment', [&$this->authorsTable]); 
-		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [&$this->blogsTable, &$this->pagesTable, &$this->eventsTable, &$this->commentsTable]);
+		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [&$this->blogsTable, &$this->pagesTable, &$this->eventsTable, &$this->itemsTable, &$this->commentsTable]);
 		$this->categoriesTable = new \Ninja\DatabaseTable($pdo, 'category', 'id', '\Site\Entity\Category', [&$this->blogsTable, &$this->blogCategoriesTable]);
 		$this->blogCategoriesTable = new \Ninja\DatabaseTable($pdo, 'blog_category', 'categoryId');
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
@@ -36,9 +38,10 @@ class SiteRoutes implements \Ninja\Routes {
 
 		public function getRoutes() : array {
 
-			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->commentsTable, $this->displayCommentsTable, $this->pagesTable, $this->eventsTable, $this->categoriesTable, $this->authentication);
-			$pageController = new \Site\Controllers\Page($this->pagesTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->eventsTable, $this->commentsTable);
-			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->pagesTable, $this->commentsTable);
+			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->commentsTable, $this->displayCommentsTable, $this->pagesTable, $this->eventsTable, $this->itemsTable, $this->categoriesTable, $this->authentication);
+			$pageController = new \Site\Controllers\Page($this->pagesTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->eventsTable, $this->itemsTable, $this->commentsTable);
+			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->pagesTable, $this->commentsTable, $this->itemsTable);
+			$itemController = new \Site\Controllers\Item($this->itemsTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->pagesTable, $this->commentsTable, $this->eventsTable);
 			$authorController = new \Site\Controllers\Register($this->authorsTable);
 			$loginController = new \Site\Controllers\Login($this->authentication);
 			$categoryController = new \Site\Controllers\Category($this->categoriesTable);
@@ -270,6 +273,48 @@ class SiteRoutes implements \Ninja\Routes {
 				'event/add' => [
 					'POST' => [
 						'controller' => $eventController,
+						'action' => 'add'
+					],
+					'login' => true
+
+				],
+				'item/list' => [
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'list'
+					]
+				],
+				'item/edit' => [
+					'POST' => [
+						'controller' => $itemController,
+						'action' => 'saveEdit'
+					],
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'displayEdit'
+					],
+					'login' => true
+				],
+				'item/delete' => [
+					'POST' => [
+						'controller' => $itemController,
+						'action' => 'delete'
+					],
+					'login' => true
+
+				],
+				'item/addpage' => [
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'addpage'
+					],
+					'login' => true,
+					'permissions' => \Site\Entity\Author::SUPERUSER
+
+				],
+				'item/add' => [
+					'POST' => [
+						'controller' => $itemController,
 						'action' => 'add'
 					],
 					'login' => true

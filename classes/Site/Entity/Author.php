@@ -18,14 +18,16 @@ class Author {
     private $blogsTable;
 	private $pagesTable;
 	private $eventsTable;
+	private $itemsTable;
 	private $commentsTable;
 
 
 
-	public function __construct(DatabaseTable $blogsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable) {
+	public function __construct(DatabaseTable $blogsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $itemsTable,DatabaseTable $commentsTable) {
 		$this->blogsTable = $blogsTable; 
 		$this->pagesTable = $pagesTable;
 		$this->eventsTable = $eventsTable;
+		$this->itemsTable = $itemsTable;
 		$this->commentsTable = $commentsTable;
 	}
 
@@ -39,6 +41,10 @@ class Author {
 
 	public function getEvents() {
 		return $this->eventsTable->find('authorId', $this->id);
+	}
+
+	public function getItems() {
+		return $this->itemsTable->find('authorId', $this->id);
 	}
 
 	public function getComments() {
@@ -64,6 +70,13 @@ class Author {
 		$event['authorId'] = $this->id;
 
 		return $this->eventsTable->save($event);
+	}
+
+	public function addItem($item) {
+
+		$item['authorId'] = $this->id;
+
+		return $this->itemsTable->save($item);
 	}
 	
 	public function addComment($comment) {

@@ -17,6 +17,8 @@
       <li><a href="/page/about">About</a></li>
       <li><a href="/blog/list">Blog List</a></li>
       <li><a href="/event/list">Calendar</a></li>
+      <li><a href="/item/list">Shop</a></li>
+
       <?php if ($loggedIn): ?>
 			<li><a href="/logout">Log out</a></li>
 			<?php else: ?>

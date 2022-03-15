@@ -10,17 +10,20 @@ class Page {
     private $blogsTable;
     private $eventsTable;
     private $commentsTable;
+    private $itemsTable;
 
 
 
 
-	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable) {
+
+	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable, DatabaseTable $itemsTable) {
 		$this->pagesTable = $pagesTable;
 		$this->authorsTable = $authorsTable;
 		$this->authentication = $authentication;
         $this->blogsTable = $blogsTable;
         $this->eventsTable = $eventsTable;
         $this->commentsTable = $commentsTable;
+        $this->itemsTable = $itemsTable;
 
 	}
 

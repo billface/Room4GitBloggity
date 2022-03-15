@@ -14,4 +14,4 @@
 <?php else: ?>
 
 <p>You may only edit events that you posted.</p>
-<?php endif; ?>
+<?php endif; ?> 
