@@ -8,7 +8,10 @@
 
 
 </h2>
-    
+<?php if ($item->itemPicture !== null) 
+
+echo '<blockquote class="imgur-embed-pub" lang="en" data-id="'.$item->itemPicture.'" data-context="false" ><a href="//imgur.com/a/'. $item->itemPicture. '"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>'
+    ?>
               <p>
     <?=(new \Ninja\Markdown($item->itemText))->toHtml()?>
 
