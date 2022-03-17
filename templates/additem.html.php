@@ -7,7 +7,7 @@
     <textarea id="itemText" name="item[itemText]" rows="3" cols="40">
     </textarea>
     <br>
-    <label for="itemPicture">Enter your picture URL here:</label>
+    <label for="itemPicture">Enter your picture URL here (GDrive, copy, bit after /d/):</label>
     <textarea id="itemPicture" name="item[itemPicture]" rows="3" cols="40">
     </textarea>
     <br>
