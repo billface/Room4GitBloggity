@@ -3,19 +3,19 @@ include __DIR__ . '/../includes/DatabaseConnection.php';
 include __DIR__ . '/../includes/DatabaseFunctions.php';
 
 try {
-		if (isset($_POST['commtext'])) {
+		if (isset($_POST['commText'])) {
 
 		
 
 		updateComment($pdo, [
-			'id' => $_POST['commentsid'],
-			'commtext' => $_POST['commtext'],
+			'id' => $_POST['commentId'],
+			'commText' => $_POST['commText'],
 			'authorId' => 2,
-			'commmoddate' => new DateTime
+			'commModDate' => new DateTime
 		]);
 
 		//header('location:blogs.php');
-        header('location: wholeblog.php?id=' . $_POST['commblogId']);  
+        header('location: wholeblog.php?id=' . $_POST['commBlogId']);  
 
 	}
 	else {

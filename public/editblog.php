@@ -3,17 +3,17 @@ include __DIR__ . '/../includes/DatabaseConnection.php';
 include __DIR__ . '/../includes/DatabaseFunctions.php';
 
 try {
-		if (isset($_POST['blogtext'])) {
+		if (isset($_POST['blogText'])) {
 
 		updateBlog($pdo, [
-			'id' => $_POST['blogid'],
-			'blogheading' => $_POST['blogheading'],
-			'blogtext' => $_POST['blogtext'], 
+			'id' => $_POST['blogId'],
+			'blogHeading' => $_POST['blogHeading'],
+			'blogText' => $_POST['blogText'], 
 			'authorId' => 2,
-			'blogmoddate' => new DateTime
+			'blogModDate' => new DateTime
 		]);
 
-		header('location: wholeblog.php?id=' . $_POST['blogid']);
+		header('location: wholeblog.php?id=' . $_POST['blogId']);
 		die;  
 
 	}

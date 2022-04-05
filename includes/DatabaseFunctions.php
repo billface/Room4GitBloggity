@@ -43,7 +43,7 @@ function wholeBlog($pdo, $id) {
 
 //inserts comment on wholeblog.php
 function insertComment($pdo, $fields) {
-	$query = 'INSERT INTO `comments` (';
+	$query = 'INSERT INTO `comment` (';
 
 	foreach ($fields as $key => $value) {
 		$query .= '`' . $key . '`,';
@@ -120,9 +120,9 @@ function allComments($pdo, $id) {
 
 	$parameters = [':id' => $id];
 
-	$comments = query($pdo, 'SELECT `comments`.`id`, `commtext`, `name`, `email`, `commdate`, `commmoddate`
-          FROM `comments` INNER JOIN `author`
-          ON `authorid` = `author`.`id` WHERE `comments`.`commblogid` = :id', $parameters);
+	$comments = query($pdo, 'SELECT `comment`.`id`, `commText`, `name`, `email`, `commDate`, `commModDate`
+          FROM `comment` INNER JOIN `author`
+          ON `authorid` = `author`.`id` WHERE `comment`.`commBlogId` = :id', $parameters);
 
 	return $comments->fetchAll();
 }
@@ -133,7 +133,7 @@ function getComment($pdo, $id) {
 	$parameters = [':id' => $id];
 
 	//call the query function and provide the `$parameters` array
-	$query = query($pdo, 'SELECT * FROM `comments` WHERE `id` = :id', $parameters);
+	$query = query($pdo, 'SELECT * FROM `comment` WHERE `id` = :id', $parameters);
 
 	return $query->fetch();
 }
@@ -171,7 +171,7 @@ function updateBlog($pdo, $fields) {
 
 function updateComment($pdo, $fields) {
   
-	$query = 'UPDATE `comments` SET ';
+	$query = 'UPDATE `comment` SET ';
 
 	foreach ($fields as $key => $value) {
 		$query .= '`' . $key . '` = :' . $key . ',';
@@ -206,7 +206,7 @@ function deleteBlog($pdo, $id) {
 function deleteComment($pdo, $id) {
 	$parameters = [':id' => $id];
   
-	query($pdo, 'DELETE FROM `comments` WHERE `id` = :id', $parameters);
+	query($pdo, 'DELETE FROM `comment` WHERE `id` = :id', $parameters);
   }
   function processDates($fields) {
 	foreach ($fields as $key => $value) {
