@@ -10,7 +10,8 @@ try {
 
   $blogs = [];
 	foreach ($result as $blog) {
-		$author = findById($pdo, 'author', 'id', $blog['authorId']);
+		//$author = findById($pdo, 'author', 'id', $blog['authorId']);
+    $author = find($pdo, 'author', 'id', $blog['authorId'])[0];
 
     $blogs[] = [
 			'id' => $blog['id'],

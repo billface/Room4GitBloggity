@@ -54,9 +54,11 @@ try {
 	
 
 			save($pdo, 'comment', 'id', $comment);
+			//echo '<pre>'; print_r($_POST); echo '</pre>'; 
 		
 			//head back to the current page after inserting comment
-			header('location: '.$_SERVER['PHP_SELF'] . '?id=' . $_POST['commBlogId']);
+			header('location: '.$_SERVER['PHP_SELF'] . '?id=' . $comment['commBlogId']);
+			//header('location: blogs.php');
 			die;
 
 		}

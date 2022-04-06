@@ -51,6 +51,18 @@ function insert($pdo, $table, $fields) {
 	query($pdo, $query, $fields);
 }
 
+function find($pdo, $table, $field, $value) {
+	$query = 'SELECT * FROM `' . $table . '` WHERE `' . $field . '` = :value';
+
+	$values = [
+		'value' => $value
+	];
+
+	$stmt = $pdo->prepare($query);
+	$stmt->execute($values);
+	return $stmt->fetchAll();
+}
+
 function findById($pdo, $table, $primaryKey, $value) {
 	$query = 'SELECT * FROM `' . $table . '` WHERE `' . $primaryKey . '` = :value';
 
