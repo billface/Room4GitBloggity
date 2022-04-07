@@ -14,6 +14,18 @@ function total($pdo, $table) {
 	return $row[0];
 }
 
+function save($pdo, $table, $primaryKey, $record) {
+	try {
+		if ($record[$primaryKey] == '') {
+			$record[$primaryKey] = null;
+		}
+		insert($pdo, $table, $record);
+	}
+	catch (PDOException $e) {
+		update($pdo, $table, $primaryKey, $record);
+	}
+}
+
 function insert($pdo, $table, $fields) {
 	$query = 'INSERT INTO `' . $table . '` (';
 
@@ -37,6 +49,18 @@ function insert($pdo, $table, $fields) {
 	$fields = processDates($fields);
 
 	query($pdo, $query, $fields);
+}
+
+function find($pdo, $table, $field, $value) {
+	$query = 'SELECT * FROM `' . $table . '` WHERE `' . $field . '` = :value';
+
+	$values = [
+		'value' => $value
+	];
+
+	$stmt = $pdo->prepare($query);
+	$stmt->execute($values);
+	return $stmt->fetchAll();
 }
 
 function findById($pdo, $table, $primaryKey, $value) {

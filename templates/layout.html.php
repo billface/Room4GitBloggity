@@ -14,7 +14,7 @@
       <li><a href="index.php?action=home&id=1">Home</a></li>
       <li><a href="index.php?action=about&id=2">About</a></li>
       <li><a href="index.php?action=events&id=3">Events</a></li>
-      <li><a href="index.php?action=shop&id=4">Shop</a></li>
+      <li><a href="index.php?action=shop&id=8">Shop</a></li>
       <li><a href="index.php?action=list&id=5">Blog List</a></li>
       <li><a href="index.php?action=add">Add a new blog</a></li>
     </ul>

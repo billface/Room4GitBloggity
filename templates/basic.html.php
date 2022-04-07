@@ -1,2 +1,2 @@
- <h1><?=$page['heading'] ?></h1>
-<p><?=$page['text'] ?? '' ?></p>
+ <h1><?=$page['pageHeading'] ?></h1>
+<p><?=$page['pageText'] ?? '' ?></p>
