@@ -125,6 +125,23 @@ class Blog {
             header('location: /blog/list');
     }
 
+    public function addcomment() {
+
+        // 1 currently represents the author id & blog id
+        
+            $comment = $_POST['comment'];
+            $comment['commDate'] = new \Datetime();
+            $comment['authorId'] = 2;
+    
+
+            $this->commentsTable->save($comment);
+        
+            //head back to the current page after inserting comment
+            header('location: /blog/wholeblog?id=' . $comment['commBlogId']);
+            //header('location: /blog/list');
+
+    } 
+
     public function addpage() {
 
             $title = 'Add a new blog';
@@ -194,20 +211,5 @@ class Blog {
 		
     }
 
-    public function addcomment() {
-
-        // 1 currently represents the author id & blog id
-        
-            $comment = $_POST['comment'];
-            $comment['authorId'] = 2;
-            $comment['commDate'] = new \Datetime();
     
-
-            $this->commentsTable->save($comment);
-        
-            //head back to the current page after inserting comment
-            header('location: /blog/wholeblog?id=' . $comment['commBlogId']);
-            die;
-
-    } 
 }
