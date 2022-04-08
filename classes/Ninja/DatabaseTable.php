@@ -136,8 +136,8 @@ class DatabaseTable
 
 	public function save($record) {
 		try {
-			if ($record[$this->primaryKey] == '') {
-				$record[$this->primaryKey] = null;
+			if (empty($record[$this->primaryKey])) {
+				unset($record[$this->primaryKey]);
 			}
 			$this->insert($record);
 		}
