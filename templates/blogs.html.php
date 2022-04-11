@@ -1,4 +1,7 @@
+<?php //echo '<pre>'; print_r($blogs); echo '</pre>'; die; ?>
+
 <p><?=$totalBlogs?> blogs have been added to the site </p>
+
 
 <?php foreach($blogs as $blog): ?>
 <blockquote>

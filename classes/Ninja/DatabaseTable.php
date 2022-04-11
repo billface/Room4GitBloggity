@@ -65,6 +65,13 @@ class DatabaseTable
 		return $query->fetchAll();
 	}
 
+	public function findAllFutureDates($column) {
+		$result = $this->query('SELECT * FROM `' . $this->table . '` WHERE `' . $column .
+		 '` > CURRENT_TIMESTAMP ORDER BY `'. $column . '`');
+		 		
+		 return $result->fetchAll();
+	}
+
 	private function insert($fields) {
 		$query = 'INSERT INTO `' . $this->table . '` (';
 
@@ -136,8 +143,8 @@ class DatabaseTable
 
 	public function save($record) {
 		try {
-			if ($record[$this->primaryKey] == '') {
-				$record[$this->primaryKey] = null;
+			if (empty($record[$this->primaryKey])) {
+				unset($record[$this->primaryKey]);
 			}
 			$this->insert($record);
 		}

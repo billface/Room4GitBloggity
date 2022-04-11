@@ -1,4 +1,4 @@
-<?php //echo '<pre>'; print_r($events); echo '</pre>'; ?>
+<?php //echo '<pre>'; print_r($events); echo '</pre>'; die; ?>
 
 <?php foreach($events as $event): ?>
 <blockquote>

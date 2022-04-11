@@ -9,6 +9,8 @@ class SiteRoutes implements \Ninja\Routes {
 	private $displayCommentsTable;
 	private $siteTabe;
 	private $eventsTable;
+	private $itemsTable;
+
 	
 
 	public function __construct() {
@@ -21,7 +23,8 @@ class SiteRoutes implements \Ninja\Routes {
         $this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId');  
 		$this->siteTable = new \Ninja\DatabaseTable($pdo, 'site', 'id');   
 		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id');    
-	
+		$this->itemsTable = new \Ninja\DatabaseTable($pdo, 'item', 'id');    
+
 	}
 
 
@@ -30,7 +33,8 @@ class SiteRoutes implements \Ninja\Routes {
 			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable);
 			$authorController = new \Site\Controllers\Register($this->authorsTable);
 			$siteController = new \Site\Controllers\Site($this->siteTable);
-			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable);
+			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication);
+			$itemController = new \Site\Controllers\Item($this->itemsTable, $this->authorsTable, $this->authentication);
 			$loginController = new \Site\Controllers\Login($this->authentication);
 
 		
@@ -169,7 +173,82 @@ class SiteRoutes implements \Ninja\Routes {
 						'controller' => $eventController,
 						'action' => 'list'
 					]
-				]
+				],
+				'event/edit' => [
+					'POST' => [
+						'controller' => $eventController,
+						'action' => 'saveEdit'
+					],
+					'GET' => [
+						'controller' => $eventController,
+						'action' => 'displayEdit'
+					],
+					'login' => true
+
+				],
+				'event/delete' => [
+					'POST' => [
+						'controller' => $eventController,
+						'action' => 'delete'
+					],
+					'login' => true
+
+				],
+				'event/addpage' => [
+					'GET' => [
+						'controller' => $eventController,
+						'action' => 'addpage'
+					],
+					'login' => true
+				],
+				'event/add' => [
+					'POST' => [
+						'controller' => $eventController,
+						'action' => 'add'
+					],
+					'login' => true
+				],
+				'item/list' => [
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'list'
+					]
+				],
+				'item/addpage' => [
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'addpage'
+					],
+					'login' => true
+				],
+				'item/add' => [
+					'POST' => [
+						'controller' => $itemController,
+						'action' => 'add'
+					],
+					'login' => true
+				],
+				'item/edit' => [
+					'POST' => [
+						'controller' => $itemController,
+						'action' => 'saveEdit'
+					],
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'displayEdit'
+					],
+					'login' => true
+
+				],
+				'item/delete' => [
+					'POST' => [
+						'controller' => $itemController,
+						'action' => 'delete'
+					],
+					'login' => true
+
+				],
+
 			];
 
 			return $routes;

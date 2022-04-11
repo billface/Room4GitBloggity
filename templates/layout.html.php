@@ -16,7 +16,10 @@
       <li><a href="/site/about">About</a></li>
       <li><a href="/blog/list">Blog List</a></li>
       <li><a href="/event/list">Calendar</a></li>
+      <li><a href="/item/list">Shop</a></li>
       <li><a href="/blog/addpage">Add a new blog</a></li>
+      <li><a href="/event/addpage">Add a new event</a></li>
+      <li><a href="/item/addpage">Add a new item</a></li>
       <?php if ($loggedIn): ?>
 			<li><a href="/logout">Log out</a></li>
 			<?php else: ?>
