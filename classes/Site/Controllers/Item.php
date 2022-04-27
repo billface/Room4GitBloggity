@@ -30,6 +30,7 @@ class Item {
                     'itemPrice' => $item['itemPrice'],
                     'itemShipping' => $item['itemShipping'],
                     'itemStock' => $item['itemStock'],
+                    'itemFileName' => $item['itemFileName'],
                     'name' => $author['name'],
                     'email' => $author['email'],
                     'authorId' => $author['id']
@@ -39,6 +40,18 @@ class Item {
           }
 
         $title = 'Items List';
+        
+        //hacked c&p code
+        if(!empty($_SESSION["cart"])){
+            $total = 0;
+            foreach ($_SESSION["cart"] as $key => $value) {
+               
+                $total = $total + ($value["item_quantity"] * $value["product_price"]);
+            }
+        }
+        else $total=0;
+
+        //end
 
         $author = $this->authentication->getUser();
 
@@ -47,7 +60,9 @@ class Item {
 				'title' => $title, 
 				'variables' => [
 						'items' => $items,
-                        'userId' => $author['id'] ?? null
+                        'userId' => $author['id'] ?? null,
+                        'total' => $total
+
 
         					]
                             					
@@ -118,18 +133,107 @@ class Item {
         $item = $_POST['item'];
         //the above is from form, below is others
         $item['authorId'] = $author['id'];
+        //upload files
+            $file = $_FILES['file'];
+            //print_r($file);
+            //die;
+            $fileName = $_FILES['file']['name'];
+            $fileTmpName = $_FILES['file']['tmp_name'];
+            $fileSize = $_FILES['file']['size'];
+            $fileError = $_FILES['file']['error'];
+            $fileType = $_FILES['file']['type'];
+
+            $fileExt = explode('.', $fileName);
+            $fileActualExt = strtolower(end($fileExt));
+
+            $allowed = array('jpg', 'jpeg', 'png', 'pdf');
+
+            if (in_array($fileActualExt, $allowed)){
+                if($fileError === 0){
+                    if ($fileSize < 500000) {
+                        $fileNameNew = $item['itemPicture'].'.'.$fileActualExt;
+                        $fileDestination = 'uploads/'.$fileNameNew;
+                        move_uploaded_file($fileTmpName,$fileDestination);
+                        $item['itemFileName'] = $fileNameNew;
+                    } else {
+                        echo 'Your file was too big! Reduce size to less than 500kb';
+                    }
+
+                } else {
+                    echo 'There was an error uploading your file';
+                }
+            } else {
+                echo 'This is not an allowed filetype! Convert to jpg or png';
+            }
+        //end upload files
 
         $this->itemsTable->save($item);
 
         header('location: /item/list');
-}
+    }
 
-public function addpage() {
+    public function addpage() {
 
-    $title = 'Add a new item';
+        $title = 'Add a new item';
 
-    return ['template' => 'additem.html.php', 'title' => $title];
+        return ['template' => 'additem.html.php', 'title' => $title];
 
-}
+    }
+
+    //hacked c&p code
+
+    public function buy() {
+
+        
+        //echo '<pre>'; print_r($_SESSION); echo '</pre>';   
+        if (isset($_POST['add'])){
+            if (isset($_SESSION["cart"])){
+                $item_array_id = array_column($_SESSION["cart"],"product_id");
+                if (!in_array($_GET["id"],$item_array_id)){
+                    $count = count($_SESSION["cart"]);
+                    $item_array = array(
+                        'product_id' => $_GET["id"],
+                        'item_name' => $_POST["hidden_name"],
+                        'product_price' => $_POST["hidden_price"],
+                        'item_quantity' => $_POST["quantity"],
+                    );
+                    $_SESSION["cart"][$count] = $item_array;
+                }else{
+                    echo '<script>alert("Product is already Added to Cart")</script>';
+
+                    echo '<script>window.location="/item/list"</script>';
+                    
+
+                }
+            }else{
+            
+            $item_array = array(
+                'product_id' => $_GET["id"],
+                'item_name' => $_POST["hidden_name"],
+                'product_price' => $_POST["hidden_price"],
+                'item_quantity' => $_POST["quantity"],
+            );
+            $_SESSION['cart'][0] = $item_array;
+            }
+        }
+
+        header('location: /item/list');
+
+    }
+
+    public function remove () {
+                foreach ($_SESSION["cart"] as $keys => $value){
+                    if ($value["product_id"] == $_GET["id"]){
+                        unset($_SESSION["cart"][$keys]);
+                        echo '<script>alert("Product has been Removed...!")</script>';
+                        echo '<script>window.location="/item/list"</script>';
+                    }
+                }
+                header('location: /item/list');
+            }
+        
+            
+    //end
+
 
 }

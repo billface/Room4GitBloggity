@@ -248,6 +248,20 @@ class SiteRoutes implements \Ninja\Routes {
 					'login' => true
 
 				],
+				'item/buy' => [
+					'POST' => [
+						'controller' => $itemController,
+						'action' => 'buy'
+					],
+
+				],
+				'item/remove' => [
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'remove'
+					]
+				]
+
 
 			];
 
