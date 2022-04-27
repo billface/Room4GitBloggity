@@ -134,38 +134,11 @@ class Item {
         //the above is from form, below is others
         $item['authorId'] = $author['id'];
         //upload files
-            $file = $_FILES['file'];
-            //print_r($file);
-            //die;
-            $fileName = $_FILES['file']['name'];
-            $fileTmpName = $_FILES['file']['tmp_name'];
-            $fileSize = $_FILES['file']['size'];
-            $fileError = $_FILES['file']['error'];
-            $fileType = $_FILES['file']['type'];
+        //$this->itemsTable->upload($item['itemPicture']);
+        $item['itemFileName'] = $this->itemsTable->upload($item['itemPicture']);
 
-            $fileExt = explode('.', $fileName);
-            $fileActualExt = strtolower(end($fileExt));
-
-            $allowed = array('jpg', 'jpeg', 'png', 'pdf');
-
-            if (in_array($fileActualExt, $allowed)){
-                if($fileError === 0){
-                    if ($fileSize < 500000) {
-                        $fileNameNew = $item['itemPicture'].'.'.$fileActualExt;
-                        $fileDestination = 'uploads/'.$fileNameNew;
-                        move_uploaded_file($fileTmpName,$fileDestination);
-                        $item['itemFileName'] = $fileNameNew;
-                    } else {
-                        echo 'Your file was too big! Reduce size to less than 500kb';
-                    }
-
-                } else {
-                    echo 'There was an error uploading your file';
-                }
-            } else {
-                echo 'This is not an allowed filetype! Convert to jpg or png';
-            }
         //end upload files
+        //$item['itemFileName'] = $fileNameNew;
 
         $this->itemsTable->save($item);
 

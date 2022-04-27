@@ -152,4 +152,39 @@ class DatabaseTable
 			$this->update($record);
 		}
 	}
+
+	public function upload($value) {
+		$file = $_FILES['file'];
+            
+            $fileName = $_FILES['file']['name'];
+            $fileTmpName = $_FILES['file']['tmp_name'];
+            $fileSize = $_FILES['file']['size'];
+            $fileError = $_FILES['file']['error'];
+            $fileType = $_FILES['file']['type'];
+
+            $fileExt = explode('.', $fileName);
+            $fileActualExt = strtolower(end($fileExt));
+
+            $allowed = array('jpg', 'jpeg', 'png', 'pdf');
+
+            if (in_array($fileActualExt, $allowed)){
+                if($fileError === 0){
+                    if ($fileSize < 500000) {
+                        $fileNameNew = $value.'.'.$fileActualExt;
+                        $fileDestination = 'uploads/'.$fileNameNew;
+                        move_uploaded_file($fileTmpName,$fileDestination);
+						
+                    } else {
+                        echo 'Your file was too big! Reduce size to less than 500kb';
+                    }
+
+                } else {
+                    echo 'There was an error uploading your file';
+                }
+            } else {
+                echo 'This is not an allowed filetype! Convert to jpg or png';
+            }
+			return $fileNameNew;
+
+	}
 }
