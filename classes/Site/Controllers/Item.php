@@ -133,24 +133,33 @@ class Item {
         $item = $_POST['item'];
         //the above is from form, below is others
         $item['authorId'] = $author['id'];
-        //upload files
-        
-        //$item['itemFileName'] = $this->itemsTable->upload($item['itemPicture']);
-        $return = $this->itemsTable->upload($item['itemPicture']);
-        $item['itemFileName'] = $return['fileNameNew'];
-        //echo '<pre>'; print_r($return); echo '</pre>'; 
-        //die;
-        //end upload files
-
-
-        if ($return['message'] == '') {
-            $this->itemsTable->save($item);
-            unset($_SESSION['item']);
-            header('location: /item/list');
+        //upload file if it isset
+        //if (isset($_FILES['file']['name'])) {
+        if ($_FILES['file']['size'] > 0){
+            //echo '<pre>'; print_r($_POST); echo '</pre>'; 
+            //echo '<pre>'; print_r($_FILES); echo '</pre>'; 
+            //die;
+            $return = $this->itemsTable->upload($item['itemPicture']);
+            $item['itemFileName'] = $return['fileNameNew'];
+            //end upload files and handle any errors
+                if ($return['message'] == '') {
+                    $this->itemsTable->save($item);
+                    unset($_SESSION['item']);
+                    header('location: /item/list');
+                } else {
+                    $_SESSION['item'] = $item;
+                    $_SESSION['itemErrorMessage'] = $return['message'];
+                    header('location: /item/addpage');
+                }
+        // if no file is uploaded submit the rest of the form
         } else {
-            $_SESSION['item'] = $item;
-            $_SESSION['itemErrorMessage'] = $return['message'];
-            header('location: /item/addpage');
+            //echo '<pre>'; print_r($_POST); echo '</pre>'; 
+            //echo '<pre>'; print_r($_FILES); echo '</pre>';
+            //echo 'sausages';
+            //die; 
+            $this->itemsTable->save($item);
+            header('location: /item/list');
+
         }
         
     }

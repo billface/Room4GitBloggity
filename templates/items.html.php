@@ -11,7 +11,9 @@
 
 
 </h2>
-<?php if ($item['itemPicture'] !== '') {
+<?php if (isset($item['itemFileName'])) {
+
+//if ($item['itemPicture'] !== '') {
 
 echo '<p><img src="/uploads/'.$item['itemFileName'].'" alt="'.$item['itemHeading'].'" width="100" height="100"></p>';
 

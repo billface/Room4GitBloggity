@@ -26,7 +26,7 @@
     <label for="itemShipping">Shipping</label>
     <input type="number" id="item[itemShipping]" name="item[itemShipping]" value="<?=$_SESSION['item']['itemShipping'] ?? ''?>">
     <br>
-    <label for="file">Image Upload</label>
+    <label for="itemImage">Image Upload</label>
     <input type="file" name="file">
     <br>
     <input type="submit" value="Add">
