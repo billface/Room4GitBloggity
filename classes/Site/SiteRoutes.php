@@ -260,6 +260,18 @@ class SiteRoutes implements \Ninja\Routes {
 						'controller' => $itemController,
 						'action' => 'remove'
 					]
+				],
+				'item/success' => [
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'success'
+					]
+				],
+				'item/failure' => [
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'failure'
+					]
 				]
 
 

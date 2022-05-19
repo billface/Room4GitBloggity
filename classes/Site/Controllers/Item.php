@@ -51,17 +51,23 @@ class Item {
         }
         else $total=0;
 
+        $_SESSION["checkoutTotal"] = $total;
+
         //end
 
         $author = $this->authentication->getUser();
 
+        $script = '<script>you massive dolt</script>';
+
 
         return ['template' => 'items.html.php', 
 				'title' => $title, 
+                'script' => $script,
 				'variables' => [
 						'items' => $items,
                         'userId' => $author['id'] ?? null,
-                        'total' => $total
+                        'total' => $total,
+                        
 
 
         					]
@@ -236,6 +242,18 @@ class Item {
         
             
     //end
+
+    public function success() {
+
+        
+		return ['template' => 'itemsuccess.html.php', 'title' => 'Payment Successful'];
+	}
+
+    public function failure() {
+
+        
+		return ['template' => 'itemfailure.html.php', 'title' => 'Payment Error'];
+	}
 
 
 }

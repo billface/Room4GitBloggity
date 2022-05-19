@@ -263,6 +263,7 @@ class Blog {
     
 
             $this->commentsTable->save($comment);
+            mail('piratemac541@gmail.com','Someone commented on your blog','have a look here:');
         
             //head back to the current page after inserting comment
             header('location: /blog/wholeblog?id=' . $comment['commBlogId']);

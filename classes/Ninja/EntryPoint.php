@@ -48,6 +48,8 @@ class EntryPoint {
 
 			$title = $page['title'];
 
+			$script = $page['script'];
+
 			if (isset($page['variables'])) {
 				$output = $this->loadTemplate($page['template'], $page['variables']);
 			}
@@ -57,7 +59,8 @@ class EntryPoint {
 
 			echo $this->loadTemplate('layout.html.php', ['loggedIn' => $authentication->isLoggedIn(),
 														'output' => $output,
-														'title' => $title
+														'title' => $title,
+														'script' => $script
 													]);		
 		}
 	}

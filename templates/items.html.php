@@ -109,7 +109,13 @@ else {
       '<tr>
                 <td colspan="3" align="right">Total</td>
                 <th align="right">$'.number_format($total, 2).' </th>
-                <td></td>
-            </tr>' ; ?>
+                
+            </tr>'
+            ; ?>
       </table>
+      <!-- paypal button will be rendered here using Javascript -->
+      <div id="btn-paypal-checkout"></div>
+      
+
 <?php } ?>
+

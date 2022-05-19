@@ -37,6 +37,7 @@ class Event {
           }
       
         $title = 'Event list';
+        $script = '';
 
         $author = $this->authentication->getUser();
 
@@ -44,6 +45,7 @@ class Event {
 
         return ['template' => 'events.html.php', 
 				'title' => $title, 
+        'script' => $script,
 				'variables' => [
 						'events' => $events,
             'userId' => $author['id'] ?? null
