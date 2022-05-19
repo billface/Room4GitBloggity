@@ -83,7 +83,7 @@
         var total = 0;
         for (var a = 0; a < cartItems.length; a++) {
             total += (cartItems[a].price * cartItems[a].quantity);
-        
+        }
 
         // Render the PayPal button
         paypal.Button.render({
