@@ -31,6 +31,7 @@ class Item {
                     'itemShipping' => $item['itemShipping'],
                     'itemStock' => $item['itemStock'],
                     'itemFileName' => $item['itemFileName'],
+                    'itemPaypalDescription' => $item['itemPaypalDescription'],
                     'name' => $author['name'],
                     'email' => $author['email'],
                     'authorId' => $author['id']
@@ -46,7 +47,7 @@ class Item {
             $total = 0;
             foreach ($_SESSION["cart"] as $key => $value) {
                
-                $total = $total + ($value["item_quantity"] * $value["product_price"]);
+                $total = $total + ($value["item_quantity"] * $value["item_price"]);
             }
         }
         else $total=0;
@@ -196,18 +197,19 @@ class Item {
         //echo '<pre>'; print_r($_SESSION); echo '</pre>';   
         if (isset($_POST['add'])){
             if (isset($_SESSION["cart"])){
-                $item_array_id = array_column($_SESSION["cart"],"product_id");
+                $item_array_id = array_column($_SESSION["cart"],"item_id");
                 if (!in_array($_GET["id"],$item_array_id)){
                     $count = count($_SESSION["cart"]);
                     $item_array = array(
-                        'product_id' => $_GET["id"],
+                        'item_id' => $_GET["id"],
                         'item_name' => $_POST["hidden_name"],
-                        'product_price' => $_POST["hidden_price"],
+                        'item_description' => $_POST["hidden_description"],
+                        'item_price' => $_POST["hidden_price"],
                         'item_quantity' => $_POST["quantity"],
                     );
                     $_SESSION["cart"][$count] = $item_array;
                 }else{
-                    echo '<script>alert("Product is already Added to Cart")</script>';
+                    echo '<script>alert("Item is already Added to Cart")</script>';
 
                     echo '<script>window.location="/item/list"</script>';
                     
@@ -216,9 +218,9 @@ class Item {
             }else{
             
             $item_array = array(
-                'product_id' => $_GET["id"],
+                'item_id' => $_GET["id"],
                 'item_name' => $_POST["hidden_name"],
-                'product_price' => $_POST["hidden_price"],
+                'item_price' => $_POST["hidden_price"],
                 'item_quantity' => $_POST["quantity"],
             );
             $_SESSION['cart'][0] = $item_array;
@@ -231,9 +233,9 @@ class Item {
 
     public function remove () {
                 foreach ($_SESSION["cart"] as $keys => $value){
-                    if ($value["product_id"] == $_GET["id"]){
+                    if ($value["item_id"] == $_GET["id"]){
                         unset($_SESSION["cart"][$keys]);
-                        echo '<script>alert("Product has been Removed...!")</script>';
+                        echo '<script>alert("Item has been Removed...!")</script>';
                         echo '<script>window.location="/item/list"</script>';
                     }
                 }

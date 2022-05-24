@@ -30,14 +30,10 @@
   <main>
   <?=$output?>
   </main>
-    <p>
-  <span id="insertHere"></span>
-            Sausages
-    </p>
+    
 
     <?php echo '<pre>'; print_r($_SESSION["cart"]); echo '</pre>'; 
-    $age = array("Peter"=>35, "Ben"=>37, "Joe"=>43);
-    echo json_encode($age);
+    
 
     ?> 
 
@@ -57,32 +53,29 @@
 
 
     window.addEventListener("load", function () {
-        var cartItems = [{
-            name: "Total",
-            description: "Description of product 1",
-            quantity: 1,
-            price: <?=$_SESSION["checkoutTotal"];?>,
-            sku: "prod1",
+        var cartItems = [
+            
+            //Populating Paypal Javascript array with $_SESSION DATA
+            <?php
+            $paypalArray = array();
+            foreach($_SESSION["cart"] as $paypalCart){
+                $paypalArray[] = '{
+            name: "'.$paypalCart['item_name'].'",
+            description: "'.$paypalCart['item_name'].'",
+            quantity: '.$paypalCart['item_quantity'].',
+            price: '.$paypalCart['item_price'].',
+            sku: "'.$paypalCart['item_id'].'",
             currency: "GBP"
-        }/*, {
-            name: "Product 2",
-            description: "Description of product 2",
-            quantity: 3,
-            price: 20,
-            sku: "prod2",
-            currency: "USD"
-        }, {
-            name: "Product 3",
-            description: "Description of product 3",
-            quantity: 4,
-            price: 10,
-            sku: "prod3",
-            currency: "USD"
-        }*/];
+                }';
+            }
+            echo implode(',', $paypalArray);
+
+            ?>];
 
         var total = 0;
         for (var a = 0; a < cartItems.length; a++) {
             total += (cartItems[a].price * cartItems[a].quantity);
+        
         }
 
         // Render the PayPal button

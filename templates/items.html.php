@@ -85,7 +85,7 @@ else {
 
 <table >
           <tr>
-              <th>Product Name</th>
+              <th>Item Name</th>
               <th>Quantity</th>
               <th>Price Details</th>
               <th>Total Price</th>
@@ -98,10 +98,10 @@ else {
                     <tr>
           <td>'.$value["item_name"].'</td>
           <td>'.$value["item_quantity"].'</td>
-          <td>£'.$value["product_price"].'</td>
+          <td>£'.$value["item_price"].'</td>
           <td>
-              £'.number_format($value["item_quantity"] * $value["product_price"], 2).'</td>
-          <td><a href=/item/remove?id='.$value["product_id"].'>Remove Item</a></td>
+              £'.number_format($value["item_quantity"] * $value["item_price"], 2).'</td>
+          <td><a href=/item/remove?id='.$value["item_id"].'>Remove Item</a></td>
 
       </tr>';}
      ?>
