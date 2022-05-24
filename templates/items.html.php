@@ -98,9 +98,9 @@ else {
                     <tr>
           <td>'.$value["item_name"].'</td>
           <td>'.$value["item_quantity"].'</td>
-          <td>$'.$value["product_price"].'</td>
+          <td>£'.$value["product_price"].'</td>
           <td>
-              $'.number_format($value["item_quantity"] * $value["product_price"], 2).'</td>
+              £'.number_format($value["item_quantity"] * $value["product_price"], 2).'</td>
           <td><a href=/item/remove?id='.$value["product_id"].'>Remove Item</a></td>
 
       </tr>';}
@@ -108,7 +108,7 @@ else {
      <?php echo
       '<tr>
                 <td colspan="3" align="right">Total</td>
-                <th align="right">$'.number_format($total, 2).' </th>
+                <th align="right">£'.number_format($total, 2).' </th>
                 
             </tr>'
             ; ?>

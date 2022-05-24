@@ -63,7 +63,7 @@
             quantity: 1,
             price: <?=$_SESSION["checkoutTotal"];?>,
             sku: "prod1",
-            currency: "USD"
+            currency: "GBP"
         }/*, {
             name: "Product 2",
             description: "Description of product 2",
@@ -121,7 +121,7 @@
                         transactions: [{
                             amount: {
                                 total: total,
-                                currency: 'USD'
+                                currency: 'GBP'
                             },
                             item_list: {
                                 // custom cartItems array created specifically for PayPal
