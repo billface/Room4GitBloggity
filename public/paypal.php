@@ -86,7 +86,7 @@ curl_close($curl);
 $result = json_decode($result);
  
 // you can use the following if statement to make sure the payment is verified
-// if ($result->status == "COMPLETED")
+ //if ($result->status == "COMPLETED")
  
 // send the response back to client
 echo json_encode([
@@ -94,4 +94,6 @@ echo json_encode([
     "message" => "Payment verified.",
     "result" => $result
 ]);
+
+//header('location: /item/success');
 exit();

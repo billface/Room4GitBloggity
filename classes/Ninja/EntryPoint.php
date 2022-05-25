@@ -48,7 +48,7 @@ class EntryPoint {
 
 			$title = $page['title'];
 
-			$script = $page['script'];
+			$paypal = $page['paypal'] ?? '';
 
 			if (isset($page['variables'])) {
 				$output = $this->loadTemplate($page['template'], $page['variables']);
@@ -60,7 +60,7 @@ class EntryPoint {
 			echo $this->loadTemplate('layout.html.php', ['loggedIn' => $authentication->isLoggedIn(),
 														'output' => $output,
 														'title' => $title,
-														'script' => $script
+														'paypal' => $paypal
 													]);		
 		}
 	}

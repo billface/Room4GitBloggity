@@ -18,6 +18,19 @@ class Event {
 
     public function list() {
         $result = $this->eventsTable->findAllFutureDates('eventDate');
+        
+        if (empty($result)) {
+          $events[] = [
+            'id' => 0,
+            'eventHeading' => 'Nothing to show' ,
+            'eventText' => 'but check back soon',
+            'eventDate' => '',
+            'name' => 'The Management',
+            'email' => '',
+            'authorId' => ''
+
+        ];
+        } else {
 
         $events = [];
           foreach ($result as $event) {
@@ -35,6 +48,7 @@ class Event {
                 ];
       
           }
+        }
       
         $title = 'Event list';
         $script = '';

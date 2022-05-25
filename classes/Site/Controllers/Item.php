@@ -18,27 +18,46 @@ class Item {
     public function list() {
         $result = $this->itemsTable->findAll();
 
-        $items = [];
-          foreach ($result as $item) {
-            $author = $this->authorsTable->findById($item['authorId']);
-      
+        if (empty($result)) {
             $items[] = [
-                    'id' => $item['id'],
-                    'itemHeading' => $item['itemHeading'],
-                    'itemText' => $item['itemText'],
-                    'itemPicture' => $item['itemPicture'],
-                    'itemPrice' => $item['itemPrice'],
-                    'itemShipping' => $item['itemShipping'],
-                    'itemStock' => $item['itemStock'],
-                    'itemFileName' => $item['itemFileName'],
-                    'itemPaypalDescription' => $item['itemPaypalDescription'],
-                    'name' => $author['name'],
-                    'email' => $author['email'],
-                    'authorId' => $author['id']
+              'id' => 0,
+              'itemHeading' => 'The Shop is empty' ,
+              'itemPaypalDescription' => 'the cupboards are bare',
+              'itemText' => 'but don\'t depair',
+              'itemPicture' => 'empty',
+              'itemPrice' => null,
+              'itemShipping' => null,
+              'itemStock' => null,
+              'itemFileName' => null,
+              'name' => 'The Management',
+              'email' => '',
+              'authorId' => ''
+  
+          ];
+        } else {
 
-                ];
-      
-          }
+            $items = [];
+            foreach ($result as $item) {
+                $author = $this->authorsTable->findById($item['authorId']);
+        
+                $items[] = [
+                        'id' => $item['id'],
+                        'itemHeading' => $item['itemHeading'],
+                        'itemText' => $item['itemText'],
+                        'itemPicture' => $item['itemPicture'],
+                        'itemPrice' => $item['itemPrice'],
+                        'itemShipping' => $item['itemShipping'],
+                        'itemStock' => $item['itemStock'],
+                        'itemFileName' => $item['itemFileName'],
+                        'itemPaypalDescription' => $item['itemPaypalDescription'],
+                        'name' => $author['name'],
+                        'email' => $author['email'],
+                        'authorId' => $author['id']
+
+                    ];
+        
+            }
+        }
 
         $title = 'Items List';
         
@@ -57,17 +76,15 @@ class Item {
         //end
 
         $author = $this->authentication->getUser();
-
-        $script = '<script>you massive dolt</script>';
-
+        $paypal = true;
 
         return ['template' => 'items.html.php', 
-				'title' => $title, 
-                'script' => $script,
+				'title' => $title,
+                'paypal' => $paypal,
 				'variables' => [
 						'items' => $items,
                         'userId' => $author['id'] ?? null,
-                        'total' => $total,
+                        'total' => $total
                         
 
 
@@ -247,7 +264,7 @@ class Item {
 
     public function success() {
 
-        
+        unset($_SESSION["cart"]);
 		return ['template' => 'itemsuccess.html.php', 'title' => 'Payment Successful'];
 	}
 

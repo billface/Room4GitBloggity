@@ -14,6 +14,9 @@ if (isset($_SESSION['itemErrorMessage'])) {
     <label for="itemHeading">Type your item heading here:</label>
     <textarea id="itemHeading" name="item[itemHeading]" rows="1" cols="40"><?=$_SESSION['item']['itemHeading'] ?? $item['itemHeading']?></textarea>
     <br>
+    <label for="itemPaypalDescription">Type your item subtitle (/Paypal descritption) here:</label>
+    <textarea id="itemPaypalDescription" name="item[itemPaypalDescription]" rows="3" cols="40"><?=$_SESSION['item']['itemPaypalDescription'] ?? $item['itemPaypalDescription']?></textarea>
+    <br>
     <label for="itemText">Type your item content here:</label>
     <textarea id="itemText" name="item[itemText]" rows="3" cols="40"><?=$_SESSION['item']['itemText'] ?? $item['itemText']?></textarea>
     <br>

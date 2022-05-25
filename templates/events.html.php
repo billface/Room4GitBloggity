@@ -9,9 +9,12 @@
 
 </h2>
     <h3>
-    <?php
+    <?php if (($event['eventDate']) !== '') {
               $date = new DateTime($event['eventDate']);
               echo $date->format('jS F Y');
+            }else {
+              echo '';
+            }
               ?>
               </h3>
               <p>

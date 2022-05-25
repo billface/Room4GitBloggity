@@ -1,7 +1,3 @@
-<?php //echo '<pre>'; print_r($items); echo '</pre>'; die; ?>
-<?php //echo '<pre>'; print_r($_SESSION); echo '</pre>'; ?>
-
-
 
 <?php foreach($items as $item): ?>
 <blockquote>
@@ -25,15 +21,15 @@ else {
 
 
 
-//imgur
-//echo '<blockquote class="imgur-embed-pub" lang="en" data-id="'.$item->itemPicture.'" data-context="false" ><a href="//imgur.com/a/'. $item->itemPicture. '"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>'
-//echo '<br><blockquote class="imgur-embed-pub" lang="en" data-id="'.$item->itemPicture.'" data-context="false" ><a href="//imgur.com/a/'. $item->itemPicture. '"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>'
 
     ?>
               <p>
-
+    
+    <?=htmlspecialchars($item['itemPaypalDescription'], ENT_QUOTES, 'UTF-8')?>
+    <br>
     <?=htmlspecialchars($item['itemText'], ENT_QUOTES, 'UTF-8')?>
-
+    
+    
 
  
 </p>
@@ -43,36 +39,46 @@ else {
           echo htmlspecialchars($item['email'], ENT_QUOTES, 'UTF-8'); ?>"><?php
           echo htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8'); ?></a> 
           )
-          <h3>
+  <h3>
     <?php
-              $stock = $item['itemStock'];
-              echo 'Stock '.$stock;
-              ?>
-              </h3>
-          <h3>
+      if (isset($item['itemStock'])){
+        $stock = $item['itemStock'];
+        echo 'Stock '.$stock;
+      }
+    ?>
+  </h3>
+  <h3>
     <?php
-              $price = $item['itemPrice'];
-              echo 'Price £' .$price;
-              ?>
-              </h3>
-<h3>
+      if (isset($item['itemPrice'])){
+        $price = $item['itemPrice'];
+        echo 'Price £' .$price;
+      }
+    ?>
+  </h3>
+  <h3>
     <?php
-              $shipping = $item['itemShipping'];
-              echo 'Shipping £'. $shipping;
-              ?>
+      if (isset($item['itemShipping'])){
+        $shipping = $item['itemShipping'];
+        echo 'Shipping £'. $shipping;
+      }
+    ?>
               </h3>
 
 
               <a href="/item/edit?id=<?=$item['id']?>">Edit</a>
   <br>
+  <?php if (isset($item['itemStock'])){ ?>
+
   <form action="/item/buy?id=<?=$item['id']?>" method="post">
     <input type="hidden" name="hidden_name" value="<?php echo $item['itemHeading']; ?>">
     <input type="hidden" name="hidden_price" value="<?php echo $item['itemPrice']; ?>">
+    <input type="hidden" name="hidden_description" value="<?php echo $item['itemPaypalDescription']; ?>">
     Quantity:<input type="number" name="quantity" value="1">
     <input type="submit" name="add" value="Buy">
 
 
   </form>
+  <?php } ?>
 
   <form action="/item/delete" method="post">
     <input type="hidden" name="itemId" value="<?=$item['id']?>">
@@ -93,7 +99,7 @@ else {
           </tr>
 
 
-                  <?php foreach ($_SESSION["cart"] as $key => $value) { 
+                  <?php foreach ($_SESSION["cart"] as $key => $value) {
                     echo'
                     <tr>
           <td>'.$value["item_name"].'</td>
@@ -112,10 +118,12 @@ else {
                 
             </tr>'
             ; ?>
-      </table>
+</table>
       <!-- paypal button will be rendered here using Javascript -->
       <div id="btn-paypal-checkout"></div>
       
 
-<?php } ?>
-
+<?php } else {?>
+ <!-- paypal button will be rendered here using Javascript -->
+ <div id="btn-paypal-checkout" style="display:none"></div>
+ <?php } ?>
