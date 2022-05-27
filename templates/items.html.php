@@ -1,4 +1,7 @@
 
+
+
+
 <?php foreach($items as $item): ?>
 <blockquote>
   <h2>
@@ -73,6 +76,14 @@ else {
     <input type="hidden" name="hidden_name" value="<?php echo $item['itemHeading']; ?>">
     <input type="hidden" name="hidden_price" value="<?php echo $item['itemPrice']; ?>">
     <input type="hidden" name="hidden_description" value="<?php echo $item['itemPaypalDescription']; ?>">
+    
+    <select name="size" id="size">
+      <option value="small">Small</option>
+      <option value="medium">Medium</option>
+      <option value="large">Large</option>
+      <option value="XL">XL</option>
+    </select>
+    <br>
     Quantity:<input type="number" name="quantity" value="1">
     <input type="submit" name="add" value="Buy">
 
@@ -103,8 +114,10 @@ else {
                     echo'
                     <tr>
           <td>'.$value["item_name"].'</td>
+          <td>'.$value["item_size"].'</td>
           <td>'.$value["item_quantity"].'</td>
           <td>£'.$value["item_price"].'</td>
+
           <td>
               £'.number_format($value["item_quantity"] * $value["item_price"], 2).'</td>
           <td><a href=/item/remove?id='.$value["item_id"].'>Remove Item</a></td>
@@ -113,8 +126,13 @@ else {
      ?>
      <?php echo
       '<tr>
+      <td colspan="3" align="right">Postage</td>
+                <th align="right">£3.00 </th>
+                
+      </tr>
+      <tr>
                 <td colspan="3" align="right">Total</td>
-                <th align="right">£'.number_format($total, 2).' </th>
+                <th align="right">£'.number_format($total + 3, 2).' </th>
                 
             </tr>'
             ; ?>

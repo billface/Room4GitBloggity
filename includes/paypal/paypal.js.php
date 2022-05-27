@@ -17,7 +17,15 @@
             }
             echo implode(',', $paypalArray);
 
-            ?>];
+            ?>
+            ,{
+                name: "Postage",
+            description: "Postage",
+            quantity: 1,
+            price: 3,
+            sku: "1",
+            currency: "GBP"   
+            }];
 
         var total = 0;
         for (var a = 0; a < cartItems.length; a++) {

@@ -223,6 +223,7 @@ class Item {
                         'item_description' => $_POST["hidden_description"],
                         'item_price' => $_POST["hidden_price"],
                         'item_quantity' => $_POST["quantity"],
+                        'item_size' => $_POST["size"]
                     );
                     $_SESSION["cart"][$count] = $item_array;
                 }else{

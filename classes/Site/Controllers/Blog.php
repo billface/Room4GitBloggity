@@ -245,7 +245,7 @@ class Blog {
                 'variables' => [
                     'blogs' => $blogs,
                     'comments' => $comments,
-                    'comment2edit' => $comment2edit,
+                    'comment2edit' => $comment2edit ?? '',
                     'userId' => $author['id'] ?? null
                     ]
                 ];
