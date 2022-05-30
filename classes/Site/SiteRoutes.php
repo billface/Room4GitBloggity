@@ -4,29 +4,22 @@ namespace Site;
 class SiteRoutes implements \Ninja\Routes {
 	private $authorsTable;
 	private $blogsTable;
+	private $authentication;
 	private $commentsTable;
 	private $displayCommentsTable;
 	private $pagesTable;
 	private $eventsTable;
-	private $categoriesTable;
-	private $blogCategoriesTable;
-	private $authentication;
-
-
-
 	
 
 	public function __construct() {
 		include __DIR__ . '/../../includes/DatabaseConnection.php';
 
-        $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id', '\Site\Entity\Blog', [&$this->authorsTable, &$this->blogCategoriesTable]);
+        $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id', '\Site\Entity\Blog', [&$this->authorsTable]);
 		$this->pagesTable = new \Ninja\DatabaseTable($pdo, 'page', 'id', '\Site\Entity\Page', [&$this->authorsTable]);   
 		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id', '\Site\Entity\Event', [&$this->authorsTable]);    
 		$this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id', '\Site\Entity\Comment', [&$this->authorsTable]);
 		$this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId', '\Site\Entity\Comment', [&$this->authorsTable]); 
 		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [&$this->blogsTable, &$this->pagesTable, &$this->eventsTable, &$this->commentsTable]);
-		$this->categoriesTable = new \Ninja\DatabaseTable($pdo, 'category', 'id', '\Site\Entity\Category', [&$this->blogsTable, &$this->blogCategoriesTable]);
-		$this->blogCategoriesTable = new \Ninja\DatabaseTable($pdo, 'blog_category', 'categoryId');
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
          
   
@@ -36,12 +29,11 @@ class SiteRoutes implements \Ninja\Routes {
 
 		public function getRoutes() : array {
 
-			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->commentsTable, $this->displayCommentsTable, $this->pagesTable, $this->eventsTable, $this->categoriesTable, $this->authentication);
+			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable, $this->pagesTable, $this->eventsTable);
+			$authorController = new \Site\Controllers\Register($this->authorsTable);
 			$pageController = new \Site\Controllers\Page($this->pagesTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->eventsTable, $this->commentsTable);
 			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->pagesTable, $this->commentsTable);
-			$authorController = new \Site\Controllers\Register($this->authorsTable);
 			$loginController = new \Site\Controllers\Login($this->authentication);
-			$categoryController = new \Site\Controllers\Category($this->categoriesTable);
 
 		
 			$routes = [
@@ -56,23 +48,12 @@ class SiteRoutes implements \Ninja\Routes {
 						'controller' => $pageController,
 						'action' => 'about'
 					]
-				], 
-				'page/admin' => [
-					'GET' => [
-						'controller' => $pageController,
-						'action' => 'admin'
-					],
-					'login' => true,
-					'permissions' => \Site\Entity\Author::SUPERUSER
 				],
 				'page/list' => [
 					'GET' => [
 						'controller' => $pageController,
 						'action' => 'list'
-					],
-					'login' => true,
-					'permissions' => \Site\Entity\Author::GOD
-
+					]
 				],
 				'page/edit' => [
 					'POST' => [
@@ -100,28 +81,6 @@ class SiteRoutes implements \Ninja\Routes {
 						'controller' => $authorController,
 						'action' => 'success'
 					]
-				],
-				'author/permissions' => [
-					'GET' => [
-						'controller' => $authorController,
-						'action' => 'permissions'
-					],
-					'POST' => [
-						'controller' => $authorController,
-						'action' => 'savePermissions'
-					],
-					'login' => true,
-					'permissions' => \Site\Entity\Author::GOD
-
-				],
-				'author/list' => [
-					'GET' => [
-						'controller' => $authorController,
-						'action' => 'list'
-					],
-					'login' => true,
-					'permissions' => \Site\Entity\Author::GOD
-
 				],
 				'blog/list' => [
 					'GET' => [
@@ -154,9 +113,7 @@ class SiteRoutes implements \Ninja\Routes {
 						'controller' => $blogController,
 						'action' => 'addpage'
 					],
-					'login' => true,
-					'permissions' => \Site\Entity\Author::SUPERUSER
-
+					'login' => true
 
 				],
 				'blog/add' => [
@@ -164,8 +121,7 @@ class SiteRoutes implements \Ninja\Routes {
 						'controller' => $blogController,
 						'action' => 'add'
 					],
-					'login' => true,
-
+					'login' => true
 
 				],
 				'blog/wholeblog' => [
@@ -227,12 +183,6 @@ class SiteRoutes implements \Ninja\Routes {
 						'action' => 'error'
 					]
 				],
-				'login/permissionserror' => [
-					'GET' => [
-						'controller' => $loginController,
-						'action' => 'permissionsError'
-					]
-				],
 				'event/list' => [
 					'GET' => [
 						'controller' => $eventController,
@@ -263,8 +213,7 @@ class SiteRoutes implements \Ninja\Routes {
 						'controller' => $eventController,
 						'action' => 'addpage'
 					],
-					'login' => true,
-					'permissions' => \Site\Entity\Author::SUPERUSER
+					'login' => true
 
 				],
 				'event/add' => [
@@ -275,37 +224,7 @@ class SiteRoutes implements \Ninja\Routes {
 					'login' => true
 
 				],
-				'category/edit' => [
-					'POST' => [
-						'controller' => $categoryController,
-						'action' => 'saveEdit'
-					],
-					'GET' => [
-						'controller' => $categoryController,
-						'action' => 'edit'
-					],
-					'login' => true,
-					'permissions' => \Site\Entity\Author::SUPERUSER
 
-				],
-				'category/delete' => [
-					'POST' => [
-						'controller' => $categoryController,
-						'action' => 'delete'
-					],
-					'login' => true,
-					'permissions' => \Site\Entity\Author::SUPERUSER
-
-				],
-				'category/list' => [
-					'GET' => [
-						'controller' => $categoryController,
-						'action' => 'list'
-					],
-					'login' => true,
-					'permissions' => \Site\Entity\Author::SUPERUSER
-
-				]
 			];
 
 			return $routes;
@@ -313,16 +232,6 @@ class SiteRoutes implements \Ninja\Routes {
 
 	public function getAuthentication(): \Ninja\Authentication {
 		return $this->authentication;
-	}
-
-	public function checkPermission($permission): bool {
-		$user = $this->authentication->getUser();
-
-		if ($user && $user->hasPermission($permission)) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 }

@@ -11,12 +11,10 @@ class Blog {
     private $displayCommentsTable;
     private $pagesTable;
     private $eventsTable;
-    private $categoriesTable;
-	private $authentication;
 
 
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $categoriesTable, Authentication $authentication) {
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
@@ -24,24 +22,15 @@ class Blog {
         $this->displayCommentsTable = $displayCommentsTable; 
         $this->pagesTable = $pagesTable;
         $this->eventsTable = $eventsTable;
-        $this->categoriesTable = $categoriesTable;
-		$this->authentication = $authentication;
 
 
     }
 
     public function list() {
-
-        if (isset($_GET['category']))
-		{
-			$category = $this->categoriesTable->findById($_GET['category']);
-			$blogs = $category->getBlogs();
-		}
-        else
-        {
-            $blogs = $this->blogsTable->findAll();
-        }
+        $blogs = $this->blogsTable->findAll();
+      
         $title = 'Blog list';
+        $metaDescription = 'Blog List';
 
         $totalBlogs = $this->blogsTable->total();
 
@@ -49,11 +38,11 @@ class Blog {
 
         return ['template' => 'blogs.html.php', 
 				'title' => $title, 
+                'metaDescription' => $metaDescription,
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
 						'blogs' => $blogs,
-                        'user' => $author, //previously 'userId' => $author->id ?? null,
-                        'categories' => $this->categoriesTable->findAll()
+                        'userId' => $author->id ?? null
                     ]
 				];
         
@@ -67,7 +56,7 @@ class Blog {
 
         $blog = $this->blogsTable->findById($_POST['blogId']);
 
-        if ($blog->authorId != $author->id && !$author->hasPermission(\Site\Entity\Author::DELETE_BLOGS) ) {
+        if ($blog->authorId != $author->id) {
 			return;
 		}
 		
@@ -97,28 +86,22 @@ class Blog {
         $blog = $_POST['blog'];
         //the above is from form, below is others
         $blog['blogDate'] = new \Datetime();
+        echo '<pre>'; print_r($blog); echo '</pre>'; 
 
-        $blogEntity = $author->addBlog($blog); 
-
-        foreach ($_POST['category'] as $categoryId) {
-            $blogEntity->addCategory($categoryId);
-        }
+        //$author->addBlog($blog);
 
         header('location: /blog/list');
 }
 
 public function addpage() {
-        $categories = $this->categoriesTable->findAll();
-
 
         $title = 'Add a new blog';
+        $metaRobots = 'noindex';
 
         return ['template' => 'addblog.html.php',
                 'title' => $title,
-                'variables' => [
-                    'categories' => $categories
-                ]
-            ];
+                'metaRobots' => $metaRobots
+                ];
     
 }
 
@@ -131,13 +114,8 @@ public function addpage() {
             //the above is from form, below is others
             $blog['blogModDate'] = new \DateTime();
 
-            $blogEntity = $author->addBlog($blog);
+            $author->addBlog($blog);
 
-            $blogEntity->clearCategories();
-
-            foreach ($_POST['category'] as $categoryId) {
-                $blogEntity->addCategory($categoryId);
-            }
             header('location: /blog/wholeblog?id=' . $blog['id']);
             //header('location: /blog/list');
 
@@ -146,7 +124,6 @@ public function addpage() {
     public function displayEdit() {
         
         $author = $this->authentication->getUser();
-        $categories = $this->categoriesTable->findAll();
 
         $blog = $this->blogsTable->findById($_GET['id']);
 
@@ -156,8 +133,7 @@ public function addpage() {
                 'title' => $title,
                 'variables' => [
                     'blog' => $blog,
-                    'user' => $author, //previously 'userId' => $author->id ?? null,
-                    'categories' => $categories
+                    'userId' => $author->id ?? null
                     ]
                 ];
     }
@@ -210,8 +186,8 @@ public function addpage() {
                 'variables' => [
                     'blog' => $blog,
                     'comments' => $comments,
-                    'comment2edit' => $comment2edit,
-                    'user' => $author
+                    'comment2edit' => $comment2edit ?? '',
+                    'userId' => $author->id ?? null
                     ]
                 ];
 
@@ -226,11 +202,13 @@ public function addpage() {
             $comment = $_POST['comment'];
             $comment['commDate'] = new \Datetime();
     
-
+            //echo '<pre>'; print_r($comment); echo '</pre>'; 
             $author->addComment($comment);
         
             //head back to the current page after inserting comment
             header('location: /blog/wholeblog?id=' . $comment['commBlogId']);
+            //header('location: /blog/list');
+
             die;
 
     } 

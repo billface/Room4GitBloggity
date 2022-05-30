@@ -27,11 +27,13 @@ class Event {
         $events = $this->eventsTable->findAllFutureDates('eventDate');
 
         $title = 'Event list';
+        $metaDescription = 'Events List';
 
         $author = $this->authentication->getUser();
 
         return ['template' => 'events.html.php', 
 				'title' => $title, 
+                'metaDescription' => $metaDescription,
 				'variables' => [
 						'events' => $events,
                         'userId' => $author->id ?? null

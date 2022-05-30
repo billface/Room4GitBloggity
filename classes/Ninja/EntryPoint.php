@@ -37,11 +37,8 @@ class EntryPoint {
 
 		$authentication = $this->routes->getAuthentication();
 
-		if (isset($routes[$this->route]['login']) && !$authentication->isLoggedIn()) {
+		if (isset($routes[$this->route]['login']) && isset($routes[$this->route]['login']) && !$authentication->isLoggedIn()) {
 			header('location: /login/error');
-		}
-		else if (isset($routes[$this->route]['permissions']) && !$this->routes->checkPermission($routes[$this->route]['permissions'])) {
-			header('location: /login/permissionserror');	
 		}
 		else {
 			$controller = $routes[$this->route][$this->method]['controller'];
@@ -50,8 +47,8 @@ class EntryPoint {
 			$display = $controller->$action();
 
 			$title = $display['title'];
-			$metaDescription = $display['metaDescription'];
-
+			$metaDescription = $display['metaDescription'] ?? '';
+			$metaRobots = $display['metaRobots'] ?? 'index';
 
 
 			if (isset($display['variables'])) {
@@ -62,11 +59,10 @@ class EntryPoint {
 			}
 
 			echo $this->loadTemplate('layout.html.php', ['loggedIn' => $authentication->isLoggedIn(),
-															'user' => $authentication->getUser(),
-
 														'output' => $output,
 														'title' => $title,
 														'metaDescription' => $metaDescription,
+														'metaRobots' => $metaRobots
 													]);		
 		}
 	}

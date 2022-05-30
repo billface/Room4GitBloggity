@@ -4,7 +4,9 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="blogs.css">
     <title><?=$title?></title>
-    <meta name="description" content="<?=$metaDescription?>">
+    <meta name="description" content="<?=$metaDescription ?? ''?>">
+    <meta name="robots" content="<?=$metaRobots?>" />
+    
     </head>
   <body>
   <nav>
@@ -17,12 +19,15 @@
       <li><a href="/page/about">About</a></li>
       <li><a href="/blog/list">Blog List</a></li>
       <li><a href="/event/list">Calendar</a></li>
+      <li><a href="/page/list">Pages</a></li>
+      <li><a href="/blog/addpage">Add a new blog</a></li>
+      <li><a href="/event/addpage">Add a new event</a></li>
+
       <?php if ($loggedIn): ?>
 			<li><a href="/logout">Log out</a></li>
 			<?php else: ?>
 			<li><a href="/login">Log in</a></li>
 			<?php endif; ?>
-      
     </ul>
   </nav>
 
@@ -31,12 +36,7 @@
   </main>
 
   <footer>
-  <?php  if ($user && $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
-        <a href="/page/admin">&copy; Bodged Websites 2020&ndash;<?php echo date('Y'); ?></a>
-        <?php else: ?>
-         <p> &copy; Bodged Websites 2020&ndash;<?php echo date('Y'); ?> </p>
-                <?php endif; ?>
-
+  &copy; Bodged Websites 2020&ndash;<?php echo date('Y'); ?>
   </footer>
 
   </body>

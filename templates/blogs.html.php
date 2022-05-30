@@ -1,9 +1,3 @@
-<ul class="categories">
-  <?php foreach($categories as $category): ?>
-    <li><a href="/blog/list?category=<?=$category->id?>"><?=$category->name?></a><li>
-  <?php endforeach; ?>
-</ul>
-
 <p><?=$totalBlogs?> blogs have been added to the site </p>
 
 <?php foreach($blogs as $blog): ?>
@@ -16,14 +10,8 @@
   <?=htmlspecialchars($blog->blogHeading, ENT_QUOTES, 'UTF-8')?>
 
   (by <a href="mailto:<?php
-              
-              $author = $blog->getAuthor();
-              echo htmlspecialchars($author ? $author->email : 'deleted user', ENT_QUOTES, 'UTF-8');
-              ?>">
-              <?php 
-              $author = $blog->getAuthor();
-              echo htmlspecialchars($author ? $author->name : 'deleted user', ENT_QUOTES, 'UTF-8');
-              ?></a>
+              echo htmlspecialchars($blog->getAuthor()->email, ENT_QUOTES, 'UTF-8'); ?>"><?php
+              echo htmlspecialchars($blog->getAuthor()->name, ENT_QUOTES, 'UTF-8'); ?></a> 
               on 
               <?php
               $date = new DateTime($blog->blogDate);
@@ -32,17 +20,13 @@
             
             <a href="/blog/wholeblog?id=<?=$blog->id?>">See more</a>
 
-    <?php if ($user): ?>
-      <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
+    <?php if ($userId == $blog->authorId): ?>
       <a href="/blog/edit?id=<?=$blog->id?>">Edit</a>
-      <?php endif; ?>
       <br>
-      <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
       <form action="/blog/delete" method="post">
         <input type="hidden" name="blogId" value="<?=$blog->id?>">
         <input type="submit" value="Delete">
       </form>
-    <?php endif; ?>
     <?php endif; ?>
 
 </p>

@@ -6,11 +6,6 @@ use \Ninja\DatabaseTable;
 //see pg529 (pdf 390)
 
 class Author {
-
-	const ADMIN = 1;
-	const SUPERUSER = 2;
-	const GOD = 4; 
-
 	public $id;
 	public $name;
 	public $email;
@@ -49,32 +44,28 @@ class Author {
 
 		$blog['authorId'] = $this->id;
 
-		return $this->blogsTable->save($blog);
+		$this->blogsTable->save($blog);
 	}
 
 	public function addPage($page) {
 
 		$page['authorId'] = $this->id;
 
-		return $this->pagesTable->save($page);
+		$this->pagesTable->save($page);
 	}
 
 	public function addEvent($event) {
 
 		$event['authorId'] = $this->id;
 
-		return $this->eventsTable->save($event);
+		$this->eventsTable->save($event);
 	}
 	
 	public function addComment($comment) {
 
 		$comment['authorId'] = $this->id;
 
-		return $this->commentsTable->save($comment);
-	}
-
-	public function hasPermission($permission) {
-		return $this->permissions & $permission;  
+		$this->commentsTable->save($comment);
 	}
 
 }
