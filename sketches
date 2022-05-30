@@ -1,0 +1,21 @@
+  <?php 
+  
+  
+echo '<pre>'; print_r($comments); echo '</pre>'; 
+
+
+
+//echoing back post array
+echo '<pre>'; print_r($_POST); echo '</pre>'; 
+
+//shows where url redirect is working properly (see https://www.sitepoint.com/community/t/url-rewriting-php-mysql-novice-to-ninja/290945/20)
+echo 'You are viewing ' . $_SERVER['REQUEST_URI']; 
+die;
+
+if ($result->status == "COMPLETED"){
+  header('location: /item/success');
+   //echo 'window.location = "/item/success";';
+} else {
+  header('location: /item/failure');
+   //echo 'window.location = "/item/failure";';
+}

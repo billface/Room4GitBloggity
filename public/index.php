@@ -1,10 +1,22 @@
 <?php
+
 try {
-  $pdo = new PDO('mysql:host=localhost;dbname=room4Two', 'room4TwoUser', 'mypassword');
-  $output = 'Database connection established.';
-}
-catch (PDOException $e) {
-  $output = 'Unable to connect to the database server: ' . $e;
+	include __DIR__ . '/../includes/autoload.php';
+
+	
+	$route = ltrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
+
+	$entryPoint = new \Ninja\EntryPoint($route, $_SERVER['REQUEST_METHOD'], new \Site\SiteRoutes());
+	$entryPoint->run();
 }
 
-include  __DIR__ . '/../templates/output.html.php';
+catch (PDOException $e) {
+	$title = 'An error has occurred';
+
+	$output = 'Database error: ' . $e->getMessage() . ' in ' .
+	$e->getFile() . ':' . $e->getLine();
+
+	include  __DIR__ . '/../templates/layout.html.php';
+
+}
+
