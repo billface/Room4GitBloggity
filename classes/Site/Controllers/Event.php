@@ -10,21 +10,29 @@ class Event {
     private $pagesTable;
     private $blogsTable;
     private $commentsTable;
+    private $itemsTable;
+
+
 
     
 
-	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $pagesTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable) {
+	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $pagesTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable, DatabaseTable $itemsTable) {
         $this->eventsTable = $eventsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
         $this->pagesTable = $pagesTable;
         $this->blogsTable = $blogsTable;
         $this->commentsTable = $commentsTable;
+        $this->itemsTable = $itemsTable;
+
 
 	}
 
     public function list() {
         $events = $this->eventsTable->findAllFutureDates('eventDate');
+        if (empty($events)) {
+            $emptyMessage = 'No dates booked';
+        }
 
         $title = 'Event list';
         $metaDescription = 'Events List';
@@ -36,7 +44,8 @@ class Event {
                 'metaDescription' => $metaDescription,
 				'variables' => [
 						'events' => $events,
-                        'userId' => $author->id ?? null
+                        'userId' => $author->id ?? null,
+                        'emptyMessage' => $emptyMessage ?? null
 					]
 				];
         
@@ -56,8 +65,12 @@ class Event {
     public function addpage() {
 
             $title = 'Add a new event';
+            $metaRobots = 'noindex';
 
-            return ['template' => 'addevent.html.php', 'title' => $title];
+            return ['template' => 'addevent.html.php',
+                    'title' => $title,
+                    'metaRobots' => $metaRobots
+                ];
         
     }
 
@@ -96,9 +109,11 @@ class Event {
         $event = $this->eventsTable->findById($_GET['id']);
 
         $title = 'Edit event';
+        $metaRobots = 'noindex';
 
         return ['template' => 'editevent.html.php', 
                 'title' => $title,
+                'metaRobots' => $metaRobots,
                 'variables' => [
                     'event' => $event,
                     'userId' => $author->id ?? null

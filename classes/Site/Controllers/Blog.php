@@ -11,10 +11,12 @@ class Blog {
     private $displayCommentsTable;
     private $pagesTable;
     private $eventsTable;
+    private $itemsTable;
 
 
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable) {
+
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable, Authentication $authentication,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $itemsTable) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
         $this->authentication = $authentication;
@@ -22,6 +24,7 @@ class Blog {
         $this->displayCommentsTable = $displayCommentsTable; 
         $this->pagesTable = $pagesTable;
         $this->eventsTable = $eventsTable;
+        $this->itemsTable = $itemsTable;
 
 
     }
@@ -38,6 +41,7 @@ class Blog {
 
         return ['template' => 'blogs.html.php', 
 				'title' => $title, 
+                'metaRobots' => 'noindex',
                 'metaDescription' => $metaDescription,
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
@@ -86,9 +90,8 @@ class Blog {
         $blog = $_POST['blog'];
         //the above is from form, below is others
         $blog['blogDate'] = new \Datetime();
-        echo '<pre>'; print_r($blog); echo '</pre>'; 
 
-        //$author->addBlog($blog);
+        $author->addBlog($blog);
 
         header('location: /blog/list');
 }
@@ -128,9 +131,11 @@ public function addpage() {
         $blog = $this->blogsTable->findById($_GET['id']);
 
         $title = 'Edit blog';
+        $metaRobots = 'noindex';
 
         return ['template' => 'editblog.html.php', 
                 'title' => $title,
+                'metaRobots' => $metaRobots,
                 'variables' => [
                     'blog' => $blog,
                     'userId' => $author->id ?? null

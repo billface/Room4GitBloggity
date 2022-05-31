@@ -9,6 +9,7 @@ class SiteRoutes implements \Ninja\Routes {
 	private $displayCommentsTable;
 	private $pagesTable;
 	private $eventsTable;
+	private $itemsTable;
 	
 
 	public function __construct() {
@@ -17,9 +18,10 @@ class SiteRoutes implements \Ninja\Routes {
         $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id', '\Site\Entity\Blog', [&$this->authorsTable]);
 		$this->pagesTable = new \Ninja\DatabaseTable($pdo, 'page', 'id', '\Site\Entity\Page', [&$this->authorsTable]);   
 		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id', '\Site\Entity\Event', [&$this->authorsTable]);    
+		$this->itemsTable = new \Ninja\DatabaseTable($pdo, 'item', 'id', '\Site\Entity\Item', [&$this->authorsTable]);
 		$this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id', '\Site\Entity\Comment', [&$this->authorsTable]);
 		$this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId', '\Site\Entity\Comment', [&$this->authorsTable]); 
-		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [&$this->blogsTable, &$this->pagesTable, &$this->eventsTable, &$this->commentsTable]);
+		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [&$this->blogsTable, &$this->pagesTable, &$this->eventsTable, &$this->commentsTable, &$this->itemsTable]);
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
          
   
@@ -29,10 +31,11 @@ class SiteRoutes implements \Ninja\Routes {
 
 		public function getRoutes() : array {
 
-			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable, $this->pagesTable, $this->eventsTable);
+			$blogController = new \Site\Controllers\Blog($this->blogsTable, $this->authorsTable, $this->authentication, $this->commentsTable, $this->displayCommentsTable, $this->pagesTable, $this->eventsTable, $this->itemsTable);
 			$authorController = new \Site\Controllers\Register($this->authorsTable);
-			$pageController = new \Site\Controllers\Page($this->pagesTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->eventsTable, $this->commentsTable);
-			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->pagesTable, $this->commentsTable);
+			$pageController = new \Site\Controllers\Page($this->pagesTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->eventsTable, $this->commentsTable, $this->itemsTable);
+			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->pagesTable, $this->commentsTable, $this->itemsTable);
+			$itemController = new \Site\Controllers\Item($this->itemsTable, $this->authorsTable, $this->authentication, $this->blogsTable, $this->pagesTable, $this->commentsTable, $this->eventsTable);
 			$loginController = new \Site\Controllers\Login($this->authentication);
 
 		
@@ -224,6 +227,71 @@ class SiteRoutes implements \Ninja\Routes {
 					'login' => true
 
 				],
+				'item/list' => [
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'list'
+					]
+				],
+				'item/addpage' => [
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'addpage'
+					],
+					'login' => true
+				],
+				'item/add' => [
+					'POST' => [
+						'controller' => $itemController,
+						'action' => 'add'
+					],
+					'login' => true
+				],
+				'item/edit' => [
+					'POST' => [
+						'controller' => $itemController,
+						'action' => 'saveEdit'
+					],
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'displayEdit'
+					],
+					'login' => true
+
+				],
+				'item/delete' => [
+					'POST' => [
+						'controller' => $itemController,
+						'action' => 'delete'
+					],
+					'login' => true
+
+				],
+				'item/buy' => [
+					'POST' => [
+						'controller' => $itemController,
+						'action' => 'buy'
+					],
+
+				],
+				'item/remove' => [
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'remove'
+					]
+				],
+				'item/success' => [
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'success'
+					]
+				],
+				'item/failure' => [
+					'GET' => [
+						'controller' => $itemController,
+						'action' => 'failure'
+					]
+				]
 
 			];
 

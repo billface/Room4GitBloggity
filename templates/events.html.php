@@ -1,4 +1,7 @@
-<?php //echo '<pre>'; print_r($events); echo '</pre>'; ?>
+<?php if ($emptyMessage !== null) {
+  echo $emptyMessage . '<br><br>';
+}
+?>
 
 <?php foreach($events as $event): ?>
 <blockquote>

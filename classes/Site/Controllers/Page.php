@@ -9,18 +9,21 @@ class Page {
 	private $authorsTable;
     private $blogsTable;
     private $eventsTable;
+    private $itemsTable;
     private $commentsTable;
 
 
 
 
-	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable) {
+	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable, DatabaseTable $itemsTable) {
 		$this->pagesTable = $pagesTable;
 		$this->authorsTable = $authorsTable;
 		$this->authentication = $authentication;
         $this->blogsTable = $blogsTable;
         $this->eventsTable = $eventsTable;
+        $this->itemsTable = $itemsTable;
         $this->commentsTable = $commentsTable;
+
 
 	}
 
@@ -32,7 +35,8 @@ class Page {
 		$author = $this->authentication->getUser();
 
 		return ['template' => 'pages.html.php', 
-				'title' => $title, 
+				'title' => $title,
+
 				'variables' => [
 						'pages' => $pages,
                         'userId' => $author->id ?? null
@@ -60,9 +64,11 @@ class Page {
         $page = $this->pagesTable->findById($_GET['id']);
 
         $title = 'Edit page';
+        $metaRobots = 'noindex';
 
         return ['template' => 'editpage.html.php', 
                 'title' => $title,
+                'metaRobots' => $metaRobots,
                 'variables' => [
                     'page' => $page,
                     'userId' => $author->id ?? null
