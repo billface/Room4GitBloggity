@@ -11,37 +11,30 @@ class Blog {
     private $displayCommentsTable;
     private $pagesTable;
     private $eventsTable;
-    private $categoriesTable;
-	private $authentication;
+    private $itemsTable;
+    private $authentication;
 
 
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $categoriesTable, Authentication $authentication) {
+	//the order of constucts is important. most specifically the position of $authentication vs SiteRoutes getRoutes()
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $itemsTable, Authentication $authentication) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
-        $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable; 
         $this->pagesTable = $pagesTable;
         $this->eventsTable = $eventsTable;
-        $this->categoriesTable = $categoriesTable;
-		$this->authentication = $authentication;
-
+        $this->itemsTable = $itemsTable;
+        $this->authentication = $authentication;
+        
 
     }
 
     public function list() {
-
-        if (isset($_GET['category']))
-		{
-			$category = $this->categoriesTable->findById($_GET['category']);
-			$blogs = $category->getBlogs();
-		}
-        else
-        {
-            $blogs = $this->blogsTable->findAll();
-        }
+        $blogs = $this->blogsTable->findAll();
+      
         $title = 'Blog list';
+        $metaDescription = 'Blog List';
 
         $totalBlogs = $this->blogsTable->total();
 
@@ -49,11 +42,12 @@ class Blog {
 
         return ['template' => 'blogs.html.php', 
 				'title' => $title, 
+                'metaRobots' => 'noindex',
+                'metaDescription' => $metaDescription,
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
 						'blogs' => $blogs,
-                        'userId' => $author->id ?? null,
-                        'categories' => $this->categoriesTable->findAll()
+                        'userId' => $author->id ?? null
                     ]
 				];
         
@@ -98,27 +92,20 @@ class Blog {
         //the above is from form, below is others
         $blog['blogDate'] = new \Datetime();
 
-        $blogEntity = $author->addBlog($blog); 
-
-        foreach ($_POST['category'] as $categoryId) {
-            $blogEntity->addCategory($categoryId);
-        }
+        $author->addBlog($blog);
 
         header('location: /blog/list');
 }
 
 public function addpage() {
-        $categories = $this->categoriesTable->findAll();
-
 
         $title = 'Add a new blog';
+        $metaRobots = 'noindex';
 
         return ['template' => 'addblog.html.php',
                 'title' => $title,
-                'variables' => [
-                    'categories' => $categories
-                ]
-            ];
+                'metaRobots' => $metaRobots
+                ];
     
 }
 
@@ -131,13 +118,8 @@ public function addpage() {
             //the above is from form, below is others
             $blog['blogModDate'] = new \DateTime();
 
-            $blogEntity = $author->addBlog($blog);
+            $author->addBlog($blog);
 
-            $blogEntity->clearCategories();
-
-            foreach ($_POST['category'] as $categoryId) {
-                $blogEntity->addCategory($categoryId);
-            }
             header('location: /blog/wholeblog?id=' . $blog['id']);
             //header('location: /blog/list');
 
@@ -146,18 +128,18 @@ public function addpage() {
     public function displayEdit() {
         
         $author = $this->authentication->getUser();
-        $categories = $this->categoriesTable->findAll();
 
         $blog = $this->blogsTable->findById($_GET['id']);
 
         $title = 'Edit blog';
+        $metaRobots = 'noindex';
 
         return ['template' => 'editblog.html.php', 
                 'title' => $title,
+                'metaRobots' => $metaRobots,
                 'variables' => [
                     'blog' => $blog,
-                    'userId' => $author->id ?? null,
-                    'categories' => $categories
+                    'userId' => $author->id ?? null
                     ]
                 ];
     }
@@ -210,7 +192,7 @@ public function addpage() {
                 'variables' => [
                     'blog' => $blog,
                     'comments' => $comments,
-                    'comment2edit' => $comment2edit,
+                    'comment2edit' => $comment2edit ?? '',
                     'userId' => $author->id ?? null
                     ]
                 ];
@@ -226,11 +208,13 @@ public function addpage() {
             $comment = $_POST['comment'];
             $comment['commDate'] = new \Datetime();
     
-
+            //echo '<pre>'; print_r($comment); echo '</pre>'; 
             $author->addComment($comment);
         
             //head back to the current page after inserting comment
             header('location: /blog/wholeblog?id=' . $comment['commBlogId']);
+            //header('location: /blog/list');
+
             die;
 
     } 

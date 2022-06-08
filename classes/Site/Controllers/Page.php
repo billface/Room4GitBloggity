@@ -9,18 +9,22 @@ class Page {
 	private $authorsTable;
     private $blogsTable;
     private $eventsTable;
+    private $itemsTable;
     private $commentsTable;
+    private $authentication;
 
 
 
-
-	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable) {
+	//the order of constucts is important. most specifically the position of $authentication vs SiteRoutes getRoutes()
+	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, DatabaseTable $blogsTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable, DatabaseTable $itemsTable, Authentication $authentication) {
 		$this->pagesTable = $pagesTable;
 		$this->authorsTable = $authorsTable;
-		$this->authentication = $authentication;
         $this->blogsTable = $blogsTable;
         $this->eventsTable = $eventsTable;
+        $this->itemsTable = $itemsTable;
         $this->commentsTable = $commentsTable;
+		$this->authentication = $authentication;
+
 
 	}
 
@@ -32,7 +36,8 @@ class Page {
 		$author = $this->authentication->getUser();
 
 		return ['template' => 'pages.html.php', 
-				'title' => $title, 
+				'title' => $title,
+
 				'variables' => [
 						'pages' => $pages,
                         'userId' => $author->id ?? null
@@ -60,9 +65,11 @@ class Page {
         $page = $this->pagesTable->findById($_GET['id']);
 
         $title = 'Edit page';
+        $metaRobots = 'noindex';
 
         return ['template' => 'editpage.html.php', 
                 'title' => $title,
+                'metaRobots' => $metaRobots,
                 'variables' => [
                     'page' => $page,
                     'userId' => $author->id ?? null
