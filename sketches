@@ -19,3 +19,27 @@ if ($result->status == "COMPLETED"){
   header('location: /item/failure');
    //echo 'window.location = "/item/failure";';
 }
+?>
+<?php foreach ($itemsizes as $itemsize): ?>
+
+  <?php if ($item && $item->hasSize($itemsize->id)): ?>
+  <input type="checkbox" checked name="itemsize[]" value="<?=$itemsize->id?>" />
+  <?php else: ?>
+
+  <input type="checkbox" name="itemsize[]" value="<?=$itemsize->id?>" /> 
+  <?php endif; ?>
+  <label><?=$itemsize->name?></label>
+  <?php endforeach; ?>
+
+  <?php foreach ($itemsizes as $itemsize): ?>
+
+  <?php if ($item && $item->hasSize($itemsize->id)): ?>
+    <select name="size" id="size">
+    <option value="small">Small</option>
+    <option value="medium">Medium</option>
+    <option value="large">Large</option>
+    <option value="XL">XL</option>
+  </select>
+
+  <?php endif; ?>
+  <?php endforeach; ?>

@@ -30,7 +30,8 @@ class Item {
 
     public function list() {
         $items = $this->itemsTable->findAll();
-        
+        $itemsizes = $this->itemSizesTable->findAll();
+
 
         if (empty($items)) {
             $emptyMessage = 'The shelves are bare';
@@ -63,6 +64,7 @@ class Item {
                 'metaDescription' => $metaDescription,
 				'variables' => [
 						'items' => $items,
+                        'itemsizes' => $itemsizes,
                         'userId' => $author->id ?? null,
                         'emptyMessage' => $emptyMessage ?? null,
                         'total' => $total
@@ -123,6 +125,7 @@ class Item {
     public function displayEdit() {
             
         $author = $this->authentication->getUser();
+        $itemsizes = $this->itemSizesTable->findAll();
 
         $item = $this->itemsTable->findById($_GET['id']);
 

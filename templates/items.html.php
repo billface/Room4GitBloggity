@@ -81,13 +81,30 @@ else {
     <input type="hidden" name="hidden_name" value="<?php echo $item->itemHeading; ?>">
     <input type="hidden" name="hidden_price" value="<?php echo $item->itemPrice; ?>">
     <input type="hidden" name="hidden_description" value="<?php echo $item->itemPaypalDescription; ?>">
+   
+
     
-    <select name="size" id="size">
-      <option value="small">Small</option>
-      <option value="medium">Medium</option>
-      <option value="large">Large</option>
-      <option value="XL">XL</option>
-    </select>
+   
+
+<?php if ($item->sizePresent($item->id) != null) { ?>
+<select name="size" id="size">
+
+<?php foreach ($itemsizes as $itemsize): ?>
+
+<?php if ($item && $item->hasSize($itemsize->id)): ?>
+  <option value="<?=$itemsize->id?>"><?=$itemsize->name?></option>
+  
+
+<?php endif; ?>
+<?php endforeach; ?>
+
+
+</select>
+
+<?php } ?>
+
+    
+
     <br>
     Quantity:<input type="number" name="quantity" value="1">
     <input type="submit" name="add" value="Buy">

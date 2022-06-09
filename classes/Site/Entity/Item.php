@@ -25,8 +25,26 @@ class Item {
 	}
 
 	public function addSize($sizeId) {
-		$itemSiz = ['itemId' => $this->id, 'sizeId' => $sizeId];
+		$itemSize = ['itemId' => $this->id, 'sizeId' => $sizeId];
 
-		$this->itemSizeJoinTable->save($itemSiz);
+		$this->itemSizeJoinTable->save($itemSize);
 	}
+
+	public function hasSize($sizeId) {
+		$itemJoinSizes = $this->itemSizeJoinTable->find('itemId', $this->id);
+
+		foreach ($itemJoinSizes as $itemJoinSize) {
+			if ($itemJoinSize->sizeId == $sizeId) {
+				return true;
+			}
+		}
+	}
+
+	public function sizePresent($itemId) {
+		$itemSizePresent = $this->itemSizeJoinTable->find('itemId', $this->id);
+		//if ($itemSizePresent !== null) {
+			return $itemSizePresent;
+		//}
+	}
+
 }

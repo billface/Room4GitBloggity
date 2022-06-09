@@ -23,6 +23,18 @@ if (isset($_SESSION['itemErrorMessage'])) {
     <label for="itemPicture">Type your item picture code here:</label>
     <textarea id="itemPicture" name="item[itemPicture]" rows="1" cols="40"><?=$_SESSION['item']['itemPicture'] ?? $item->itemPicture?></textarea>
     <br>
+    <p>Select sizes for this item:</p>
+    <?php foreach ($itemsizes as $itemsize): ?>
+
+    <?php if ($item && $item->hasSize($itemsize->id)): ?>
+    <input type="checkbox" checked name="itemsize[]" value="<?=$itemsize->id?>" />
+    <?php else: ?>
+
+    <input type="checkbox" name="itemsize[]" value="<?=$itemsize->id?>" /> 
+    <?php endif; ?>
+    <label><?=$itemsize->name?></label>
+    <?php endforeach; ?>
+    <br>
     <label for="itemStock">Stock</label>
     <input type="number" id="item[itemStock]" name="item[itemStock]" value="<?=$_SESSION['item']['itemStock'] ?? $item->itemStock?>">
     <br>
