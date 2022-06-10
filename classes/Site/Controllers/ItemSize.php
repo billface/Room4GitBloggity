@@ -16,7 +16,7 @@ class ItemSize {
 
 		$title = 'Edit Item Sizes';
 
-		return ['template' => 'edititemsize.html.php',
+		return ['template' => 'itemsizeedit.html.php',
 				'title' => $title,
 				'variables' => [
 					'itemsize' => $itemsize ?? null

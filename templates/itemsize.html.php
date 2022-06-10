@@ -1,6 +1,7 @@
 
 <h2>Item Sizes</h2>
-
+<a href="/item/edit">Back to listing page</a>
+<br>
 <a href="/itemsize/edit">Add a new size</a>
 
 <?php foreach($itemsizes as $itemsize): ?>

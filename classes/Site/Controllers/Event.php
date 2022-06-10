@@ -92,7 +92,7 @@ class Event {
         $title = 'Edit event';
         $metaRobots = 'noindex';
 
-        return ['template' => 'editevent.html.php', 
+        return ['template' => 'eventedit.html.php', 
                 'title' => $title,
                 'metaRobots' => $metaRobots,
                 'variables' => [

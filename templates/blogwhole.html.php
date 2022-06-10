@@ -71,35 +71,36 @@
 
 
 if (isset($_GET['commentid'])) {
-  if ($userId == $comment->authorId): 
+  if (empty($comment->id) || $userId == $comment->authorId): ?>
 
-    echo
-		'<form action="/blog/editcomment" method="post">
-	    <input type="hidden" name="comment[id]" value="'.$comment2edit->id.'">
-      <input type="hidden" name="comment[commBlogId]" value="'.$comment2edit->commBlogId.'">
+    
+		<form action="/blog/editcomment" method="post">
+	    <input type="hidden" name="comment[id]" value="<?=$comment2edit->id?>">
+      <input type="hidden" name="comment[commBlogId]" value="<?=$comment2edit->commBlogId?>">
       <label for="commText">Type your comment here:</label>
-      <textarea id="commText" name="comment[commText]" rows="3" cols="40">'.$comment2edit->commText.'</textarea>
+      <textarea id="commText" name="comment[commText]" rows="3" cols="40"><?=$comment2edit->commText?></textarea>
+      <input type="hidden" name="comment[CommEdit]" value="true">
       <input type="submit" value="Save">
-    </form>';
+    </form>
      
-  else:
+  <?php else:
     echo
 
     '<blockquote>You may only edit your own comments</blockquote>';
 		 
   endif; 
 
-} else {
-  echo '
-    <form action="/blog/addcomment" method="post">
+} else { ?>
+  
+    <form action="/blog/editcomment" method="post">
       <input type="hidden" name="comment[id]" value="">
       <label for="commText">Type your comment here:</label>
       <textarea id="commText" name="comment[commText]" rows="3" cols="40"></textarea>
-      <input type="hidden" name="comment[commBlogId]" value="'.$blog->id.'">
+      <input type="hidden" name="comment[commBlogId]" value="<?=$blog->id?>">
       <input type="submit" value="Add"> 
       <br>
-    </form> ';
-}
+    </form> 
+<?php }
 
 ?>
 

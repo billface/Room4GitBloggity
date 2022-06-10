@@ -67,7 +67,7 @@ class Page {
         $title = 'Edit page';
         $metaRobots = 'noindex';
 
-        return ['template' => 'editpage.html.php', 
+        return ['template' => 'pageedit.html.php', 
                 'title' => $title,
                 'metaRobots' => $metaRobots,
                 'variables' => [

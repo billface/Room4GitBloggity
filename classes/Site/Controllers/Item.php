@@ -93,7 +93,8 @@ class Item {
         $author = $this->authentication->getUser();
 
         $item = $_POST['item'];
-        
+        //the above is from form, below is others
+
         //upload file if it has been selected
         if ($_FILES['file']['size'] > 0){
             $return = $this->itemsTable->upload($item['itemPicture']);
@@ -126,21 +127,23 @@ class Item {
 
     }
 
-    public function displayEdit() {
+    public function addOrEdit() {
             
         $author = $this->authentication->getUser();
         $itemsizes = $this->itemSizesTable->findAll();
 
-        $item = $this->itemsTable->findById($_GET['id']);
+        if (isset($_GET['id'])) {
+            $item = $this->itemsTable->findById($_GET['id']);			
+		}
 
         $title = 'Edit item';
         $metaRobots = 'noindex';
 
-        return ['template' => 'edititem.html.php', 
+        return ['template' => 'itemedit.html.php', 
                 'title' => $title,
                 'metaRobots' => $metaRobots,
                 'variables' => [
-                    'item' => $item,
+                    'item' => $item ?? null,
                     'userId' => $author->id ?? null,
                     'itemsizes' => $itemsizes
                     ]
@@ -150,10 +153,7 @@ class Item {
     public function add() {
         $author = $this->authentication->getUser();
 
-       //possible security flaw (see pg 493 PDF 363)
-
         $item = $_POST['item'];
-        //the above is from form, below is others
         
         //upload file if it has been selected
         if ($_FILES['file']['size'] > 0){
@@ -167,10 +167,16 @@ class Item {
                         $itemEntity->addSize($sizeId);
                     }
                     unset($_SESSION['item']);
+                    unset($_SESSION['itemsize']);
                     header('location: /item/list');
                 } else {
                     $_SESSION['item'] = $item;
+                    //PIG $_SESSION['itemsize'] = $itemsize;
                     $_SESSION['itemErrorMessage'] = $return['message'];
+                    /*PIG
+                    echo '<pre>'; print_r($_SESSION); echo '</pre>'; 
+                    echo '<pre>'; print_r($_POST); echo '</pre>'; 
+                    die;*/
                     header('location: /item/addpage');
                 }
         // if no file is selected submit the rest of the form

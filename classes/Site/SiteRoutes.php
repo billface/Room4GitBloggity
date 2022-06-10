@@ -103,7 +103,7 @@ class SiteRoutes implements \Ninja\Routes {
 					],
 					'GET' => [
 						'controller' => $blogController,
-						'action' => 'displayEdit'
+						'action' => 'addOrEdit'
 					],
 					'login' => true
 
@@ -116,40 +116,16 @@ class SiteRoutes implements \Ninja\Routes {
 					'login' => true
 
 				],
-				'blog/addpage' => [
-					'GET' => [
-						'controller' => $blogController,
-						'action' => 'addpage'
-					],
-					'login' => true
-
-				],
-				'blog/add' => [
-					'POST' => [
-						'controller' => $blogController,
-						'action' => 'add'
-					],
-					'login' => true
-
-				],
 				'blog/wholeblog' => [
 					'GET' => [
 						'controller' => $blogController,
 						'action' => 'wholeblog'
 					]
 				],
-				'blog/addcomment' => [
-					'POST' => [
-						'controller' => $blogController,
-						'action' => 'addcomment'
-					],
-					'login' => true
-
-				],
 				'blog/editcomment' => [
 					'POST' => [
 						'controller' => $blogController,
-						'action' => 'editcomment'
+						'action' => 'AddOrEditComment'
 					],
 					'login' => true
 
@@ -216,22 +192,6 @@ class SiteRoutes implements \Ninja\Routes {
 					'login' => true
 
 				],
-				'event/addpage' => [
-					'GET' => [
-						'controller' => $eventController,
-						'action' => 'addpage'
-					],
-					'login' => true
-
-				],
-				'event/add' => [
-					'POST' => [
-						'controller' => $eventController,
-						'action' => 'add'
-					],
-					'login' => true
-
-				],
 				'item/list' => [
 					'GET' => [
 						'controller' => $itemController,
@@ -259,7 +219,7 @@ class SiteRoutes implements \Ninja\Routes {
 					],
 					'GET' => [
 						'controller' => $itemController,
-						'action' => 'displayEdit'
+						'action' => 'addOrEdit'
 					],
 					'login' => true
 

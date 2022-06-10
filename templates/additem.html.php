@@ -1,10 +1,14 @@
-<?php //if stagement to display errors 
+<?php //if statement to display errors 
     if (isset($_SESSION['itemErrorMessage'])) {
         echo '<p>You got these errors :'. $_SESSION['itemErrorMessage']. '</p>';
         unset($_SESSION['itemErrorMessage']);
     }
+     echo '<pre>'; print_r($_SESSION); echo '</pre>'; 
+     echo '<pre>'; print_r($_POST); echo '</pre>'; 
+
+
 ?>
-   
+    
 
 <form action="/item/add" method="post" enctype="multipart/form-data">
     <input type="hidden" name="item[id]" value="<?=''?>">
@@ -22,7 +26,14 @@
     <br>
     <p>Select sizes for this item:</p>
     <?php foreach ($itemsizes as $itemsize): ?>
-    <input type="checkbox" name="itemsize[]" value="<?=$itemsize->id?>" /> <label><?=$itemsize->name?></label>
+
+    <?php if ($_SESSION['itemsize'] !== null): ?>
+    <input type="checkbox" checked name="itemsize[]" value="<?=$itemsize->id?>" />
+    <?php else: ?>
+    
+    <input type="checkbox" name="itemsize[]" value="<?=$itemsize->id?>" /> 
+    <?php endif; ?>
+    <label><?=$itemsize->name?></label>
     <?php endforeach; ?>
     <br>
     <label for="itemStock">Stock</label>
