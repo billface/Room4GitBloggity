@@ -42,9 +42,11 @@ class Item {
 
 	public function sizePresent($itemId) {
 		$itemSizePresent = $this->itemSizeJoinTable->find('itemId', $this->id);
-		//if ($itemSizePresent !== null) {
 			return $itemSizePresent;
-		//}
+	}
+
+	public function clearSizes() {
+		$this->itemSizeJoinTable->deleteWhere('itemId', $this->id);
 	}
 
 }

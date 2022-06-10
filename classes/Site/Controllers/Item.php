@@ -101,6 +101,7 @@ class Item {
             //end upload files and handle any errors
                 if ($return['message'] == '') {
                     $itemEntity = $author->addItem($item);
+                    $itemEntity->clearSizes();
                     foreach ($_POST['itemsize'] as $sizeId) {
                         $itemEntity->addSize($sizeId);
                     }
@@ -115,7 +116,10 @@ class Item {
         } else {
             
             $itemEntity = $author->addItem($item);
-
+            $itemEntity->clearSizes();
+            foreach ($_POST['itemsize'] as $sizeId) {
+                $itemEntity->addSize($sizeId);
+            }
             header('location: /item/list');
 
         }

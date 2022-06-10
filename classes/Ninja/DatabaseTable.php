@@ -132,6 +132,17 @@ class DatabaseTable
 		$this->query('DELETE FROM `' . $this->table . '` WHERE `' . $this->primaryKey . '` = :id', $parameters);
 	}
 
+	//this function is used to delete categories when editing
+	public function deleteWhere($column, $value) {
+		$query = 'DELETE FROM ' . $this->table . ' WHERE ' . $column . ' = :value';
+
+		$parameters = [
+			'value' => $value
+		];
+
+		$query = $this->query($query, $parameters);
+	}
+
 	public function findAll() {
 		$result = $this->query('SELECT * FROM `' . $this->table . '`');
 
