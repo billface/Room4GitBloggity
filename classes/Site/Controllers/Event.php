@@ -51,29 +51,6 @@ class Event {
 				];
         
     }
-    //checks auth and adds
-    public function add() {
-        $author = $this->authentication->getUser();
-
-        $event = $_POST['event'];
-        //the above is from form, below is others
-
-        $author->addEvent($event);
-
-        header('location: /event/list');
-    }
-    //brings up form
-    public function addpage() {
-
-            $title = 'Add a new event';
-            $metaRobots = 'noindex';
-
-            return ['template' => 'addevent.html.php',
-                    'title' => $title,
-                    'metaRobots' => $metaRobots
-                ];
-        
-    }
 
     public function delete() {
 
@@ -90,6 +67,7 @@ class Event {
         header('location: /event/list');
     }
 
+    
     public function saveEdit() {
         $author = $this->authentication->getUser();
 
@@ -103,11 +81,13 @@ class Event {
 
     }
 
-    public function displayEdit() {
+    public function addOrEdit() {
 
         $author = $this->authentication->getUser();
 
-        $event = $this->eventsTable->findById($_GET['id']);
+        if (isset($_GET['id'])) {
+            $event = $this->eventsTable->findById($_GET['id']);
+        }
 
         $title = 'Edit event';
         $metaRobots = 'noindex';
@@ -116,7 +96,7 @@ class Event {
                 'title' => $title,
                 'metaRobots' => $metaRobots,
                 'variables' => [
-                    'event' => $event,
+                    'event' => $event ?? null,
                     'userId' => $author->id ?? null
                     ]
                 ];

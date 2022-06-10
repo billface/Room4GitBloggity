@@ -22,7 +22,7 @@
       <li><a href="/item/list">Shop</a></li>
       <li><a href="/page/list">Pages</a></li>
       <li><a href="/blog/addpage">Add a new blog</a></li>
-      <li><a href="/event/addpage">Add a new event</a></li>
+      <li><a href="/event/edit">Add a new event</a></li>
       <li><a href="/item/addpage">Add a new item</a></li>
       <?php if ($loggedIn): ?>
 			<li><a href="/logout">Log out</a></li>

@@ -204,7 +204,7 @@ class SiteRoutes implements \Ninja\Routes {
 					],
 					'GET' => [
 						'controller' => $eventController,
-						'action' => 'displayEdit'
+						'action' => 'addOrEdit'
 					],
 					'login' => true
 				],
