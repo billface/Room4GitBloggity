@@ -4,7 +4,6 @@
         unset($_SESSION['itemErrorMessage']);
     }
      echo '<pre>'; print_r($_SESSION); echo '</pre>'; 
-     echo '<pre>'; print_r($_POST); echo '</pre>'; 
 
 
 ?>

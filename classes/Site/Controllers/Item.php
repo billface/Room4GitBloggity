@@ -171,10 +171,10 @@ class Item {
                     header('location: /item/list');
                 } else {
                     $_SESSION['item'] = $item;
-                    //PIG $_SESSION['itemsize'] = $itemsize;
+                    $_SESSION['itemsize'] = $itemsize;
                     $_SESSION['itemErrorMessage'] = $return['message'];
-                    /*PIG
-                    echo '<pre>'; print_r($_SESSION); echo '</pre>'; 
+                    
+                    /*echo '<pre>'; print_r($_SESSION); echo '</pre>'; 
                     echo '<pre>'; print_r($_POST); echo '</pre>'; 
                     die;*/
                     header('location: /item/addpage');
