@@ -103,6 +103,25 @@ else {
 
 <?php } ?>
 
+<br>
+
+<?php if ($item->descPresent($item->id) != null) { ?>
+<select name="desc" id="desc">
+
+<?php foreach ($itemdescs as $itemdesc): ?>
+
+<?php if ($item && $item->hasDesc($itemdesc->id)): ?>
+  <option value="<?=$itemdesc->id?>"><?=$itemdesc->name?></option>
+  
+
+<?php endif; ?>
+<?php endforeach; ?>
+
+
+</select>
+
+<?php } ?>
+
     
 
     <br>

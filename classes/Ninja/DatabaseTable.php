@@ -179,6 +179,8 @@ class DatabaseTable
 			$this->update($record);
 		}
 
+		//each time the save method is called it will return an entity instance representing the record thats just been save. See pg 575
+
 		foreach ($record as $key => $value) {
 			if (!empty($value)) {
 				$entity->$key = $value;	

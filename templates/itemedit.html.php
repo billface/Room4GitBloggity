@@ -1,4 +1,8 @@
 <?php 
+     echo '<pre>'; print_r($_SESSION); echo '</pre>';
+     
+
+
 if (empty($item->id) || $userId == $item->authorId): 
 
 if (isset($_SESSION['itemErrorMessage'])) {
@@ -23,20 +27,58 @@ if (isset($_SESSION['itemErrorMessage'])) {
     <label for="itemPicture">Type your item picture code here:</label>
     <textarea id="itemPicture" name="item[itemPicture]" rows="1" cols="40"><?=$item->itemPicture ?? $_SESSION['item']['itemPicture'] ?? ''?></textarea>
     <br>
+    <!--add sizes -->
     <p>Select sizes for this item:</p>
-    <?php foreach ($itemsizes as $itemsize): ?>
+    <?php foreach ($itemsizes as $itemsize) { 
+        $doWeHaveASizeMatch = 'no';?>
+        
+    <?php if ($item && $item->hasSize($itemsize->id)){ ?>
+             <input type="checkbox" checked name="itemsize[]" value="<?=$itemsize->id?>" />
+             
+    <?php } elseif (isset($_SESSION['itemsize'])) {
+                foreach ($_SESSION['itemsize'] as $itemSizeSelected) {
+                    if ($itemSizeSelected == $itemsize->id) {
+                        $doWeHaveASizeMatch = 'yes';
+                    }
+                }
+            }  if ($doWeHaveASizeMatch == 'yes') {
+            echo '<input type="checkbox" checked name="itemsize[]" value="'.$itemsize->id.'" />'; ?>
+    <?php } else { ?>
 
-    <?php if ($item && $item->hasSize($itemsize->id)): ?>
-    <input type="checkbox" checked name="itemsize[]" value="<?=$itemsize->id?>" />
-    <?php else: ?>
-
-    <input type="checkbox" name="itemsize[]" value="<?=$itemsize->id?>" /> 
-    <?php endif; ?>
-    <label><?=$itemsize->name?></label>
-    <?php endforeach; ?>
+        <input type="checkbox" name="itemsize[]" value="<?=$itemsize->id?>" /> 
+    <?php } ?>
+        <label><?=$itemsize->name?></label>
+    <?php } ?>
     <br>
     <a href="/itemsize/edit">Add a new size</a>
     <br>
+    <!--add description -->
+
+    <p>Select description for this item:</p>
+    <?php foreach ($itemdescs as $itemdesc) { 
+        $doWeHaveADescMatch = 'no';?>
+        
+    <?php if ($item && $item->hasDesc($itemdesc->id)){ ?>
+             <input type="checkbox" checked name="itemdesc[]" value="<?=$itemdesc->id?>" />
+             
+    <?php } elseif (isset($_SESSION['itemdesc'])) {
+                foreach ($_SESSION['itemdesc'] as $itemDescSelected) {
+                    if ($itemDescSelected == $itemdesc->id) {
+                        $doWeHaveADescMatch = 'yes';
+                    }
+                }
+            }  if ($doWeHaveADescMatch == 'yes') {
+            echo '<input type="checkbox" checked name="itemdesc[]" value="'.$itemdesc->id.'" />'; ?>
+    <?php } else { ?>
+
+        <input type="checkbox" name="itemdesc[]" value="<?=$itemdesc->id?>" /> 
+    <?php } ?>
+        <label><?=$itemdesc->name?></label>
+    <?php } ?>
+    <br>
+    <a href="/itemdesc/edit">Add a new description</a>
+    <br>
+
     <label for="itemStock">Stock</label>
     <input type="number" id="item[itemStock]" name="item[itemStock]" value="<?=$item->itemStock ?? $_SESSION['item']['itemStock'] ?? ''?>">
     <br>

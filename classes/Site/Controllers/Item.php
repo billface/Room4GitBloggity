@@ -7,6 +7,7 @@ use \Ninja\Authentication;
 class Item {
     private $itemsTable;
     private $itemSizesTable;
+    private $itemDescsTable;
     private $authorsTable;
     private $pagesTable;
     private $blogsTable;
@@ -15,9 +16,10 @@ class Item {
     private $authentication;
 
 	//the order of constucts is important. most specifically the position of $authentication vs SiteRoutes getRoutes()
-	public function __construct(DatabaseTable $itemsTable,  DatabaseTable $itemSizesTable, DatabaseTable $authorsTable, DatabaseTable $pagesTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable, DatabaseTable $eventsTable, Authentication $authentication) {
+	public function __construct(DatabaseTable $itemsTable,  DatabaseTable $itemSizesTable, DatabaseTable $itemDescsTable, DatabaseTable $authorsTable, DatabaseTable $pagesTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable, DatabaseTable $eventsTable, Authentication $authentication) {
         $this->itemsTable = $itemsTable;
         $this->itemSizesTable = $itemSizesTable;
+        $this->itemDescsTable = $itemDescsTable;
         $this->authorsTable = $authorsTable;
         $this->pagesTable = $pagesTable;
         $this->blogsTable = $blogsTable;
@@ -31,6 +33,8 @@ class Item {
     public function list() {
         $items = $this->itemsTable->findAll();
         $itemsizes = $this->itemSizesTable->findAll();
+        $itemdescs = $this->itemDescsTable->findAll();
+
 
 
         if (empty($items)) {
@@ -65,6 +69,7 @@ class Item {
 				'variables' => [
 						'items' => $items,
                         'itemsizes' => $itemsizes,
+                        'itemdescs' => $itemdescs,
                         'userId' => $author->id ?? null,
                         'emptyMessage' => $emptyMessage ?? null,
                         'total' => $total
@@ -93,6 +98,9 @@ class Item {
         $author = $this->authentication->getUser();
 
         $item = $_POST['item'];
+        $itemsize = $_POST['itemsize'];
+        $itemdesc = $_POST['itemdesc'];
+
         //the above is from form, below is others
 
         //upload file if it has been selected
@@ -103,24 +111,39 @@ class Item {
                 if ($return['message'] == '') {
                     $itemEntity = $author->addItem($item);
                     $itemEntity->clearSizes();
+                    $itemEntity->clearDescs();
                     foreach ($_POST['itemsize'] as $sizeId) {
                         $itemEntity->addSize($sizeId);
                     }
+                    foreach ($_POST['itemdesc'] as $descId) {
+                        $itemEntity->addDesc($descId);
+                    }
                     unset($_SESSION['item']);
+                    unset($_SESSION['itemsize']);
+                    unset($_SESSION['itemdesc']);
                     header('location: /item/list');
                 } else {
                     $_SESSION['item'] = $item;
+                    $_SESSION['itemsize'] = $itemsize;
+                    $_SESSION['itemdesc'] = $itemdesc;
                     $_SESSION['itemErrorMessage'] = $return['message'];
-                    header('location: /item/addpage');
+                    header('location: /item/edit');
                 }
         // if no file is selected submit the rest of the form
         } else {
             
             $itemEntity = $author->addItem($item);
             $itemEntity->clearSizes();
+            $itemEntity->clearDescs();
             foreach ($_POST['itemsize'] as $sizeId) {
                 $itemEntity->addSize($sizeId);
             }
+            foreach ($_POST['itemdesc'] as $descId) {
+                $itemEntity->addDesc($descId);
+            }
+            unset($_SESSION['item']);
+            unset($_SESSION['itemsize']);
+            unset($_SESSION['itemdesc']);
             header('location: /item/list');
 
         }
@@ -131,6 +154,8 @@ class Item {
             
         $author = $this->authentication->getUser();
         $itemsizes = $this->itemSizesTable->findAll();
+        $itemdescs = $this->itemDescsTable->findAll();
+
 
         if (isset($_GET['id'])) {
             $item = $this->itemsTable->findById($_GET['id']);			
@@ -145,69 +170,14 @@ class Item {
                 'variables' => [
                     'item' => $item ?? null,
                     'userId' => $author->id ?? null,
-                    'itemsizes' => $itemsizes
+                    //PIG not sure if i need these next nulls
+                    'itemsizes' => $itemsizes ?? null,
+                    'itemdescs' => $itemdescs ?? null
                     ]
                 ];
     }
 
-    public function add() {
-        $author = $this->authentication->getUser();
-
-        $item = $_POST['item'];
-        
-        //upload file if it has been selected
-        if ($_FILES['file']['size'] > 0){
-            $return = $this->itemsTable->upload($item['itemPicture']);
-            $item['itemFileName'] = $return['fileNameNew'];
-            //end upload files and handle any errors
-                if ($return['message'] == '') {
-                    $itemEntity = $author->addItem($item);
-
-                    foreach ($_POST['itemsize'] as $sizeId) {
-                        $itemEntity->addSize($sizeId);
-                    }
-                    unset($_SESSION['item']);
-                    unset($_SESSION['itemsize']);
-                    header('location: /item/list');
-                } else {
-                    $_SESSION['item'] = $item;
-                    $_SESSION['itemsize'] = $itemsize;
-                    $_SESSION['itemErrorMessage'] = $return['message'];
-                    
-                    /*echo '<pre>'; print_r($_SESSION); echo '</pre>'; 
-                    echo '<pre>'; print_r($_POST); echo '</pre>'; 
-                    die;*/
-                    header('location: /item/addpage');
-                }
-        // if no file is selected submit the rest of the form
-        } else {
-            $itemEntity = $author->addItem($item);
-
-            foreach ($_POST['itemsize'] as $sizeId) {
-                $itemEntity->addSize($sizeId);
-            }
-            header('location: /item/list');
-
-        }
-        
-    }
-
-    public function addpage() {
-        $itemsizes = $this->itemSizesTable->findAll();
-
-
-        $title = 'Add a new item';
-        $metaRobots = 'noindex';
-
-        return ['template' => 'additem.html.php', 
-                'title' => $title,
-                'metaRobots' => $metaRobots,
-                'variables' => [
-                    'itemsizes' => $itemsizes
-                ]
-    ];
-
-    }
+    
 
     //hacked c&p code
 
@@ -226,7 +196,8 @@ class Item {
                         'item_description' => $_POST["hidden_description"],
                         'item_price' => $_POST["hidden_price"],
                         'item_quantity' => $_POST["quantity"],
-                        'item_size' => $_POST["size"]
+                        'item_size' => $_POST["size"],
+                        'item_desc' => $_POST["desc"]
                     );
                     $_SESSION["cart"][$count] = $item_array;
                 }else{
@@ -244,7 +215,9 @@ class Item {
                 'item_description' => $_POST["hidden_description"],
                 'item_price' => $_POST["hidden_price"],
                 'item_quantity' => $_POST["quantity"],
-                'item_size' => $_POST["size"]
+                'item_size' => $_POST["size"],
+                'item_desc' => $_POST["desc"]
+
             );
             $_SESSION['cart'][0] = $item_array;
             }

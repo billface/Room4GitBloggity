@@ -12,6 +12,10 @@ class SiteRoutes implements \Ninja\Routes {
 	private $itemsTable;
 	private $itemSizesTable;
 	private $itemSizeJoinTable;
+	private $itemDescsTable;
+	private $itemDescJoinTable;
+
+
 
 	public function __construct() {
 		include __DIR__ . '/../../includes/DatabaseConnection.php';
@@ -19,12 +23,14 @@ class SiteRoutes implements \Ninja\Routes {
         $this->blogsTable = new \Ninja\DatabaseTable($pdo, 'blog', 'id', '\Site\Entity\Blog', [&$this->authorsTable]);
 		$this->pagesTable = new \Ninja\DatabaseTable($pdo, 'page', 'id', '\Site\Entity\Page', [&$this->authorsTable]);   
 		$this->eventsTable = new \Ninja\DatabaseTable($pdo, 'event', 'id', '\Site\Entity\Event', [&$this->authorsTable]);    
-		$this->itemsTable = new \Ninja\DatabaseTable($pdo, 'item', 'id', '\Site\Entity\Item', [&$this->authorsTable, &$this->itemSizeJoinTable]);
+		$this->itemsTable = new \Ninja\DatabaseTable($pdo, 'item', 'id', '\Site\Entity\Item', [&$this->authorsTable, &$this->itemSizeJoinTable, &$this->itemDescJoinTable]);
 		$this->commentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'id', '\Site\Entity\Comment', [&$this->authorsTable]);
 		$this->displayCommentsTable = new \Ninja\DatabaseTable($pdo, 'comment', 'commBlogId', '\Site\Entity\Comment', [&$this->authorsTable]); 
 		$this->authorsTable = new \Ninja\DatabaseTable($pdo, 'author', 'id', '\Site\Entity\Author', [&$this->blogsTable, &$this->pagesTable, &$this->eventsTable, &$this->commentsTable, &$this->itemsTable]);
 		$this->itemSizesTable = new \Ninja\DatabaseTable($pdo, 'itemsize', 'id' /*,'\Site\Entity\ItemSize', [&$this->itemsTable, &$this->itemSizeJoinTable]*/);
 		$this->itemSizeJoinTable = new \Ninja\DatabaseTable($pdo, 'item_size_join', 'sizeId');
+		$this->itemDescsTable = new \Ninja\DatabaseTable($pdo, 'itemdesc', 'id' /*,'\Site\Entity\ItemDesc', [&$this->itemsTable, &$this->itemDescJoinTable]*/);
+		$this->itemDescJoinTable = new \Ninja\DatabaseTable($pdo, 'item_desc_join', 'descId');
 		$this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
          
   
@@ -38,9 +44,10 @@ class SiteRoutes implements \Ninja\Routes {
 			$authorController = new \Site\Controllers\Register($this->authorsTable);
 			$pageController = new \Site\Controllers\Page($this->pagesTable, $this->authorsTable, $this->blogsTable, $this->eventsTable, $this->commentsTable, $this->itemsTable, $this->authentication);
 			$eventController = new \Site\Controllers\Event($this->eventsTable, $this->authorsTable, $this->blogsTable, $this->pagesTable, $this->commentsTable, $this->itemsTable, $this->authentication);
-			$itemController = new \Site\Controllers\Item($this->itemsTable, $this->itemSizesTable, $this->authorsTable, $this->blogsTable, $this->pagesTable, $this->commentsTable, $this->eventsTable, $this->authentication);
+			$itemController = new \Site\Controllers\Item($this->itemsTable, $this->itemSizesTable, $this->itemDescsTable, $this->authorsTable, $this->blogsTable, $this->pagesTable, $this->commentsTable, $this->eventsTable, $this->authentication);
 			$loginController = new \Site\Controllers\Login($this->authentication);
 			$itemSizeController = new \Site\Controllers\ItemSize($this->itemSizesTable);
+			$itemDescController = new \Site\Controllers\ItemDesc($this->itemDescsTable);
 
 
 		
@@ -198,20 +205,6 @@ class SiteRoutes implements \Ninja\Routes {
 						'action' => 'list'
 					]
 				],
-				'item/addpage' => [
-					'GET' => [
-						'controller' => $itemController,
-						'action' => 'addpage'
-					],
-					'login' => true
-				],
-				'item/add' => [
-					'POST' => [
-						'controller' => $itemController,
-						'action' => 'add'
-					],
-					'login' => true
-				],
 				'item/edit' => [
 					'POST' => [
 						'controller' => $itemController,
@@ -278,6 +271,31 @@ class SiteRoutes implements \Ninja\Routes {
 				'itemsize/list' => [
 					'GET' => [
 						'controller' => $itemSizeController,
+						'action' => 'list'
+					],
+					'login' => true
+				],
+				'itemdesc/edit' => [
+					'POST' => [
+						'controller' => $itemDescController,
+						'action' => 'saveEdit'
+					],
+					'GET' => [
+						'controller' => $itemDescController,
+						'action' => 'edit'
+					],
+					'login' => true
+				],
+				'itemdesc/delete' => [
+					'POST' => [
+						'controller' => $itemDescController,
+						'action' => 'delete'
+					],
+					'login' => true
+				],
+				'itemdesc/list' => [
+					'GET' => [
+						'controller' => $itemDescController,
 						'action' => 'list'
 					],
 					'login' => true

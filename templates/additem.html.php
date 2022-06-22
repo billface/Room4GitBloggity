@@ -24,16 +24,24 @@
     <textarea id="itemPicture" name="item[itemPicture]" rows="1" cols="40"><?=$_SESSION['item']['itemPicture'] ?? ''?></textarea>
     <br>
     <p>Select sizes for this item:</p>
-    <?php foreach ($itemsizes as $itemsize): ?>
-
-    <?php if ($_SESSION['itemsize'] !== null): ?>
-    <input type="checkbox" checked name="itemsize[]" value="<?=$itemsize->id?>" />
-    <?php else: ?>
-    
-    <input type="checkbox" name="itemsize[]" value="<?=$itemsize->id?>" /> 
-    <?php endif; ?>
-    <label><?=$itemsize->name?></label>
-    <?php endforeach; ?>
+    <?php
+        foreach ($itemsizes as $itemsize) {
+        $doWeHaveAMatch = 'no';
+        if (isset($_SESSION['itemsize'])) {
+            foreach ($_SESSION['itemsize'] as $itemSizeSelected) {
+                if ($itemSizeSelected == $itemsize->id) {
+                    $doWeHaveAMatch = 'yes';
+                }
+            }
+        }
+        if ($doWeHaveAMatch == 'yes') {
+            echo '<input type="checkbox" checked name="itemsize[]" value="'.$itemsize->id.'" />';
+        } else {
+            echo '<input type="checkbox" name="itemsize[]" value="'.$itemsize->id.'" />';
+        }
+        echo '<label>'.$itemsize->name.'</label>';
+        }
+?>
     <br>
     <label for="itemStock">Stock</label>
     <input type="number" id="item[itemStock]" name="item[itemStock]" value="<?=$_SESSION['item']['itemStock'] ?? ''?>">
