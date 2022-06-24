@@ -50,9 +50,12 @@ class EntryPoint {
 			$display = $controller->$action();
 
 			$title = $display['title'];
-			$metaDescription = $display['metaDescription'];
 
+			$metaDescription = $display['metaDescription'] ?? '';
+			//add default metaRobots tag unless one is specified
+			$metaRobots = $display['metaRobots'] ?? 'index';
 
+			$paypal = $display['paypal'] ?? '';
 
 			if (isset($display['variables'])) {
 				$output = $this->loadTemplate($display['template'], $display['variables']);
@@ -62,11 +65,12 @@ class EntryPoint {
 			}
 
 			echo $this->loadTemplate('layout.html.php', ['loggedIn' => $authentication->isLoggedIn(),
-															'user' => $authentication->getUser(),
-
+														'user' => $authentication->getUser(),
 														'output' => $output,
 														'title' => $title,
 														'metaDescription' => $metaDescription,
+														'metaRobots' => $metaRobots,
+														'paypal' => $paypal
 													]);		
 		}
 	}

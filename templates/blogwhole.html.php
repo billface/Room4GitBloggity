@@ -4,14 +4,8 @@
 </h2>
   <?=htmlspecialchars($blog->blogText, ENT_QUOTES, 'UTF-8')?><br>
   (by <a href="mailto:
-              <?php 
-              $author = $blog->getAuthor();
-              echo htmlspecialchars($author ? $author->email : 'deleted user', ENT_QUOTES, 'UTF-8');
-              ?>">
-              <?php 
-              $author = $blog->getAuthor();
-              echo htmlspecialchars($author ? $author->name : 'deleted user', ENT_QUOTES, 'UTF-8');
-              ?></a>
+              <?php echo htmlspecialchars($blog->getAuthor()->email ?? 'deleted user', ENT_QUOTES, 'UTF-8'); ?>">
+              <?php echo htmlspecialchars($blog->getAuthor()->name ?? 'deleted user', ENT_QUOTES, 'UTF-8'); ?></a>
               on 
               <?php
               $date = new DateTime($blog->blogDate);
@@ -24,18 +18,13 @@
                
               }
               ?>)
-                  <?php if ($user): ?>
-      <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
-      <a href="/blog/edit?id=<?=$blog->id?>">Edit</a>
-      <?php endif; ?>
-      <br>
-      <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
-      <form action="/blog/delete" method="post">
-        <input type="hidden" name="blogId" value="<?=$blog->id?>">
-        <input type="submit" value="Delete">
-      </form>
-    <?php endif; ?>
-    <?php endif; ?>
+                  <?php if ($userId == $blog->authorId): ?>
+              <a href="/blog/edit?id=<?=$blog->id?>">Edit</a>
+              <form action="/blog/delete" method="post">
+                <input type="hidden" name="blogId" value="<?=$blog->id?>">
+                <input type="submit" value="Delete">
+              </form>
+              <?php endif; ?>
 
               
   
@@ -47,9 +36,7 @@
   <?php foreach($comments as $comment): ?>
  <small> <?=htmlspecialchars($comment->commText, ENT_QUOTES, 'UTF-8')?>
  (by <?php
-              $author = $comment->getAuthor();
-              echo htmlspecialchars($author ? $author->name : 'deleted user', ENT_QUOTES, 'UTF-8');
-              //echo htmlspecialchars($comment->getAuthor()->name, ENT_QUOTES, 'UTF-8') ?? 'deleted user'; ?></a>
+              echo htmlspecialchars($comment->getAuthor()->name ?? 'deleted user', ENT_QUOTES, 'UTF-8'); ?></a>
               on 
               <?php
               $date = new DateTime($comment->commDate);
@@ -60,16 +47,14 @@
                 echo ' (<i>Edited ' .$date->format('jS F Y H:i'). '</i>)';
               }
               ?>)</small>
-              <?php if ($user): ?>
-                  <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::ADMIN)): ?>
+                  <?php if ($userId == $comment->authorId): ?>
+
               <a href="/blog/wholeblog?id=<?=$blog->id?>&commentid=<?=$comment->id?>">Edit</a>
-              
               <form action="/blog/deletecomment" method="post">
                 <input type="hidden" name="commId" value="<?=$comment->id?>">
                 <input type="hidden" name="headerBlogId" value="<?=$blog->id?>">
                 <input type="submit" value="Delete">
               </form>
-              <?php endif; ?>
               <?php endif; ?>
 
               <br>
@@ -85,35 +70,36 @@
 
 
 if (isset($_GET['commentid'])) {
-  if ($userId == $comment->authorId): 
+  if (empty($comment->id) || $userId == $comment->authorId): ?>
 
-    echo
-		'<form action="/blog/editcomment" method="post">
-	    <input type="hidden" name="comment[id]" value="'.$comment2edit->id.'">
-      <input type="hidden" name="comment[commBlogId]" value="'.$comment2edit->commBlogId.'">
+    
+		<form action="/blog/editcomment" method="post">
+	    <input type="hidden" name="comment[id]" value="<?=$comment2edit->id?>">
+      <input type="hidden" name="comment[commBlogId]" value="<?=$comment2edit->commBlogId?>">
       <label for="commText">Type your comment here:</label>
-      <textarea id="commText" name="comment[commText]" rows="3" cols="40">'.$comment2edit->commText.'</textarea>
+      <textarea id="commText" name="comment[commText]" rows="3" cols="40"><?=$comment2edit->commText?></textarea>
+      <input type="hidden" name="comment[CommEdit]" value="true">
       <input type="submit" value="Save">
-    </form>';
+    </form>
      
-  else:
+  <?php else:
     echo
 
     '<blockquote>You may only edit your own comments</blockquote>';
 		 
   endif; 
 
-} else {
-  echo '
-    <form action="/blog/addcomment" method="post">
-      
+} else { ?>
+  
+    <form action="/blog/editcomment" method="post">
+      <input type="hidden" name="comment[id]" value="">
       <label for="commText">Type your comment here:</label>
       <textarea id="commText" name="comment[commText]" rows="3" cols="40"></textarea>
-      <input type="hidden" name="comment[commBlogId]" value="'.$blog->id.'">
+      <input type="hidden" name="comment[commBlogId]" value="<?=$blog->id?>">
       <input type="submit" value="Add"> 
       <br>
-    </form> ';
-}
+    </form> 
+<?php }
 
 ?>
 

@@ -1,0 +1,212 @@
+ //V1 code
+
+ <!-- uses: <div id="btn-paypal-checkout"></div> -->
+ 
+
+ <script>
+    //IT'D BE NICE TO POPULATE THIS ARRAY WITH THE SESSION DATA
+      window.addEventListener("load", function () {
+          var cartItems = [{
+              name: "Total",
+              description: "Description of product 1",
+              quantity: 1,
+              price: <?=$_SESSION["checkoutTotal"];?>,
+              sku: "prod1",
+              currency: "USD"
+          }/*, {
+              name: "Product 2",
+              description: "Description of product 2",
+              quantity: 3,
+              price: 20,
+              sku: "prod2",
+              currency: "USD"
+          }, {
+              name: "Product 3",
+              description: "Description of product 3",
+              quantity: 4,
+              price: 10,
+              sku: "prod3",
+              currency: "USD"
+          }*/];
+
+          var total = 0;
+          for (var a = 0; a < cartItems.length; a++) {
+              total += (cartItems[a].price * cartItems[a].quantity);
+          }
+
+          // Render the PayPal button
+          paypal.Button.render({
+
+              // Set your environment
+              env: 'sandbox', // sandbox | production
+  
+              // Specify the style of the button
+              style: {
+                  label: 'checkout',
+                  size: 'medium', // small | medium | large | responsive
+                  shape: 'pill', // pill | rect
+                  color: 'gold', // gold | blue | silver | black,
+                  layout: 'vertical'
+              },
+
+              // PayPal Client IDs - replace with your own
+              // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+
+              client: {
+                  sandbox: 'AbPlQy4uC6FTFnjlST33seQdjHXX0UQEWvnJ-Nskgo6gtja4altpSXSVRMHJXS_jY0wGXu5U_Njw17qH',
+                  production: 'AfwN7TBcRZpDz3147cEC1u6bKXgAR5wpMD3jYg8A3zclMH9xK205qzS_mKngt1qnuO9aIkx40_kOXMfd'
+              },
+
+              funding: {
+                  allowed: [
+                      paypal.FUNDING.CARD,
+                      paypal.FUNDING.ELV
+                  ]
+              },
+
+              payment: function(data, actions) {
+                  return actions.payment.create({
+                      payment: {
+                          transactions: [{
+                              amount: {
+                                  total: total,
+                                  currency: 'USD'
+                              },
+                              item_list: {
+                                  // custom cartItems array created specifically for PayPal
+                                  items: cartItems
+                              }
+                          }]
+                      }
+                  });
+              },
+
+              onAuthorize: function(data, actions) {
+                  return actions.payment.execute().then(function() {
+                      // you can use all the values received from PayPal as you want
+                      console.log({
+                          "intent": data.intent,
+                          "orderID": data.orderID,
+                          "payerID": data.payerID,
+                          "paymentID": data.paymentID,
+                          "paymentToken": data.paymentToken
+                      });
+                      
+                      // [call AJAX here]
+                      paymentMade(data.orderID, data.payerID, data.paymentID, data.paymentToken);
+                      
+                  });
+              },
+
+              onCancel: function (data, actions) {
+                  console.log(data);
+              }
+  
+          }, '#btn-paypal-checkout');
+      });
+
+      function paymentMade(orderID, payerID, paymentID, paymentToken) {
+      var ajax = new XMLHttpRequest();
+      ajax.open("POST", "../../paypal.php", true);
+  
+      ajax.onreadystatechange = function () {
+          if (this.readyState == 4) {
+              if (this.status == 200) {
+                  var response = JSON.parse(this.responseText);
+                  console.log(response);
+              }
+  
+              if (this.status == 500) {
+                  console.log(this.responseText)
+                  //window.location.replace(url:"http://bbc.co.uk");
+              }
+          }
+      };
+  
+      var formData = new FormData();
+      formData.append("orderID", orderID);
+      formData.append("payerID", payerID);
+      formData.append("paymentID", paymentID);
+      formData.append("paymentToken", paymentToken);
+      ajax.send(formData);
+  }
+</script>
+
+
+//v2 CODE
+
+    <!-- uses: <div id="btn-paypal-checkout"> -->
+            
+    <!-- Load the required checkout.js script -->
+    <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
+    
+    <!-- Load the required Braintree components. -->
+    <script src="https://js.braintreegateway.com/web/3.39.0/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.39.0/js/paypal-checkout.min.js"></script>
+    
+    <script src="https://www.paypal.com/sdk/js?client-id=AbPlQy4uC6FTFnjlST33seQdjHXX0UQEWvnJ-Nskgo6gtja4altpSXSVRMHJXS_jY0wGXu5U_Njw17qH"></script>
+      <script>paypal.Buttons({
+        style:{
+            color:'blue',
+            shape:'pill'
+        },
+        createOrder:function(data,actions){
+          return actions.order.create({
+            purchase_units:[{
+              amount:{
+                value:'<?php echo number_format($_SESSION["checkoutTotal"], 2); ?>'
+              }
+            }]
+          });
+        },
+        onApprove:function(data,actions){
+          return actions.order.capture().then(function(details){
+            console.log(details)
+
+            window.location = "/item/success";
+          })
+        }//,
+        //onCancel:function(data){
+          //window.location.replace(url:"/item/failure")
+        //}
+    }).render('#paypal-payment-button');
+    </script>
+    
+
+
+//AJAX example code from Dave
+    <script type="text/javascript">
+    
+    $(document).ready(function(){
+      var dateToLoad = '';
+      var linkToLoad = 'web-custom/loadTimes.php?dateToLoad=';
+      var linkAndDateToLoad = '';
+
+      $('#Date').change(function() {
+        $("#timeSlots").html('<p>Loading time slots...</p>');
+        dateToLoad = $('#Date').val();
+        linkAndDateToLoad = linkToLoad.concat(dateToLoad);
+        $.ajax({url: linkAndDateToLoad, success: function(result){
+          $("#timeSlots").html(result);
+        }});
+      });
+      
+      /* Set the initial date to todays date (or the previously selected date) */
+      $('input[name="Date"]').val('<?php 
+        if($bookDate != '') {
+          echo $bookDate;
+        } else {
+          echo date('d-m-Y');
+        }
+      ?>');
+      dateToLoad = $('#Date').val();
+      //linkAndDateToLoad = linkToLoad.concat(dateToLoad);
+      linkAndDateToLoad = linkToLoad.concat(dateToLoad).concat('&selectedTimes=<?php echo $selectedTimes; ?>');
+      $.ajax({url: linkAndDateToLoad, success: function(result){
+        $("#timeSlots").html(result);
+      }});
+      
+    });
+
+//end Dave code
+</script>

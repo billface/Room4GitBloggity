@@ -10,5 +10,3 @@
 
 	<input type="submit" name="login" value="Log in">
 </form>
-
-<p>Don't have an account? <a href = "/author/register">Register here </a></p>

@@ -4,7 +4,9 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="blogs.css">
     <title><?=$title?></title>
-    <meta name="description" content="<?=$metaDescription?>">
+    <meta name="description" content="<?=$metaDescription ?? ''?>">
+    <meta name="robots" content="<?=$metaRobots?>" />
+    
     </head>
   <body>
   <nav>
@@ -17,12 +19,13 @@
       <li><a href="/page/about">About</a></li>
       <li><a href="/blog/list">Blog List</a></li>
       <li><a href="/event/list">Calendar</a></li>
+      <li><a href="/item/list">Shop</a></li>
+      
       <?php if ($loggedIn): ?>
 			<li><a href="/logout">Log out</a></li>
 			<?php else: ?>
 			<li><a href="/login">Log in</a></li>
 			<?php endif; ?>
-      
     </ul>
   </nav>
 
@@ -39,5 +42,14 @@
 
   </footer>
 
+  <?php 
+if ($paypal === true) {
+     include __DIR__ . '/../includes/paypal/paypal.js.php' ;
+ }
+
+ ?>
+    
+
+ <br>
   </body>
 </html>

@@ -16,7 +16,6 @@
   <?=htmlspecialchars($blog->blogHeading, ENT_QUOTES, 'UTF-8')?>
 
   (by <a href="mailto:<?php
-              
               $author = $blog->getAuthor();
               echo htmlspecialchars($author ? $author->email : 'deleted user', ENT_QUOTES, 'UTF-8');
               ?>">
@@ -36,14 +35,15 @@
       <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
       <a href="/blog/edit?id=<?=$blog->id?>">Edit</a>
       <?php endif; ?>
-      <br>
+    <br>
       <?php if ($user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
       <form action="/blog/delete" method="post">
         <input type="hidden" name="blogId" value="<?=$blog->id?>">
         <input type="submit" value="Delete">
       </form>
+      <?php endif; ?>
     <?php endif; ?>
-    <?php endif; ?>
+
 
 </p>
 </blockquote>

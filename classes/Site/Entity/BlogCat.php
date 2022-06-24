@@ -3,19 +3,19 @@ namespace Site\Entity;
 
 use Ninja\DatabaseTable;
 
-class Category {
+class BlogCat {
 	public $id;
 	public $name;
 	private $blogsTable;
-	private $blogCategoriesTable;
+	private $blogCatJoinTable;
 
-	public function __construct(DatabaseTable $blogsTable, DatabaseTable $blogCategoriesTable) {
+	public function __construct(DatabaseTable $blogsTable, DatabaseTable $blogCatJoinTable) {
 		$this->blogsTable = $blogsTable;
-		$this->blogCategoriesTable = $blogCategoriesTable;
+		$this->blogCatJoinTable = $blogCatJoinTable;
 	}
 
 	public function getBlogs() {
-		$blogCategories = $this->blogCategoriesTable->find('categoryId', $this->id);
+		$blogCategories = $this->blogCatJoinTable->find('categoryId', $this->id);
 
 		$blogs = [];
 

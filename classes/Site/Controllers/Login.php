@@ -9,7 +9,10 @@ class Login {
 	}
 
 	public function loginForm() {
-		return ['template' => 'login.html.php', 'title' => 'Log In'];
+		return ['template' => 'login.html.php', 
+				'title' => 'Log In',
+				'metaRobots' => 'noindex',
+			];
 	}
 
 	public function processLogin() {
@@ -19,6 +22,7 @@ class Login {
 		else {
 			return ['template' => 'login.html.php',
 					'title' => 'Log In',
+					'metaRobots' => 'noindex',
 					'variables' => [
 							'error' => 'Invalid username/password.'
 						]
@@ -27,19 +31,20 @@ class Login {
 	}
 
 	public function success() {
-		return ['template' => 'loginsuccess.html.php', 'title' => 'Login Successful'];
+		return ['template' => 'loginsuccess.html.php', 'title' => 'Login Successful', 'metaRobots' => 'noindex'];
 	}
 
 	public function error() {
-		return ['template' => 'loginerror.html.php', 'title' => 'You are not logged in'];
+		return ['template' => 'loginerror.html.php', 'title' => 'You are not logged in', 'metaRobots' => 'noindex'];
 	}
 
 	public function permissionsError() {
 		return ['template' => 'permissionserror.html.php', 'title' => 'Access Denied'];
 	}
 
+
 	public function logout() {
 		session_destroy();	
-		return ['template' => 'logout.html.php', 'title' => 'You have been logged out'];
+		return ['template' => 'logout.html.php', 'title' => 'You have been logged out', 'metaRobots' => 'noindex'];
 	}
 }

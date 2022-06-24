@@ -11,37 +11,40 @@ class Blog {
     private $displayCommentsTable;
     private $pagesTable;
     private $eventsTable;
-    private $categoriesTable;
-	private $authentication;
+    private $itemsTable;
+    private $blogCatsTable;
+    private $authentication;
 
 
 
-    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $categoriesTable, Authentication $authentication) {
+	//the order of constucts is important. most specifically the position of $authentication vs SiteRoutes getRoutes()
+    public function __construct(DatabaseTable $blogsTable, DatabaseTable $authorsTable,  DatabaseTable $commentsTable, DatabaseTable $displayCommentsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $itemsTable, DatabaseTable $blogCatsTable, Authentication $authentication) {
 		$this->blogsTable = $blogsTable;
         $this->authorsTable = $authorsTable;
-        $this->authentication = $authentication;
         $this->commentsTable = $commentsTable;
         $this->displayCommentsTable = $displayCommentsTable; 
         $this->pagesTable = $pagesTable;
         $this->eventsTable = $eventsTable;
-        $this->categoriesTable = $categoriesTable;
-		$this->authentication = $authentication;
-
+        $this->itemsTable = $itemsTable;
+        $this->blogCatsTable = $blogCatsTable;
+        $this->authentication = $authentication;
+        
 
     }
 
     public function list() {
-
         if (isset($_GET['category']))
 		{
-			$category = $this->categoriesTable->findById($_GET['category']);
+			$category = $this->blogCatsTable->findById($_GET['category']);
 			$blogs = $category->getBlogs();
 		}
         else
         {
             $blogs = $this->blogsTable->findAll();
         }
+      
         $title = 'Blog list';
+        $metaDescription = 'Blog List';
 
         $totalBlogs = $this->blogsTable->total();
 
@@ -49,11 +52,13 @@ class Blog {
 
         return ['template' => 'blogs.html.php', 
 				'title' => $title, 
+                'metaRobots' => 'noindex',
+                'metaDescription' => $metaDescription,
 				'variables' => [
 						'totalBlogs' => $totalBlogs,
 						'blogs' => $blogs,
                         'user' => $author, //previously 'userId' => $author->id ?? null,
-                        'categories' => $this->categoriesTable->findAll()
+                        'categories' => $this->blogCatsTable->findAll()
                     ]
 				];
         
@@ -67,7 +72,7 @@ class Blog {
 
         $blog = $this->blogsTable->findById($_POST['blogId']);
 
-        if ($blog->authorId != $author->id && !$author->hasPermission(\Site\Entity\Author::DELETE_BLOGS) ) {
+        if ($blog->authorId != $author->id && !$author->hasPermission(\Site\Entity\Author::SUPERUSER) ) {
 			return;
 		}
 		
@@ -76,120 +81,64 @@ class Blog {
         header('location: /blog/list');
     }
 
-
-    public function deletecomment() {
-
-        $author = $this->authentication->getUser();
-
-        $comment = $this->commentsTable->findById($_POST['commId']);
-
-        if ($comment->authorId != $author->id) {
-			return;
-		}
-        $this->commentsTable->delete($_POST['commId']);
-    
-        header('location: /blog/wholeblog?id=' . $_POST['headerBlogId']);
-    }
-
-    public function add() {
-        $author = $this->authentication->getUser();
-
-        $blog = $_POST['blog'];
-        //the above is from form, below is others
-        $blog['blogDate'] = new \Datetime();
-
-        $blogEntity = $author->addBlog($blog); 
-
-        foreach ($_POST['category'] as $categoryId) {
-            $blogEntity->addCategory($categoryId);
-        }
-
-        header('location: /blog/list');
-}
-
-public function addpage() {
-        $categories = $this->categoriesTable->findAll();
-
-
-        $title = 'Add a new blog';
-
-        return ['template' => 'addblog.html.php',
-                'title' => $title,
-                'variables' => [
-                    'categories' => $categories
-                ]
-            ];
-    
-}
-
-
-
     public function saveEdit() {
             $author = $this->authentication->getUser();
 
             $blog = $_POST['blog'];
             //the above is from form, below is others
-            $blog['blogModDate'] = new \DateTime();
+            if (isset($_GET['id'])) {
+                $blog['blogModDate'] = new \DateTime();
+                $blogEntity = $author->addBlog($blog); 
 
-            $blogEntity = $author->addBlog($blog);
+                $blogEntity->clearCategories();
 
-            $blogEntity->clearCategories();
 
-            foreach ($_POST['category'] as $categoryId) {
-                $blogEntity->addCategory($categoryId);
+                foreach ($_POST['category'] as $categoryId) {
+                    $blogEntity->addCategory($categoryId);
+                }
+                header('location: /blog/wholeblog?id=' . $blog['id']);
+            
+            } else {
+                $blog['blogDate'] = new \Datetime();
+                $blogEntity = $author->addBlog($blog);
+
+    
+                foreach ($_POST['category'] as $categoryId) {
+                    $blogEntity->addCategory($categoryId);
+                }                header('location: /blog/list');
             }
-            header('location: /blog/wholeblog?id=' . $blog['id']);
-            //header('location: /blog/list');
+
+            //PIG might be able to return Entitiy with blog Id on newly created blogs??
 
     }
 
-    public function displayEdit() {
+    public function addOrEdit() {
         
         $author = $this->authentication->getUser();
-        $categories = $this->categoriesTable->findAll();
+        $categories = $this->blogCatsTable->findAll();
 
-        $blog = $this->blogsTable->findById($_GET['id']);
+        if (isset($_GET['id'])) {
+            $blog = $this->blogsTable->findById($_GET['id']);
+        }
 
         $title = 'Edit blog';
+        $metaRobots = 'noindex';
 
-        return ['template' => 'editblog.html.php', 
+        return ['template' => 'blogedit.html.php', 
                 'title' => $title,
+                'metaRobots' => $metaRobots,
                 'variables' => [
-                    'blog' => $blog,
+                    'blog' => $blog ?? null,
                     'user' => $author, //previously 'userId' => $author->id ?? null,
                     'categories' => $categories
                     ]
                 ];
     }
 
-    public function editcomment() {
-        if (isset($_POST['comment'])) {
-
-            $author = $this->authentication->getUser();
-
-            $comment = $_POST['comment'];
-			$comment['commModDate'] = new \DateTime();
-    
-
-            $author->addComment($comment);
-
-        	header('location: /blog/wholeblog?id=' . $comment['commBlogId']);  
-
-		}
-		
-    }
-
-    
-
     public function wholeblog() {
         $blog = $this->blogsTable->findById($_GET['id']);
 
 		$comments = $this->displayCommentsTable->findAllById($_GET['id']);
-
-		
-
-        
-        
 
         if (isset($_GET['commentid'])) {
             
@@ -204,34 +153,52 @@ public function addpage() {
 
         $author = $this->authentication->getUser();
 
-        return ['template' => 'wholeblog.html.php',
+        return ['template' => 'blogwhole.html.php',
                 'title' => $title,
                 'metaDescription' => $metaDescription,
                 'variables' => [
                     'blog' => $blog,
                     'comments' => $comments,
-                    'comment2edit' => $comment2edit,
-                    'user' => $author
+                    'comment2edit' => $comment2edit ?? '',
+                    'userId' => $author->id ?? null
                     ]
                 ];
 
 		
     }
 
-    public function addcomment() {
+    public function addOrEditComment() {
+        $author = $this->authentication->getUser();
 
-            $author = $this->authentication->getUser();
-
-
-            $comment = $_POST['comment'];
-            $comment['commDate'] = new \Datetime();
-    
+        
+        $comment = $_POST['comment'];
+        
+            if (isset($_POST['comment[commEdit]'])) {
+			    $comment['commModDate'] = new \DateTime();
+            } else {
+                $comment['commDate'] = new \Datetime();
+            }
 
             $author->addComment($comment);
-        
-            //head back to the current page after inserting comment
-            header('location: /blog/wholeblog?id=' . $comment['commBlogId']);
-            die;
 
-    } 
+        	header('location: /blog/wholeblog?id=' . $comment['commBlogId']);  
+
+	}
+		
+    
+
+    public function deletecomment() {
+
+        $author = $this->authentication->getUser();
+
+        $comment = $this->commentsTable->findById($_POST['commId']);
+
+        if ($comment->authorId != $author->id) {
+			return;
+		}
+        $this->commentsTable->delete($_POST['commId']);
+    
+        header('location: /blog/wholeblog?id=' . $_POST['headerBlogId']);
+    }
+    
 }
