@@ -6,6 +6,11 @@ use \Ninja\DatabaseTable;
 //see pg529 (pdf 390)
 
 class Author {
+
+	const ADMIN = 1;
+	const SUPERUSER = 2;
+	const GOD = 4; 
+
 	public $id;
 	public $name;
 	public $email;
@@ -19,8 +24,8 @@ class Author {
 	
 
 
-
-	public function __construct(DatabaseTable $blogsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable, DatabaseTable $itemsTable) {
+	//PIG wierd anomoly about the following \Ninja\DatabaseTable. a07-4 doesn't seem to need it
+	public function __construct($blogsTable, DatabaseTable $pagesTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable, DatabaseTable $itemsTable) {
 		$this->blogsTable = $blogsTable; 
 		$this->pagesTable = $pagesTable;
 		$this->eventsTable = $eventsTable;
@@ -82,6 +87,10 @@ class Author {
 		$item['authorId'] = $this->id;
 
 		return $this->itemsTable->save($item);
+	}
+
+	public function hasPermission($permission) {
+		return $this->permissions & $permission;  
 	}
 
 }

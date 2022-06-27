@@ -76,6 +76,24 @@ class Page {
                     ]
                 ];
     }
+
+    public function admin() {
+
+        //$page = $this->pagesTable->findById(7);
+
+        $title = 'Admin';
+        $metaDescription = 'Admin Page';
+
+        return ['template' => 'admin.html.php',
+                 'title' => $title,
+                 'metaDescription' => $metaDescription,
+                 'variables' => [
+                    'userId' => $author->id ?? null
+                    ]
+                 
+                 
+                ];
+    }
     
 
 	public function home() {

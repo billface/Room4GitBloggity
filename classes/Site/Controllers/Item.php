@@ -98,8 +98,8 @@ class Item {
         $author = $this->authentication->getUser();
 
         $item = $_POST['item'];
-        $itemsize = $_POST['itemsize'];
-        $itemdesc = $_POST['itemdesc'];
+        $itemsize = $_POST['itemsize'] ?? null;
+        $itemdesc = $_POST['itemdesc'] ?? null;
 
         //the above is from form, below is others
 
@@ -112,11 +112,15 @@ class Item {
                     $itemEntity = $author->addItem($item);
                     $itemEntity->clearSizes();
                     $itemEntity->clearDescs();
-                    foreach ($_POST['itemsize'] as $sizeId) {
+                    if (isset($itemsize)) {
+                        foreach ($_POST['itemsize'] as $sizeId) {
                         $itemEntity->addSize($sizeId);
-                    }
-                    foreach ($_POST['itemdesc'] as $descId) {
+                        }
+                    }   
+                    if (isset($itemdesc)){
+                        foreach ($_POST['itemdesc'] as $descId) {
                         $itemEntity->addDesc($descId);
+                        }
                     }
                     unset($_SESSION['item']);
                     unset($_SESSION['itemsize']);
@@ -127,7 +131,11 @@ class Item {
                     $_SESSION['itemsize'] = $itemsize;
                     $_SESSION['itemdesc'] = $itemdesc;
                     $_SESSION['itemErrorMessage'] = $return['message'];
-                    header('location: /item/edit');
+                    if ($_POST['hiddenId'] != '') {
+                        header('location: /item/edit?id='.$_POST['hiddenId']);
+                    } else {
+                        header('location: /item/edit');
+                    }
                 }
         // if no file is selected submit the rest of the form
         } else {
@@ -135,11 +143,15 @@ class Item {
             $itemEntity = $author->addItem($item);
             $itemEntity->clearSizes();
             $itemEntity->clearDescs();
-            foreach ($_POST['itemsize'] as $sizeId) {
+            if (isset($itemsize)) {
+                foreach ($_POST['itemsize'] as $sizeId) {
                 $itemEntity->addSize($sizeId);
-            }
-            foreach ($_POST['itemdesc'] as $descId) {
+                }
+            }   
+            if (isset($itemdesc)){
+                foreach ($_POST['itemdesc'] as $descId) {
                 $itemEntity->addDesc($descId);
+                }
             }
             unset($_SESSION['item']);
             unset($_SESSION['itemsize']);
@@ -196,8 +208,8 @@ class Item {
                         'item_description' => $_POST["hidden_description"],
                         'item_price' => $_POST["hidden_price"],
                         'item_quantity' => $_POST["quantity"],
-                        'item_size' => $_POST["size"],
-                        'item_desc' => $_POST["desc"]
+                        'item_size' => $_POST["size"] ?? '',
+                        'item_desc' => $_POST["desc"] ?? ''
                     );
                     $_SESSION["cart"][$count] = $item_array;
                 }else{
@@ -215,8 +227,8 @@ class Item {
                 'item_description' => $_POST["hidden_description"],
                 'item_price' => $_POST["hidden_price"],
                 'item_quantity' => $_POST["quantity"],
-                'item_size' => $_POST["size"],
-                'item_desc' => $_POST["desc"]
+                'item_size' => $_POST["size"] ?? '',
+                'item_desc' => $_POST["desc"] ?? ''
 
             );
             $_SESSION['cart'][0] = $item_array;

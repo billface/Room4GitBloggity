@@ -20,10 +20,7 @@
       <li><a href="/blog/list">Blog List</a></li>
       <li><a href="/event/list">Calendar</a></li>
       <li><a href="/item/list">Shop</a></li>
-      <li><a href="/page/list">Pages</a></li>
-      <li><a href="/blog/edit">Add a new blog</a></li>
-      <li><a href="/event/edit">Add a new event</a></li>
-      <li><a href="/item/edit">Add a new item</a></li>
+      
       <?php if ($loggedIn): ?>
 			<li><a href="/logout">Log out</a></li>
 			<?php else: ?>
@@ -37,7 +34,12 @@
   </main>
 
   <footer>
-  &copy; Bodged Websites 2020&ndash;<?php echo date('Y'); ?>
+  <?php  if ($user && $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
+        <a href="/page/admin">&copy; Bodged Websites 2020&ndash;<?php echo date('Y'); ?></a>
+        <?php else: ?>
+         <p> &copy; Bodged Websites 2020&ndash;<?php echo date('Y'); ?> </p>
+                <?php endif; ?>
+
   </footer>
 
   <?php 

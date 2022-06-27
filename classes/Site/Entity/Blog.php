@@ -8,10 +8,13 @@ class Blog {
 	public $blogtext;
 	private $authorsTable;
 	private $author;
+	private $blogCatJoinTable;
 
 
-	public function __construct(\Ninja\DatabaseTable $authorsTable) {
+	public function __construct(\Ninja\DatabaseTable $authorsTable, \Ninja\DatabaseTable $blogCatJoinTable) {
 		$this->authorsTable = $authorsTable;
+		$this->blogCatJoinTable = $blogCatJoinTable;
+
 	}
 
 	public function getAuthor() {
@@ -19,5 +22,24 @@ class Blog {
 			$this->author = $this->authorsTable->findById($this->authorId);
 		}
 		
-		return $this->author;	}
+		return $this->author;	
+	}
+
+	public function addCategory($categoryId) {
+		$blogCat = ['blogId' => $this->id, 'categoryId' => $categoryId];
+
+		$this->blogCatJoinTable->save($blogCat);
+	}
+	public function hasCategory($categoryId) {
+		$blogCategories = $this->blogCatJoinTable->find('blogId', $this->id);
+
+		foreach ($blogCategories as $blogCategory) {
+			if ($blogCategory->categoryId == $categoryId) {
+				return true;
+			}
+		}
+	}
+	public function clearCategories() {
+		$this->blogCatJoinTable->deleteWhere('blogId', $this->id);
+	}
 }

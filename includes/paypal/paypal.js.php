@@ -8,7 +8,7 @@
             foreach($_SESSION["cart"] as $paypalCart){
                 $paypalArray[] = '{
             name: "'.$paypalCart['item_name'].'",
-            description: "'.$paypalCart['item_name'].'",
+            description: "'.$paypalCart['item_size'].'",
             quantity: '.$paypalCart['item_quantity'].',
             price: '.$paypalCart['item_price'].',
             sku: "'.$paypalCart['item_id'].'",

@@ -29,52 +29,62 @@ if (isset($_SESSION['itemErrorMessage'])) {
     <br>
     <!--add sizes -->
     <p>Select sizes for this item:</p>
-    <?php foreach ($itemsizes as $itemsize) { 
-        $doWeHaveASizeMatch = 'no';?>
-        
-    <?php if ($item && $item->hasSize($itemsize->id)){ ?>
-             <input type="checkbox" checked name="itemsize[]" value="<?=$itemsize->id?>" />
-             
-    <?php } elseif (isset($_SESSION['itemsize'])) {
-                foreach ($_SESSION['itemsize'] as $itemSizeSelected) {
-                    if ($itemSizeSelected == $itemsize->id) {
-                        $doWeHaveASizeMatch = 'yes';
-                    }
-                }
-            }  if ($doWeHaveASizeMatch == 'yes') {
-            echo '<input type="checkbox" checked name="itemsize[]" value="'.$itemsize->id.'" />'; ?>
-    <?php } else { ?>
+    <?php
+		foreach ($itemsizes as $itemsize) { 
+			$doWeHaveASizeMatch = 'no';
+					
+			if ($item && $item->hasSize($itemsize->id)){
+				echo '<input type="checkbox" checked name="itemsize[]" value="'.$itemsize->id.'" />';
+					 
+			} else if (isset($_SESSION['itemsize'])) {
+				foreach ($_SESSION['itemsize'] as $itemSizeSelected) {
+					if ($itemSizeSelected == $itemsize->id) {
+						$doWeHaveASizeMatch = 'yes';
+					}
+				}
+				if ($doWeHaveASizeMatch == 'yes') {
+					echo '<input type="checkbox" checked name="itemsize[]" value="'.$itemsize->id.'" />'; 
+				} else {
+					echo '<input type="checkbox" name="itemsize[]" value="'.$itemsize->id.'" />'; 
+				}
+			} else {
+				echo '<input type="checkbox" name="itemsize[]" value="'.$itemsize->id.'" />'; 
+			}
 
-        <input type="checkbox" name="itemsize[]" value="<?=$itemsize->id?>" /> 
-    <?php } ?>
-        <label><?=$itemsize->name?></label>
-    <?php } ?>
+			echo '<label>'.$itemsize->name.'</label>';
+		}
+		?>
     <br>
     <a href="/itemsize/edit">Add a new size</a>
     <br>
     <!--add description -->
 
     <p>Select description for this item:</p>
-    <?php foreach ($itemdescs as $itemdesc) { 
-        $doWeHaveADescMatch = 'no';?>
-        
-    <?php if ($item && $item->hasDesc($itemdesc->id)){ ?>
-             <input type="checkbox" checked name="itemdesc[]" value="<?=$itemdesc->id?>" />
-             
-    <?php } elseif (isset($_SESSION['itemdesc'])) {
-                foreach ($_SESSION['itemdesc'] as $itemDescSelected) {
-                    if ($itemDescSelected == $itemdesc->id) {
-                        $doWeHaveADescMatch = 'yes';
-                    }
-                }
-            }  if ($doWeHaveADescMatch == 'yes') {
-            echo '<input type="checkbox" checked name="itemdesc[]" value="'.$itemdesc->id.'" />'; ?>
-    <?php } else { ?>
+    <?php
+		foreach ($itemdescs as $itemdesc) { 
+			$doWeHaveADescMatch = 'no';
+					
+			if ($item && $item->hasDesc($itemdesc->id)){
+				echo '<input type="checkbox" checked name="itemdesc[]" value="'.$itemdesc->id.'" />';
+					 
+			} else if (isset($_SESSION['itemdesc'])) {
+				foreach ($_SESSION['itemdesc'] as $itemDescSelected) {
+					if ($itemDescSelected == $itemdesc->id) {
+						$doWeHaveADescMatch = 'yes';
+					}
+				}
+				if ($doWeHaveADescMatch == 'yes') {
+					echo '<input type="checkbox" checked name="itemdesc[]" value="'.$itemdesc->id.'" />'; 
+				} else {
+					echo '<input type="checkbox" name="itemdesc[]" value="'.$itemdesc->id.'" />'; 
+				}
+			} else {
+				echo '<input type="checkbox" name="itemdesc[]" value="'.$itemdesc->id.'" />'; 
+			}
 
-        <input type="checkbox" name="itemdesc[]" value="<?=$itemdesc->id?>" /> 
-    <?php } ?>
-        <label><?=$itemdesc->name?></label>
-    <?php } ?>
+			echo '<label>'.$itemdesc->name.'</label>';
+		}
+		?>
     <br>
     <a href="/itemdesc/edit">Add a new description</a>
     <br>
@@ -90,6 +100,7 @@ if (isset($_SESSION['itemErrorMessage'])) {
     <br>
     <label for="itemImage">Image Upload</label>
     <input type="file" name="file">
+    <input type="hidden" name="hiddenId" value="<?=$_GET['id'] ?? ''?>">
     <br>
     <input type="submit" value="Save">
 

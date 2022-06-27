@@ -1,6 +1,8 @@
 <?php if ($emptyMessage !== null) {
   echo $emptyMessage . '<br><br>';
 }
+ echo '<pre>'; print_r($_SESSION); echo '</pre>'; 
+
 ?>
 
 
@@ -28,7 +30,7 @@ else {
 
 
     ?>
-              <p>
+    <p>
     
     <?=htmlspecialchars($item->itemPaypalDescription, ENT_QUOTES, 'UTF-8')?>
     <br>
@@ -92,7 +94,7 @@ else {
 <?php foreach ($itemsizes as $itemsize): ?>
 
 <?php if ($item && $item->hasSize($itemsize->id)): ?>
-  <option value="<?=$itemsize->id?>"><?=$itemsize->name?></option>
+  <option value="<?=$itemsize->name?>"><?=$itemsize->name?></option>
   
 
 <?php endif; ?>
@@ -111,7 +113,7 @@ else {
 <?php foreach ($itemdescs as $itemdesc): ?>
 
 <?php if ($item && $item->hasDesc($itemdesc->id)): ?>
-  <option value="<?=$itemdesc->id?>"><?=$itemdesc->name?></option>
+  <option value="<?=$itemdesc->name?>"><?=$itemdesc->name?></option>
   
 
 <?php endif; ?>
@@ -144,8 +146,9 @@ else {
 <table >
           <tr>
               <th>Item Name</th>
+              <th>Description</th>
+              <th>Size</th>
               <th>Quantity</th>
-              <th>Price Details</th>
               <th>Total Price</th>
               <th>Remove Item</th>
           </tr>
@@ -156,6 +159,7 @@ else {
             echo'
                     <tr>
           <td>'.$value["item_name"].'</td>
+          <td>'.$value["item_desc"].'</td>
           <td>'.$value["item_size"].'</td>
           <td>'.$value["item_quantity"].'</td>
           <td>£'.$value["item_price"].'</td>
