@@ -1,6 +1,7 @@
 <?php if ($emptyMessage !== null) {
   echo $emptyMessage . '<br><br>';
 }
+
 ?>
 
 
@@ -28,11 +29,10 @@ else {
 
 
     ?>
-              <p>
+    <p>
     
-    <?=htmlspecialchars($item->itemPaypalDescription, ENT_QUOTES, 'UTF-8')?>
     <br>
-    <?=htmlspecialchars($item->itemText, ENT_QUOTES, 'UTF-8')?>
+    <?=$item->itemText?>
     
     
 
@@ -44,14 +44,7 @@ else {
           echo htmlspecialchars($item->getAuthor()->email, ENT_QUOTES, 'UTF-8'); ?>"><?php
           echo htmlspecialchars($item->getAuthor()->name, ENT_QUOTES, 'UTF-8'); ?></a> 
           )
-  <h3>
-    <?php
-      if (isset($item->itemStock)){
-        $stock = $item->itemStock;
-        echo 'Stock '.$stock;
-      }
-    ?>
-  </h3>
+  
   <h3>
     <?php
       if (isset($item->itemPrice)){
@@ -60,14 +53,7 @@ else {
       }
     ?>
   </h3>
-  <h3>
-    <?php
-      if (isset($item->itemShipping)){
-        $shipping = $item->itemShipping;
-        echo 'Shipping £'. $shipping;
-      }
-    ?>
-  </h3>
+  
 
   <?php if ($userId == $item->authorId): ?>
 
@@ -75,25 +61,62 @@ else {
   <br>
   <?php endif;
   //if there is stock show buy form
-  if (isset($item->itemStock)){ ?>
+  if ($item->outOfStock == 0) {?>
 
   <form action="/item/buy?id=<?=$item->id?>" method="post">
     <input type="hidden" name="hidden_name" value="<?php echo $item->itemHeading; ?>">
     <input type="hidden" name="hidden_price" value="<?php echo $item->itemPrice; ?>">
-    <input type="hidden" name="hidden_description" value="<?php echo $item->itemPaypalDescription; ?>">
+   
+
     
-    <select name="size" id="size">
-      <option value="small">Small</option>
-      <option value="medium">Medium</option>
-      <option value="large">Large</option>
-      <option value="XL">XL</option>
-    </select>
+   
+
+<?php if ($item->sizePresent($item->id) != null) { ?>
+<select name="size" id="size">
+
+<?php foreach ($itemsizes as $itemsize): ?>
+
+<?php if ($item && $item->hasSize($itemsize->id)): ?>
+  <option value="<?=$itemsize->name?>"><?=$itemsize->name?></option>
+  
+
+<?php endif; ?>
+<?php endforeach; ?>
+
+
+</select>
+
+<?php } ?>
+
+<br>
+
+<?php if ($item->descPresent($item->id) != null) { ?>
+<select name="desc" id="desc">
+
+<?php foreach ($itemdescs as $itemdesc): ?>
+
+<?php if ($item && $item->hasDesc($itemdesc->id)): ?>
+  <option value="<?=$itemdesc->name?>"><?=$itemdesc->name?></option>
+  
+
+<?php endif; ?>
+<?php endforeach; ?>
+
+
+</select>
+
+<?php } ?>
+
+    
+
     <br>
     Quantity:<input type="number" name="quantity" value="1">
     <input type="submit" name="add" value="Buy">
 
 
   </form>
+  <?php } else {?>
+    <p>Currently Out Of Stock </p>
   <?php } ?>
 
   <form action="/item/delete" method="post">
@@ -108,8 +131,9 @@ else {
 <table >
           <tr>
               <th>Item Name</th>
+              <th>Description</th>
+              <th>Size</th>
               <th>Quantity</th>
-              <th>Price Details</th>
               <th>Total Price</th>
               <th>Remove Item</th>
           </tr>
@@ -120,6 +144,7 @@ else {
             echo'
                     <tr>
           <td>'.$value["item_name"].'</td>
+          <td>'.$value["item_desc"].'</td>
           <td>'.$value["item_size"].'</td>
           <td>'.$value["item_quantity"].'</td>
           <td>£'.$value["item_price"].'</td>

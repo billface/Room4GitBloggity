@@ -3,12 +3,13 @@
         var cartItems = [
             
             //Populating Paypal Javascript array with $_SESSION DATA
+            //Description isn't visible on seller account
             <?php
             $paypalArray = array();
             foreach($_SESSION["cart"] as $paypalCart){
                 $paypalArray[] = '{
-            name: "'.$paypalCart['item_name'].'",
-            description: "'.$paypalCart['item_name'].'",
+            name: "'.$paypalCart['item_name'].' '.$paypalCart['item_size'].' '.$paypalCart['item_desc'].'",
+            description: "",
             quantity: '.$paypalCart['item_quantity'].',
             price: '.$paypalCart['item_price'].',
             sku: "'.$paypalCart['item_id'].'",

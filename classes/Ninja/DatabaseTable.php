@@ -26,19 +26,39 @@ class DatabaseTable
 		$query->execute($parameters);
 		return $query;
 	}
-	//shows how many blogs have been added
-	public function total() {
-		$query = $this->query('SELECT COUNT(*) FROM `' . $this->table . '`');
+	//shows how many blogs have been added, and how many in each category
+	public function total($field = null, $value = null) {
+		$sql = 'SELECT COUNT(*) FROM `' . $this->table . '`';
+		$parameters = [];
+
+		if (!empty($field)) {
+			$sql .= ' WHERE `' . $field . '` = :value';
+			$parameters = ['value' => $value];
+		}
+		
+		$query = $this->query($sql, $parameters);
 		$row = $query->fetch();
 		return $row[0];
 	}
 
-	public function find($column, $value) {
+	public function find($column, $value, $orderBy = null, $limit = null, $offset = null) {
 		$query = 'SELECT * FROM ' . $this->table . ' WHERE ' . $column . ' = :value';
 
 		$parameters = [
 			'value' => $value
 		];
+
+		if ($orderBy != null) {
+			$query .= ' ORDER BY ' . $orderBy;
+		}
+
+		if ($limit != null) {
+			$query .= ' LIMIT ' . $limit;
+		}
+
+		if ($offset != null) {
+			$query .= ' OFFSET ' . $offset;
+		}
 
 		$query = $this->query($query, $parameters);
 
@@ -99,6 +119,9 @@ class DatabaseTable
 		$fields =$this->processDates($fields);
 
 		$this->query($query, $fields);
+
+		return $this->pdo->lastInsertId();
+
 	}
 
 	private function update($fields) {
@@ -129,8 +152,34 @@ class DatabaseTable
 		$this->query('DELETE FROM `' . $this->table . '` WHERE `' . $this->primaryKey . '` = :id', $parameters);
 	}
 
-	public function findAll() {
-		$result = $this->query('SELECT * FROM `' . $this->table . '`');
+	//this function is used to delete categories when editing
+	public function deleteWhere($column, $value) {
+		$query = 'DELETE FROM ' . $this->table . ' WHERE ' . $column . ' = :value';
+
+		$parameters = [
+			'value' => $value
+		];
+
+		$query = $this->query($query, $parameters);
+	}
+
+	public function findAll($orderBy = null, $limit = null, $offset = null) {
+		$query = 'SELECT * FROM ' . $this->table;
+
+		if ($orderBy != null) {
+			$query .= ' ORDER BY ' . $orderBy;
+		}
+
+		
+		if ($limit != null) {
+			$query .= ' LIMIT ' . $limit;
+		}
+		
+		if ($offset != null) {
+			$query .= ' OFFSET ' . $offset;
+		}
+		
+		$result = $this->query($query);
 
 		return $result->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorArgs);
 	}
@@ -150,15 +199,31 @@ class DatabaseTable
 	}
 
 	public function save($record) {
+		$entity = new $this->className(...$this->constructorArgs);
+
 		try {
 			if ($record[$this->primaryKey] == '') {
 				$record[$this->primaryKey] = null;
 			}
-			$this->insert($record);
+			$insertId = $this->insert($record);
+
+			$entity->{$this->primaryKey} = $insertId;
+
 		}
 		catch (\PDOException $e) {
 			$this->update($record);
 		}
+
+		//each time the save method is called it will return an entity instance representing the record thats just been save. See pg 575
+
+		foreach ($record as $key => $value) {
+			if (!empty($value)) {
+				$entity->$key = $value;	
+			}			
+		}
+
+		return $entity;	
+
 	}
 
 	public function upload($value) {

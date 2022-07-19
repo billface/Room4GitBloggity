@@ -8,7 +8,7 @@
   <h2>
   <!--hidden form field so as not to display id of each event
       form and input tags aren't outside the blockquote to simplify CSS -->
-  <?=htmlspecialchars($event->eventHeading, ENT_QUOTES, 'UTF-8')?>
+  <?=$event->eventHeading?>
 
 </h2>
     <h3>
@@ -18,7 +18,7 @@
               ?>
               </h3>
               <p>
-    <?=htmlspecialchars($event->eventText, ENT_QUOTES, 'UTF-8')?>
+    <?=$event->eventText?>
  
 </p>
 

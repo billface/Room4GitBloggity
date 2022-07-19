@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: shareddb-z.hosting.stackcp.net
--- Generation Time: May 25, 2022 at 10:28 AM
+-- Generation Time: Jul 05, 2022 at 11:50 AM
 -- Server version: 10.4.14-MariaDB-log
 -- PHP Version: 7.1.25
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `room4Two-3136353c69`
 --
-CREATE DATABASE IF NOT EXISTS `room4Two-3136353c69` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `room4Two-3136353c69`;
 
 -- --------------------------------------------------------
 
@@ -48,7 +46,7 @@ INSERT INTO `author` (`id`, `name`, `email`, `password`, `permissions`) VALUES
 (4, 'John smith', 'kendoturtle@gmail.com', '$2y$10$48TGXs6a3hOCfc7TEweYzudL3Vce8y0bDQsCF29LuR96KdgcjDUpW', 0),
 (5, 'Joe Mama', 'oniomnimon@gmail.com', '$2y$10$wK3A2VaOmsCduCVeZeMjhOx1MswwVajqooJw4C91lQFsy1y4cRnQm', 0),
 (6, 'Tina O\'Toole', 'kitkitdavies@gmail.com', '$2y$10$QrLwn8Mg8/swCNDpRRwtd.ZDvAlcaxuEUubWhOr052s.k0xrtDWkK', 0),
-(7, 'Testy', 'testytester@gmail.com', '$2y$10$Gjo9MSg5C42em5gY5PVuY.7MqwcjeXwNFCS4291L1o2X9fWABRoSm', 0);
+(7, 'Testy', 'testytester@gmail.com', '$2y$10$Gjo9MSg5C42em5gY5PVuY.7MqwcjeXwNFCS4291L1o2X9fWABRoSm', 7);
 
 -- --------------------------------------------------------
 
@@ -83,23 +81,23 @@ INSERT INTO `blog` (`id`, `blogHeading`, `blogText`, `blogDate`, `authorId`, `bl
 -- --------------------------------------------------------
 
 --
--- Table structure for table `blog_category`
+-- Table structure for table `blogcat`
 --
 
-CREATE TABLE `blog_category` (
-  `blogId` int(11) NOT NULL,
-  `categoryId` int(11) NOT NULL
+CREATE TABLE `blogcat` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `category`
+-- Table structure for table `blog_cat_join`
 --
 
-CREATE TABLE `category` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL
+CREATE TABLE `blog_cat_join` (
+  `blogId` int(11) NOT NULL,
+  `categoryId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -132,7 +130,8 @@ INSERT INTO `comment` (`id`, `commText`, `commDate`, `authorId`, `commBlogId`, `
 (89, 'Adding a comment', '2022-01-10', 2, 53, NULL),
 (90, 'adding another comment', '2022-01-10', 2, 53, NULL),
 (93, 'This is a serious blog, for serious people. Any further cartoon references will be moderated', '2022-01-10', 3, 58, NULL),
-(94, '??', '2022-01-10', 3, 59, NULL);
+(94, '??', '2022-01-10', 3, 59, NULL),
+(95, 'Great, do you get am email when i send this?', '2022-05-27', 7, 56, NULL);
 
 -- --------------------------------------------------------
 
@@ -160,11 +159,68 @@ CREATE TABLE `item` (
   `itemText` varchar(255) DEFAULT NULL,
   `itemPicture` varchar(255) DEFAULT NULL,
   `itemPrice` int(11) NOT NULL DEFAULT 0,
-  `itemShipping` int(11) NOT NULL DEFAULT 0,
-  `itemStock` int(11) NOT NULL DEFAULT 0,
   `authorId` int(11) DEFAULT NULL,
   `itemFileName` varchar(255) DEFAULT NULL,
-  `itemPaypalDescription` varchar(255) DEFAULT NULL
+  `outOfStock` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `item`
+--
+
+INSERT INTO `item` (`id`, `itemHeading`, `itemText`, `itemPicture`, `itemPrice`, `authorId`, `itemFileName`, `outOfStock`) VALUES
+(1, 'Apples', '<p>These are particularly lovely apples</p>', 'apples', 1, 7, 'apples.jpeg', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itemdesc`
+--
+
+CREATE TABLE `itemdesc` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itemsize`
+--
+
+CREATE TABLE `itemsize` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `itemsize`
+--
+
+INSERT INTO `itemsize` (`id`, `name`) VALUES
+(1, 'Big'),
+(2, 'Little');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `item_desc_join`
+--
+
+CREATE TABLE `item_desc_join` (
+  `itemId` int(11) NOT NULL,
+  `sizeId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `item_size_join`
+--
+
+CREATE TABLE `item_size_join` (
+  `itemId` int(11) NOT NULL,
+  `sizeId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -195,6 +251,14 @@ CREATE TABLE `page` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Dumping data for table `page`
+--
+
+INSERT INTO `page` (`id`, `pageHeading`, `pageText`, `authorId`, `metaDescription`) VALUES
+(1, 'Home Page', 'This is the home page', 7, 'homepage'),
+(2, 'About Page', 'This is the about page', 7, 'aboutpage');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -211,16 +275,16 @@ ALTER TABLE `blog`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `blog_category`
+-- Indexes for table `blogcat`
 --
-ALTER TABLE `blog_category`
-  ADD PRIMARY KEY (`blogId`,`categoryId`);
+ALTER TABLE `blogcat`
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `category`
+-- Indexes for table `blog_cat_join`
 --
-ALTER TABLE `category`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `blog_cat_join`
+  ADD PRIMARY KEY (`blogId`,`categoryId`);
 
 --
 -- Indexes for table `comment`
@@ -239,6 +303,30 @@ ALTER TABLE `event`
 --
 ALTER TABLE `item`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `itemdesc`
+--
+ALTER TABLE `itemdesc`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `itemsize`
+--
+ALTER TABLE `itemsize`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `item_desc_join`
+--
+ALTER TABLE `item_desc_join`
+  ADD PRIMARY KEY (`itemId`,`sizeId`);
+
+--
+-- Indexes for table `item_size_join`
+--
+ALTER TABLE `item_size_join`
+  ADD PRIMARY KEY (`itemId`,`sizeId`);
 
 --
 -- Indexes for table `meta`
@@ -269,16 +357,16 @@ ALTER TABLE `blog`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
--- AUTO_INCREMENT for table `category`
+-- AUTO_INCREMENT for table `blogcat`
 --
-ALTER TABLE `category`
+ALTER TABLE `blogcat`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `event`
@@ -290,7 +378,19 @@ ALTER TABLE `event`
 -- AUTO_INCREMENT for table `item`
 --
 ALTER TABLE `item`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `itemdesc`
+--
+ALTER TABLE `itemdesc`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `itemsize`
+--
+ALTER TABLE `itemsize`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `meta`
@@ -302,7 +402,7 @@ ALTER TABLE `meta`
 -- AUTO_INCREMENT for table `page`
 --
 ALTER TABLE `page`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

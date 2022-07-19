@@ -11,18 +11,19 @@ class Page {
     private $eventsTable;
     private $itemsTable;
     private $commentsTable;
+    private $authentication;
 
 
 
-
-	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $blogsTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable, DatabaseTable $itemsTable) {
+	//the order of constucts is important. most specifically the position of $authentication vs SiteRoutes getRoutes()
+	public function __construct(DatabaseTable $pagesTable, DatabaseTable $authorsTable, DatabaseTable $blogsTable, DatabaseTable $eventsTable, DatabaseTable $commentsTable, DatabaseTable $itemsTable, Authentication $authentication) {
 		$this->pagesTable = $pagesTable;
 		$this->authorsTable = $authorsTable;
-		$this->authentication = $authentication;
         $this->blogsTable = $blogsTable;
         $this->eventsTable = $eventsTable;
         $this->itemsTable = $itemsTable;
         $this->commentsTable = $commentsTable;
+		$this->authentication = $authentication;
 
 
 	}
@@ -66,13 +67,31 @@ class Page {
         $title = 'Edit page';
         $metaRobots = 'noindex';
 
-        return ['template' => 'editpage.html.php', 
+        return ['template' => 'pageedit.html.php', 
                 'title' => $title,
                 'metaRobots' => $metaRobots,
                 'variables' => [
                     'page' => $page,
                     'userId' => $author->id ?? null
                     ]
+                ];
+    }
+
+    public function admin() {
+
+        //$page = $this->pagesTable->findById(7);
+
+        $title = 'Admin';
+        $metaDescription = 'Admin Page';
+
+        return ['template' => 'admin.html.php',
+                 'title' => $title,
+                 'metaDescription' => $metaDescription,
+                 'variables' => [
+                    'userId' => $author->id ?? null
+                    ]
+                 
+                 
                 ];
     }
     
