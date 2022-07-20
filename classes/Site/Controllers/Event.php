@@ -10,52 +10,45 @@ class Event {
     private $pagesTable;
     private $blogsTable;
     private $commentsTable;
+    private $itemsTable;
+    private $authentication;
+
+
 
     
-
-	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, Authentication $authentication, DatabaseTable $pagesTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable) {
+	//the order of constucts is important. most specifically the position of $authentication vs SiteRoutes getRoutes()
+	public function __construct(DatabaseTable $eventsTable, DatabaseTable $authorsTable, DatabaseTable $pagesTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable, DatabaseTable $itemsTable, Authentication $authentication) {
         $this->eventsTable = $eventsTable;
         $this->authorsTable = $authorsTable;
-        $this->authentication = $authentication;
         $this->pagesTable = $pagesTable;
         $this->blogsTable = $blogsTable;
         $this->commentsTable = $commentsTable;
+        $this->itemsTable = $itemsTable;
+        $this->authentication = $authentication;
+
 
 	}
 
     public function list() {
         $events = $this->eventsTable->findAllFutureDates('eventDate');
+        if (empty($events)) {
+            $emptyMessage = 'No dates booked';
+        }
 
         $title = 'Event list';
+        $metaDescription = 'Events List';
 
         $author = $this->authentication->getUser();
 
         return ['template' => 'events.html.php', 
 				'title' => $title, 
+                'metaDescription' => $metaDescription,
 				'variables' => [
 						'events' => $events,
-                        'user' => $author //previously 'userId' => $author->id ?? null,
+                        'userId' => $author->id ?? null,
+                        'emptyMessage' => $emptyMessage ?? null
 					]
 				];
-        
-    }
-    //checks auth and adds
-    public function add() {
-        $author = $this->authentication->getUser();
-
-        $event = $_POST['event'];
-        //the above is from form, below is others
-
-        $author->addEvent($event);
-
-        header('location: /event/list');
-    }
-    //brings up form
-    public function addpage() {
-
-            $title = 'Add a new event';
-
-            return ['template' => 'addevent.html.php', 'title' => $title];
         
     }
 
@@ -74,6 +67,7 @@ class Event {
         header('location: /event/list');
     }
 
+    
     public function saveEdit() {
         $author = $this->authentication->getUser();
 
@@ -87,19 +81,25 @@ class Event {
 
     }
 
-    public function displayEdit() {
+    public function addOrEdit() {
 
         $author = $this->authentication->getUser();
 
-        $event = $this->eventsTable->findById($_GET['id']);
+        if (isset($_GET['id'])) {
+            $event = $this->eventsTable->findById($_GET['id']);
+        }
 
         $title = 'Edit event';
+        $tinyMCE = true;
+        $metaRobots = 'noindex';
 
-        return ['template' => 'editevent.html.php', 
+        return ['template' => 'eventedit.html.php', 
                 'title' => $title,
+                'tinyMCE' => $tinyMCE,
+                'metaRobots' => $metaRobots,
                 'variables' => [
-                    'event' => $event,
-                    'user' => $author 
+                    'event' => $event ?? null,
+                    'userId' => $author->id ?? null
                     ]
                 ];
     }

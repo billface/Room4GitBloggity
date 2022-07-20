@@ -1,17 +1,17 @@
 <?php
 namespace Site\Controllers;
 
-class Category {
-	private $categoriesTable;
+class BlogCat {
+	private $blogCatsTable;
 
-	public function __construct(\Ninja\DatabaseTable $categoriesTable) {
-		$this->categoriesTable = $categoriesTable;
+	public function __construct(\Ninja\DatabaseTable $blogCatsTable) {
+		$this->blogCatsTable = $blogCatsTable;
 	}
 
 	public function edit() {
 
 		if (isset($_GET['id'])) {
-			$category = $this->categoriesTable->findById($_GET['id']);
+			$category = $this->blogCatsTable->findById($_GET['id']);
 		}
 
 		$title = 'Edit Category';
@@ -27,17 +27,17 @@ class Category {
 	public function saveEdit() {
 		$category = $_POST['category'];
 
-		$this->categoriesTable->save($category);
+		$this->blogCatsTable->save($category);
 
-		header('location: /category/list');
+		header('location: /blogcat/list');
 	}
 
 	public function list() {
-		$categories = $this->categoriesTable->findAll();
+		$categories = $this->blogCatsTable->findAll();
 
 		$title = 'Blog Categories';
 
-		return ['template' => 'categories.html.php', 
+		return ['template' => 'blogcats.html.php', 
 			'title' => $title, 
 			'variables' => [
 			    'categories' => $categories

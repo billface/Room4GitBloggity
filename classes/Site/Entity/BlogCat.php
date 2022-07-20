@@ -3,19 +3,20 @@ namespace Site\Entity;
 
 use Ninja\DatabaseTable;
 
-class Category {
+class BlogCat {
 	public $id;
 	public $name;
 	private $blogsTable;
-	private $blogCategoriesTable;
+	private $blogCatJoinTable;
 
-	public function __construct(DatabaseTable $blogsTable, DatabaseTable $blogCategoriesTable) {
+	public function __construct(DatabaseTable $blogsTable, DatabaseTable $blogCatJoinTable) {
 		$this->blogsTable = $blogsTable;
-		$this->blogCategoriesTable = $blogCategoriesTable;
+		$this->blogCatJoinTable = $blogCatJoinTable;
 	}
 
 	public function getBlogs($limit = null, $offset = null) {
-		$blogCategories = $this->blogCategoriesTable->find('categoryId', $this->id, null, $limit, $offset);
+	$blogCategories = $this->blogCatJoinTable->find('categoryId', $this->id, null, $limit, $offset);
+    //null is there to negate orderBy in find()
 
 		$blogs = [];
 
@@ -33,7 +34,7 @@ class Category {
 	}
 
 	public function getNumBlogs() {
-		return $this->blogCategoriesTable->total('categoryId', $this->id);
+		return $this->blogCatJoinTable->total('categoryId', $this->id);
 	}
 
 	private function sortBlogs($a, $b) {

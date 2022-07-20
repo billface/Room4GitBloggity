@@ -1,11 +1,14 @@
-<?php //echo '<pre>'; print_r($events); echo '</pre>'; ?>
+<?php if ($emptyMessage !== null) {
+  echo $emptyMessage . '<br><br>';
+}
+?>
 
 <?php foreach($events as $event): ?>
 <blockquote>
   <h2>
-  
-  <?=(new \Ninja\Markdown($event->eventHeading))->toHtml()?>
-
+  <!--hidden form field so as not to display id of each event
+      form and input tags aren't outside the blockquote to simplify CSS -->
+  <?=$event->eventHeading?>
 
 </h2>
     <h3>
@@ -15,36 +18,23 @@
               ?>
               </h3>
               <p>
-    <?=(new \Ninja\Markdown($event->eventText))->toHtml()?>
-
+    <?=$event->eventText?>
  
 </p>
 
   (by <a href="mailto:<?php
+              echo htmlspecialchars($event->getAuthor()->email, ENT_QUOTES, 'UTF-8'); ?>"><?php
+              echo htmlspecialchars($event->getAuthor()->name, ENT_QUOTES, 'UTF-8'); ?></a>)
 
-              $author = $event->getAuthor();
-              echo htmlspecialchars($author ? $author->email : 'deleted user', ENT_QUOTES, 'UTF-8');
-              ?>">
-              <?php
-              $author = $event->getAuthor();
-              echo htmlspecialchars($author ? $author->name : 'deleted user', ENT_QUOTES, 'UTF-8');
-               ?></a>)
+<?php if ($userId == $event->authorId): ?>
 
-
-<?php if ($user): ?>
-  <?php if ($user->id == $event->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
   <a href="/event/edit?id=<?=$event->id?>">Edit</a>
-  <?php endif; ?>
-
   <br>
-  <?php if ($user->id == $event->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)): ?>
-    <form action="/event/delete" method="post">
+  <form action="/event/delete" method="post">
     <input type="hidden" name="eventId" value="<?=$event->id?>">
     <input type="submit" value="Delete">
   </form>
   <?php endif; ?>
-  <?php endif; ?>
-
 
   </p>
 </blockquote>

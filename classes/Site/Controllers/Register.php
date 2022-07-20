@@ -96,7 +96,7 @@ class Register {
 
 		$author = $this->authorsTable->findById($_GET['id']);
 
-		$reflected = new \ReflectionClass('\Site\Entity\Author');
+		$reflected = new \ReflectionClass('\Ijdb\Entity\Author');
 		$constants = $reflected->getConstants();
 
 		return ['template' => 'permissions.html.php',

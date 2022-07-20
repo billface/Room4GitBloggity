@@ -26,7 +26,7 @@ class DatabaseTable
 		$query->execute($parameters);
 		return $query;
 	}
-	//shows how many blogs have been added
+	//shows how many blogs have been added, and how many in each category
 	public function total($field = null, $value = null) {
 		$sql = 'SELECT COUNT(*) FROM `' . $this->table . '`';
 		$parameters = [];
@@ -116,15 +116,18 @@ class DatabaseTable
 
 		$query .= ')';
 
-		$fields = $this->processDates($fields);
+		$fields =$this->processDates($fields);
 
 		$this->query($query, $fields);
 
 		return $this->pdo->lastInsertId();
+
 	}
 
 	private function update($fields) {
+
 		$query = ' UPDATE `' . $this->table .'` SET ';
+
 
 		foreach ($fields as $key => $value) {
 			$query .= '`' . $key . '` = :' . $key . ',';
@@ -135,7 +138,7 @@ class DatabaseTable
 		$query .= ' WHERE `' . $this->primaryKey . '` = :primaryKey';
 
 		//Set the :primaryKey variable
-		$fields['primaryKey'] = $fields[$this->primaryKey];
+		$fields['primaryKey'] = $fields['id'];
 
 		$fields = $this->processDates($fields);
 
@@ -149,6 +152,7 @@ class DatabaseTable
 		$this->query('DELETE FROM `' . $this->table . '` WHERE `' . $this->primaryKey . '` = :id', $parameters);
 	}
 
+	//this function is used to delete categories when editing
 	public function deleteWhere($column, $value) {
 		$query = 'DELETE FROM ' . $this->table . ' WHERE ' . $column . ' = :value';
 
@@ -166,14 +170,15 @@ class DatabaseTable
 			$query .= ' ORDER BY ' . $orderBy;
 		}
 
+		
 		if ($limit != null) {
 			$query .= ' LIMIT ' . $limit;
 		}
-
+		
 		if ($offset != null) {
 			$query .= ' OFFSET ' . $offset;
 		}
-
+		
 		$result = $this->query($query);
 
 		return $result->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorArgs);
@@ -203,10 +208,13 @@ class DatabaseTable
 			$insertId = $this->insert($record);
 
 			$entity->{$this->primaryKey} = $insertId;
+
 		}
 		catch (\PDOException $e) {
 			$this->update($record);
 		}
+
+		//each time the save method is called it will return an entity instance representing the record thats just been save. See pg 575
 
 		foreach ($record as $key => $value) {
 			if (!empty($value)) {
@@ -215,5 +223,51 @@ class DatabaseTable
 		}
 
 		return $entity;	
+
+	}
+
+	public function upload($value) {
+		$output = [
+			'success' => false,
+			'fileNameNew' => '',
+			'message' => ''
+		];
+
+		$file = $_FILES['file'];
+            
+		$fileName = $_FILES['file']['name'];
+		$fileTmpName = $_FILES['file']['tmp_name'];
+		$fileSize = $_FILES['file']['size'];
+		$fileError = $_FILES['file']['error'];
+		$fileType = $_FILES['file']['type'];
+
+		$fileExt = explode('.', $fileName);
+		$fileActualExt = strtolower(end($fileExt));
+
+		$allowed = array('jpg', 'jpeg', 'png');
+
+		if (in_array($fileActualExt, $allowed)){
+			if($fileError === 0){
+				if ($fileSize < 500000) {
+					$fileNameNew = $value.'.'.$fileActualExt;
+					$fileDestination = 'uploads/'.$fileNameNew;
+					if (move_uploaded_file($fileTmpName, $fileDestination)) {
+						$output['success'] = true;
+						$output['fileNameNew'] = $fileNameNew;
+					} else {
+						$output['message'] = 'failed to move the file';
+					}
+				} else {
+					$output['message'] = 'Your file was too big! Reduce size to less than 500kb';
+				}
+
+			} else {
+				$output['message'] = 'There was an error uploading your file';
+			}
+		} else {
+			$output['message'] = 'Please upload a .jpg or .png file. You may need to convert of image file types';
+		}
+		return $output;	
+
 	}
 }
