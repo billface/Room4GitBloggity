@@ -96,7 +96,6 @@ class Item {
 
     public function saveEdit() {
         $author = $this->authentication->getUser();
-
         $item = $_POST['item'];
         $itemsize = $_POST['itemsize'] ?? null;
         $itemdesc = $_POST['itemdesc'] ?? null;
@@ -105,10 +104,15 @@ class Item {
 
         //upload file if it has been selected
         if ($_FILES['file']['size'] > 0){
-            $return = $this->itemsTable->upload($item['itemPicture']);
+            $return = $this->itemsTable->upload($item['itemImageName']);
             $item['itemFileName'] = $return['fileNameNew'];
             //end upload files and handle any errors
                 if ($return['message'] == '') {
+                    if (isset($item['outOfStock'])){
+                        $item['outOfStock'] = 1;
+                    } else {
+                        $item['outOfStock'] = 0;
+                    }
                     $itemEntity = $author->addItem($item);
                     $itemEntity->clearSizes();
                     $itemEntity->clearDescs();
@@ -130,7 +134,7 @@ class Item {
                     $_SESSION['item'] = $item;
                     $_SESSION['itemsize'] = $itemsize;
                     $_SESSION['itemdesc'] = $itemdesc;
-                    $_SESSION['itemErrorMessage'] = $return['message'];
+                    $_SESSION['uploadErrorMessage'] = $return['message'];
                     if ($_POST['hiddenId'] != '') {
                         header('location: /item/edit?id='.$_POST['hiddenId']);
                     } else {
@@ -139,7 +143,11 @@ class Item {
                 }
         // if no file is selected submit the rest of the form
         } else {
-            
+            if (isset($item['outOfStock'])){
+                        $item['outOfStock'] = 1;
+                    } else {
+                        $item['outOfStock'] = 0;
+                    }
             $itemEntity = $author->addItem($item);
             $itemEntity->clearSizes();
             $itemEntity->clearDescs();

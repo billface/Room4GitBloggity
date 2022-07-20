@@ -97,34 +97,95 @@ class Blog {
             $author = $this->authentication->getUser();
 
             $blog = $_POST['blog'];
+            $blogCategory = $_POST['category'] ?? null;
+
+
             //the above is from form, below is others
-            if (isset($_GET['id'])) {
-                $blog['blogModDate'] = new \DateTime();
-                $blogEntity = $author->addBlog($blog); 
-
-                //a little fudge to edit categories
-                $blogEntity->clearCategories();
-
-                if(isset($_POST['category'])){
-                    foreach ($_POST['category'] as $categoryId) {
-                        $blogEntity->addCategory($categoryId);
-                    }
-                }   
-
-                header('location: /blog/wholeblog?id=' . $blog['id']);
             
+            if ($_FILES['file']['size'] > 0){
+                $return = $this->blogsTable->upload($blog['blogImageName']);
+                $blog['blogFileName'] = $return['fileNameNew'];
+                    //end upload files and handle any errors
+                    if ($return['message'] == '') {
+
+                        // edit form => modDate
+                        if (isset($_GET['id'])) {
+                            $blog['blogModDate'] = new \DateTime();
+                            $blogEntity = $author->addBlog($blog); 
+
+                            //a little fudge to edit categories
+                            $blogEntity->clearCategories();
+
+                            if(isset($_POST['category'])){
+                                foreach ($_POST['category'] as $categoryId) {
+                                    $blogEntity->addCategory($categoryId);
+                                }
+                            }   
+
+                            header('location: /blog/wholeblog?id=' . $blog['id']);
+                        
+                        // upload form => new date
+                        } else {
+                            
+                            $blog['blogDate'] = new \Datetime();
+                            $blogEntity = $author->addBlog($blog);
+
+                            if(isset($_POST['category'])){
+                                foreach ($_POST['category'] as $categoryId) {
+                                    $blogEntity->addCategory($categoryId);
+                                }
+                            } 
+                            unset($_SESSION['blog']);
+                            unset($_SESSION['blogCategory']);
+
+                            header('location: /blog/list');
+                    
+                        }
+                    } else {
+                        $_SESSION['blog'] = $blog;
+                        $_SESSION['blogCategory'] = $blogCategory;
+                        $_SESSION['uploadErrorMessage'] = $return['message'];
+                        if ($_POST['hiddenId'] != '') {
+                            header('location: /blog/edit?id='.$_POST['hiddenId']);
+                        } else {
+                            header('location: /blog/edit');
+                        }
+                    }
+            // if no file is selected submit the rest of the form
             } else {
                 
-                $blog['blogDate'] = new \Datetime();
-                $blogEntity = $author->addBlog($blog);
+                // edit form => modDate
+                if (isset($_GET['id'])) {
+                    $blog['blogModDate'] = new \DateTime();
+                    $blogEntity = $author->addBlog($blog); 
 
-                if(isset($_POST['category'])){
-                    foreach ($_POST['category'] as $categoryId) {
-                        $blogEntity->addCategory($categoryId);
-                    }
-                } 
+                    //a little fudge to edit categories
+                    $blogEntity->clearCategories();
 
-                header('location: /blog/list');
+                    if(isset($_POST['category'])){
+                        foreach ($_POST['category'] as $categoryId) {
+                            $blogEntity->addCategory($categoryId);
+                        }
+                    }   
+
+                    header('location: /blog/wholeblog?id=' . $blog['id']);
+                
+                // upload form => new date
+                } else {
+                    
+                    $blog['blogDate'] = new \Datetime();
+                    $blogEntity = $author->addBlog($blog);
+
+                    if(isset($_POST['category'])){
+                        foreach ($_POST['category'] as $categoryId) {
+                            $blogEntity->addCategory($categoryId);
+                        }
+                    } 
+
+                    header('location: /blog/list');
+            
+                }
+    
             }
 
             //PIG might be able to return Entitiy with blog Id on newly created blogs??

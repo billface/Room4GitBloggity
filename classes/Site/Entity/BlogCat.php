@@ -15,7 +15,7 @@ class BlogCat {
 	}
 
 	public function getBlogs($limit = null, $offset = null) {
-	$blogCategories = $this->blogCatJoinTable->find('categoryId', $this->id, null, $limit, $offset);
+	$blogCategories = $this->blogCatJoinTable->findAndJoin('categoryId', $this->id, 'blogId', 'blog', 'id',  'blogdate DESC', $limit, $offset);
     //null is there to negate orderBy in find()
 
 		$blogs = [];

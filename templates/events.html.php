@@ -21,10 +21,15 @@
     <?=$event->eventText?>
  
 </p>
-
-  (by <a href="mailto:<?php
+<?php if ($event->outOfStock == 1) {
+  echo 'SOLD OUT<br>';
+}
+  ?>
+<br>  (by <a href="mailto:<?php
               echo htmlspecialchars($event->getAuthor()->email, ENT_QUOTES, 'UTF-8'); ?>"><?php
               echo htmlspecialchars($event->getAuthor()->name, ENT_QUOTES, 'UTF-8'); ?></a>)
+
+
 
 <?php if ($userId == $event->authorId): ?>
 

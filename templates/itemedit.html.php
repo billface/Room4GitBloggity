@@ -1,16 +1,15 @@
 <?php 
-     //echo '<pre>'; print_r($_SESSION); echo '</pre>';
      
 
 
 if (empty($item->id) || $userId == $item->authorId): 
 
-if (isset($_SESSION['itemErrorMessage'])) {
-    echo '<p>You got these errors :'. $_SESSION['itemErrorMessage']. '</p>';
-    unset($_SESSION['itemErrorMessage']);
+if (isset($_SESSION['uploadErrorMessage'])) {
+    echo '<p>You got these errors :'. $_SESSION['uploadErrorMessage']. '</p>';
+    unset($_SESSION['uploadErrorMessage']);
 }
 
-?>
+?>  
 
 
 <form action="" method="post" enctype="multipart/form-data">
@@ -22,8 +21,8 @@ if (isset($_SESSION['itemErrorMessage'])) {
     <label for="itemText">Type your item content here:</label>
     <textarea id="itemText" name="item[itemText]" rows="3" cols="40"><?=$item->itemText ?? $_SESSION['item']['itemText'] ?? ''?></textarea>
     <br>
-    <label for="itemPicture">Type your item picture code here:</label>
-    <textarea id="itemPicture" name="item[itemPicture]" class="not-here" rows="1" cols="40"><?=$item->itemPicture ?? $_SESSION['item']['itemPicture'] ?? ''?></textarea>
+    <label for="itemImageName">Type your item picture code here:</label>
+    <textarea id="itemImageName" name="item[itemImageName]" class="not-here" rows="1" cols="40"><?=$item->itemImageName ?? $_SESSION['item']['itemImageName'] ?? ''?></textarea>
     <br>
     <!--add sizes -->
     <p>Select sizes for this item:</p>
@@ -91,8 +90,13 @@ if (isset($_SESSION['itemErrorMessage'])) {
     <label for="itemPrice">Price</label>
     <input type="number" id="item[itemPrice]" name="item[itemPrice]" value="<?=$item->itemPrice ?? $_SESSION['item']['itemPrice'] ?? ''?>">
     <br>
-    Out Of Stock?: <input type="checkbox" name="item[outOfStock]" value="1">
-    <br>
+	<?php if (isset ($item->outOfStock) && ($item->outOfStock == 1)) {
+        echo 'Out Of Stock?: <input type="checkbox" checked name="item[outOfStock]" value="1"> ';
+    }else{
+		echo 'Out Of Stock?: <input type="checkbox" name="item[outOfStock]" value="1"> ';
+    }
+    ?>
+	<br>
     
     <label for="itemImage">Image Upload</label>
     <input type="file" name="file">

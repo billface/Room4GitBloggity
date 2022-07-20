@@ -69,13 +69,29 @@ class Event {
 
     
     public function saveEdit() {
+        //echo '<pre>'; print_r($_POST); echo '</pre>';
+        //die; 
+
         $author = $this->authentication->getUser();
 
         $event = $_POST['event'];
-            
-        //the above is from form, below is others
 
+        
+        
+
+        //the above is from form, below is others
+        
+        if (isset($event['outOfStock'])){
+            $event['outOfStock'] = 1;
+        } else {
+            $event['outOfStock'] = 0;
+        }
+
+
+        
         $author->addEvent($event);
+
+        
 
         header('location: /event/list');
 
@@ -99,7 +115,7 @@ class Event {
                 'metaRobots' => $metaRobots,
                 'variables' => [
                     'event' => $event ?? null,
-                    'userId' => $author->id ?? null
+                    'user' => $author //previously 'userId' => $author->id ?? null,
                     ]
                 ];
     }

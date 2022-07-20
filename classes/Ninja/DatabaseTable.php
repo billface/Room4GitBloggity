@@ -65,6 +65,38 @@ class DatabaseTable
 		return $query->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorArgs);
 	}
 
+
+	public function findAndJoin($column, $value, $thisJoinColumn, $otherTable, $otherJoinColumn, $orderBy = null, $limit = null, $offset = null) {
+		//function made to paginate list of category blogs in correct order (BASED on $query = 'SELECT * FROM ' . $this->table . ' JOIN blog ON blog_cat_join.blogId = blog.id WHERE ' . $column . ' = :value';)
+
+        $query = 'SELECT * FROM ' . $this->table . ' JOIN ' . $otherTable . ' ON ' . $this->table . ' . ' . $thisJoinColumn . '  = ' . $otherTable . ' . ' . $otherJoinColumn. ' WHERE ' . $column . ' = :value';
+
+        $parameters = [
+
+            'value' => $value
+
+        ];
+        if ($orderBy != null) {
+
+            $query .= ' ORDER BY ' . $orderBy;
+
+        }
+        if ($limit != null) {
+
+            $query .= ' LIMIT ' . $limit;
+
+        }
+        if ($offset != null) {
+
+            $query .= ' OFFSET ' . $offset;
+
+        }
+        $query = $this->query($query, $parameters);
+		
+        return $query->fetchAll(\PDO::FETCH_CLASS, $this->className, $this->constructorArgs);
+
+    }
+
 	public function findById($value) {
 		$query = 'SELECT * FROM `' . $this->table . '` WHERE `' . $this->primaryKey . '` = :value';
 

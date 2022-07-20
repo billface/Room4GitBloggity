@@ -12,6 +12,14 @@
     <label for="eventDate">Event date</label>
     <input type="datetime-local" id="event[eventDate]" name="event[eventDate]" value="<?=$event->eventDate ?? ''?>">
     <br>
+	<?php if (isset ($event->outOfStock) && ($event->outOfStock == 1)) {
+        echo 'Sold Out?: <input type="checkbox" checked name="event[outOfStock]" value="1"> ';
+    }else{
+        echo 'Sold Out?: <input type="checkbox" name="event[outOfStock]" value="1"> ';
+    }
+    ?>
+    
+    <br>
     <input type="submit" value="Save">
 </form>
 <?php else: ?>

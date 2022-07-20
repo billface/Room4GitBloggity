@@ -15,6 +15,16 @@
       form and input tags aren't outside the blockquote to simplify CSS -->
   <?=$blog->blogHeading?>
 
+  <?php
+    if (isset($blog->blogFileName)) {
+      echo '<p><img src="/uploads/'.$blog->blogFileName.'" alt="'.$blog->blogHeading.'" width="560" height="315"></p>';
+    } else if ($blog->blogVideo !== '') {
+        echo '<iframe width="560" height="315" src="https://www.youtube.com/embed/'. $blog->blogVideo .'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br>';
+    } else {
+      echo '<p><img src="/uploads/defaultBlog.png" alt="default" width="560" height="315"></p>';
+    }
+  ?>
+
   (by <a href="mailto:<?php
               $author = $blog->getAuthor();
               echo htmlspecialchars($author ? $author->email : 'deleted user', ENT_QUOTES, 'UTF-8');

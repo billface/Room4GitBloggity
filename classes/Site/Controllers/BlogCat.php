@@ -16,7 +16,7 @@ class BlogCat {
 
 		$title = 'Edit Category';
 
-		return ['template' => 'editcategory.html.php',
+		return ['template' => 'blogcatedit.html.php',
 				'title' => $title,
 				'variables' => [
 					'category' => $category ?? null

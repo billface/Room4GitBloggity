@@ -1,7 +1,19 @@
 <blockquote>
+<?php echo '<pre>'; print_r($_SESSION); echo '</pre>'; ?>
+
 <h2>
   <?=$blog->blogHeading?>
 </h2>
+<?php if ($blog->blogVideo !== '') {
+  echo '<iframe width="560" height="315" src="https://www.youtube.com/embed/'. $blog->blogVideo .'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br>';
+} else {
+if (isset($blog->blogFileName)) {
+    echo '<p><img src="/uploads/'.$blog->blogFileName.'" alt="'.$blog->blogHeading.'" width="560" height="315"></p>';
+  }
+}
+  ?>
+
+  
   <?=$blog->blogText?><br>
   (by <a href="mailto:
               <?php echo htmlspecialchars($blog->getAuthor()->email ?? 'deleted user', ENT_QUOTES, 'UTF-8'); ?>">

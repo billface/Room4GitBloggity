@@ -95,5 +95,4 @@ echo json_encode([
     "result" => $result
 ]);
 
-//header('location: /item/success');
 exit();
