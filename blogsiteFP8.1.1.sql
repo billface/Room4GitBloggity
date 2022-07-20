@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: shareddb-z.hosting.stackcp.net
--- Generation Time: Jul 05, 2022 at 11:50 AM
+-- Generation Time: Jul 20, 2022 at 11:07 AM
 -- Server version: 10.4.14-MariaDB-log
 -- PHP Version: 7.1.25
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `room4Two-3136353c69`
 --
+CREATE DATABASE IF NOT EXISTS `room4Two-3136353c69` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `room4Two-3136353c69`;
 
 -- --------------------------------------------------------
 
@@ -62,21 +64,22 @@ CREATE TABLE `blog` (
   `authorId` int(11) DEFAULT NULL,
   `blogModDate` datetime DEFAULT NULL,
   `metaDescription` text DEFAULT NULL,
-  `blogVideo` text DEFAULT NULL
+  `blogVideo` text DEFAULT NULL,
+  `blogFileName` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `blog`
 --
 
-INSERT INTO `blog` (`id`, `blogHeading`, `blogText`, `blogDate`, `authorId`, `blogModDate`, `metaDescription`, `blogVideo`) VALUES
-(56, 'Instructions', 'Go to add a new blog. \r\nThen Register. \r\nThen Log In. \r\nThen add a new blog. \r\nThen be thanked : )\r\nThen comment on other blogs\r\n', '2022-01-10 12:16:18', 3, '2022-01-10 12:17:37', NULL, NULL),
-(57, 'its not very good yet', 'I just want to see if the basic functionality works on other browsers etc', '2022-01-10 12:20:29', 3, NULL, NULL, NULL),
-(58, 'Gaming', 'Yaâ€™ll gone (pft) make me act a fool, (pft) up in here, (pft) up inâ€…here!â€…(pft) Yaâ€™ll gone (pft)â€…make me loose my (pft) cool,â€…up in here, (pft) up in here! (pft) Yaâ€™ll gone make (pft) me bust a (pft) smack, up in here, (pft) up in here! (pft) Yaâ€™ll gone make (pft) my fingers snap, (pft) up in here, (pft) up in here! (pft) Why should I battle a crusty old man When you canâ€™t even defeat a little weak Peter Pan Ya lucky this is (pft) only a beatbox (pft) battle Cause in a real battle (pft) I make ya feel rattled Look at him, (pft) he only got one planet, (pft) I got the whole Galaxy (pft) under my dependence, (pft) Youâ€™re gonna beg (pft) when you bleed and die, (pft) As you realize (pft) destiny arrived Yaâ€™ll gone (pft) make me AHBRTT AHGHHBABEBETAEBFHGAHFHBRTHBRTTTBRTTT Yaâ€™ll gone (pft) make me AHBRTT ABHTETETFBEBATEABTGTEHUAHBRHTBRHT Yaâ€™ll gone (pft) make me AHBHEHH BHRBHBAUTBAHBAUHBRHBRTTBRTT Yaâ€™ll gone (pft) make me AHBRTT SSAHBEHBEBTBSSHFBETHUFDHAHDBHTBHTT BMFAFETTYFETTYBMBM DON- DON\'T STOP BMFETTYBM DON- BMFAPFTDAH BMFAFETTYFETTYBMBM DON- DON\'T STOP BMH LET ME SHOW YOU HOW TO SCRATCH IT BMFABETEHETHETETBETBEBATBEBABETBMFABETATAHETETBETGABETEBBTEABTHABHRTBHRTHEHAHBMBETTBABTBETAEBTETBHTEHABHETAHETABM Either way, destiny still arrives BEEHYUHMM', '2022-01-10 12:28:35', 5, NULL, NULL, NULL),
-(59, 'Qanon and pepsi', '2 eggs 120degrees til simmer ðŸ‘Œ', '2022-01-10 12:34:44', 4, NULL, NULL, NULL),
-(60, 'Qanon and pepsi', '2 eggs 120degrees til simmer ðŸ‘Œ', '2022-01-10 12:34:47', 4, NULL, NULL, NULL),
-(61, 'Random quotes', 'How pathetically scanty my self-knowledge is compared with, say, my knowledge of my roomâ€¦. There is no such thing as observation of the inner world, as there is of the outer world.', '2022-01-10 18:41:00', 6, NULL, NULL, NULL),
-(62, 'Random quotes', 'Lifeâ€™s splendour forever lies in wait about each one of us in all its fullness, but veiled from view, deep down, invisible, far off. It is there, though, not hostile, not reluctant, not deaf. If you summon it by the right word, by its right name, it will come.', '2022-01-10 18:43:24', 6, NULL, NULL, NULL);
+INSERT INTO `blog` (`id`, `blogHeading`, `blogText`, `blogDate`, `authorId`, `blogModDate`, `metaDescription`, `blogVideo`, `blogFileName`) VALUES
+(56, 'Instructions', 'Go to add a new blog. \r\nThen Register. \r\nThen Log In. \r\nThen add a new blog. \r\nThen be thanked : )\r\nThen comment on other blogs\r\n', '2022-01-10 12:16:18', 3, '2022-01-10 12:17:37', NULL, NULL, NULL),
+(57, 'its not very good yet', 'I just want to see if the basic functionality works on other browsers etc', '2022-01-10 12:20:29', 3, NULL, NULL, NULL, NULL),
+(58, 'Gaming', 'Yaâ€™ll gone (pft) make me act a fool, (pft) up in here, (pft) up inâ€…here!â€…(pft) Yaâ€™ll gone (pft)â€…make me loose my (pft) cool,â€…up in here, (pft) up in here! (pft) Yaâ€™ll gone make (pft) me bust a (pft) smack, up in here, (pft) up in here! (pft) Yaâ€™ll gone make (pft) my fingers snap, (pft) up in here, (pft) up in here! (pft) Why should I battle a crusty old man When you canâ€™t even defeat a little weak Peter Pan Ya lucky this is (pft) only a beatbox (pft) battle Cause in a real battle (pft) I make ya feel rattled Look at him, (pft) he only got one planet, (pft) I got the whole Galaxy (pft) under my dependence, (pft) Youâ€™re gonna beg (pft) when you bleed and die, (pft) As you realize (pft) destiny arrived Yaâ€™ll gone (pft) make me AHBRTT AHGHHBABEBETAEBFHGAHFHBRTHBRTTTBRTTT Yaâ€™ll gone (pft) make me AHBRTT ABHTETETFBEBATEABTGTEHUAHBRHTBRHT Yaâ€™ll gone (pft) make me AHBHEHH BHRBHBAUTBAHBAUHBRHBRTTBRTT Yaâ€™ll gone (pft) make me AHBRTT SSAHBEHBEBTBSSHFBETHUFDHAHDBHTBHTT BMFAFETTYFETTYBMBM DON- DON\'T STOP BMFETTYBM DON- BMFAPFTDAH BMFAFETTYFETTYBMBM DON- DON\'T STOP BMH LET ME SHOW YOU HOW TO SCRATCH IT BMFABETEHETHETETBETBEBATBEBABETBMFABETATAHETETBETGABETEBBTEABTHABHRTBHRTHEHAHBMBETTBABTBETAEBTETBHTEHABHETAHETABM Either way, destiny still arrives BEEHYUHMM', '2022-01-10 12:28:35', 5, NULL, NULL, NULL, NULL),
+(59, 'Qanon and pepsi', '2 eggs 120degrees til simmer ðŸ‘Œ', '2022-01-10 12:34:44', 4, NULL, NULL, NULL, NULL),
+(60, 'Qanon and pepsi', '2 eggs 120degrees til simmer ðŸ‘Œ', '2022-01-10 12:34:47', 4, NULL, NULL, NULL, NULL),
+(61, 'Random quotes', 'How pathetically scanty my self-knowledge is compared with, say, my knowledge of my roomâ€¦. There is no such thing as observation of the inner world, as there is of the outer world.', '2022-01-10 18:41:00', 6, NULL, NULL, NULL, NULL),
+(62, 'Random quotes', 'Lifeâ€™s splendour forever lies in wait about each one of us in all its fullness, but veiled from view, deep down, invisible, far off. It is there, though, not hostile, not reluctant, not deaf. If you summon it by the right word, by its right name, it will come.', '2022-01-10 18:43:24', 6, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -157,10 +160,10 @@ CREATE TABLE `item` (
   `id` int(11) NOT NULL,
   `itemHeading` varchar(255) DEFAULT NULL,
   `itemText` varchar(255) DEFAULT NULL,
-  `itemPicture` varchar(255) DEFAULT NULL,
+  `itemImageName` varchar(255) DEFAULT NULL,
+  `itemFileName` varchar(255) DEFAULT NULL,
   `itemPrice` int(11) NOT NULL DEFAULT 0,
   `authorId` int(11) DEFAULT NULL,
-  `itemFileName` varchar(255) DEFAULT NULL,
   `outOfStock` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -168,8 +171,11 @@ CREATE TABLE `item` (
 -- Dumping data for table `item`
 --
 
-INSERT INTO `item` (`id`, `itemHeading`, `itemText`, `itemPicture`, `itemPrice`, `authorId`, `itemFileName`, `outOfStock`) VALUES
-(1, 'Apples', '<p>These are particularly lovely apples</p>', 'apples', 1, 7, 'apples.jpeg', 1);
+INSERT INTO `item` (`id`, `itemHeading`, `itemText`, `itemImageName`, `itemFileName`, `itemPrice`, `authorId`, `outOfStock`) VALUES
+(1, 'Apples', '<p>These are particularly lovely apples</p>', 'apples', 'apples.jpeg', 1, 7, 1),
+(2, 'Banana', '<p>a big one</p>', 'banana', 'banana.jpeg', 0, 7, 0),
+(3, 'Grapes', '<p>mmmh</p>', 'grapes', 'grapes.jpeg', 1, 7, 0),
+(4, 'edcedcecd', '<p>e2cecdedc</p>', 'edxxdexde', NULL, 1, 7, 0);
 
 -- --------------------------------------------------------
 
@@ -181,6 +187,14 @@ CREATE TABLE `itemdesc` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `itemdesc`
+--
+
+INSERT INTO `itemdesc` (`id`, `name`) VALUES
+(1, 'Rotten'),
+(2, 'Ripe');
 
 -- --------------------------------------------------------
 
@@ -209,8 +223,16 @@ INSERT INTO `itemsize` (`id`, `name`) VALUES
 
 CREATE TABLE `item_desc_join` (
   `itemId` int(11) NOT NULL,
-  `sizeId` int(11) NOT NULL
+  `descId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `item_desc_join`
+--
+
+INSERT INTO `item_desc_join` (`itemId`, `descId`) VALUES
+(3, 2),
+(4, 2);
 
 -- --------------------------------------------------------
 
@@ -222,6 +244,15 @@ CREATE TABLE `item_size_join` (
   `itemId` int(11) NOT NULL,
   `sizeId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `item_size_join`
+--
+
+INSERT INTO `item_size_join` (`itemId`, `sizeId`) VALUES
+(2, 1),
+(3, 2),
+(4, 2);
 
 -- --------------------------------------------------------
 
@@ -320,7 +351,7 @@ ALTER TABLE `itemsize`
 -- Indexes for table `item_desc_join`
 --
 ALTER TABLE `item_desc_join`
-  ADD PRIMARY KEY (`itemId`,`sizeId`);
+  ADD PRIMARY KEY (`itemId`,`descId`);
 
 --
 -- Indexes for table `item_size_join`
@@ -378,13 +409,13 @@ ALTER TABLE `event`
 -- AUTO_INCREMENT for table `item`
 --
 ALTER TABLE `item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `itemdesc`
 --
 ALTER TABLE `itemdesc`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `itemsize`
