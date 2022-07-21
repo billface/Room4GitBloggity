@@ -16,7 +16,7 @@ class Item {
     private $authentication;
 
 	//the order of constucts is important. most specifically the position of $authentication vs SiteRoutes getRoutes()
-	public function __construct(DatabaseTable $itemsTable,  DatabaseTable $itemSizesTable, DatabaseTable $itemDescsTable, DatabaseTable $authorsTable, DatabaseTable $pagesTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable, DatabaseTable $eventsTable, Authentication $authentication) {
+	public function __construct(DatabaseTable $itemsTable, DatabaseTable $itemSizesTable, DatabaseTable $itemDescsTable, DatabaseTable $authorsTable, DatabaseTable $pagesTable, DatabaseTable $blogsTable, DatabaseTable $commentsTable, DatabaseTable $eventsTable, Authentication $authentication) {
         $this->itemsTable = $itemsTable;
         $this->itemSizesTable = $itemSizesTable;
         $this->itemDescsTable = $itemDescsTable;
@@ -88,8 +88,10 @@ class Item {
 			return;
 		}
 		
-
+        $item->clearSizes();
+        $item->clearDescs();
         $this->itemsTable->delete($_POST['itemId']);
+        
     
         header('location: /item/list');
     }

@@ -1,8 +1,5 @@
-<?php 
-     
 
-
-if (empty($item->id) || $userId == $item->authorId): 
+<?php if (empty($blog->id) || $user->id == $blog->authorId || $user->hasPermission(\Site\Entity\Author::SUPERUSER)) : 
 
 if (isset($_SESSION['uploadErrorMessage'])) {
     echo '<p>You got these errors :'. $_SESSION['uploadErrorMessage']. '</p>';

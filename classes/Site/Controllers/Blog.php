@@ -88,6 +88,7 @@ class Blog {
 			return;
 		}
 		
+        $blog->clearCategories(); /* clears any associated join table entries */
         $this->blogsTable->delete($_POST['blogId']);
     
         header('location: /blog/list');

@@ -184,6 +184,12 @@ class DatabaseTable
 		$this->query('DELETE FROM `' . $this->table . '` WHERE `' . $this->primaryKey . '` = :id', $parameters);
 	}
 
+	public function deleteJoin($id) {
+		$parameters = [':id' => $id];
+
+		$this->query('DELETE FROM `' . $this->table . '` WHERE `' . $this->primaryKey . '` = :itemId', $parameters);
+	}
+
 	//this function is used to delete categories when editing
 	public function deleteWhere($column, $value) {
 		$query = 'DELETE FROM ' . $this->table . ' WHERE ' . $column . ' = :value';
