@@ -58,7 +58,7 @@
     <textarea id="blogVideo" name="blog[blogVideo]" class="not-here" rows="1" cols="40"><?=$blog->blogVideo  ?? $_SESSION['blog']['blogVideo'] ?? ''?></textarea>
     
     <br>
-    <label for="blogImageName">Type your blog image name here (noSpaces):</label>
+    <label for="blogImageName">Type your image filename here (noSpaces):</label>
     <textarea id="blogImageName" name="blog[blogImageName]" class="not-here" rows="1" cols="40"><?=$blog->blogImageName ?? $_SESSION['blog']['blogImageName'] ?? ''?></textarea>
     <p>[if adding image and video => image is shown on the list, video is shown in the post]</p>
     <label for="blogImage">Image Upload</label>

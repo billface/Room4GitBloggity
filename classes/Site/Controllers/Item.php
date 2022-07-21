@@ -88,8 +88,8 @@ class Item {
 			return;
 		}
 		
-        $item->clearSizes();
-        $item->clearDescs();
+        $item->clearSizes(); /* clears any associated join table entries */
+        $item->clearDescs(); /* clears any associated join table entries */
         $this->itemsTable->delete($_POST['itemId']);
         
     
@@ -115,6 +115,7 @@ class Item {
                     } else {
                         $item['outOfStock'] = 0;
                     }
+                    //entities allow categories to be added in lookup tables
                     $itemEntity = $author->addItem($item);
                     $itemEntity->clearSizes();
                     $itemEntity->clearDescs();

@@ -10,6 +10,11 @@
       form and input tags aren't outside the blockquote to simplify CSS -->
   <?=$event->eventHeading?>
 
+<?php
+  if (isset($event->eventFileName)) {
+      echo '<p><img src="/uploads/'.$event->eventFileName.'" alt="'.$event->eventHeading.'" width="560" height="315"></p>';
+    }
+?>
 </h2>
     <h3>
     <?php

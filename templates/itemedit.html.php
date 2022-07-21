@@ -18,9 +18,7 @@ if (isset($_SESSION['uploadErrorMessage'])) {
     <label for="itemText">Type your item content here:</label>
     <textarea id="itemText" name="item[itemText]" rows="3" cols="40"><?=$item->itemText ?? $_SESSION['item']['itemText'] ?? ''?></textarea>
     <br>
-    <label for="itemImageName">Type your item picture code here:</label>
-    <textarea id="itemImageName" name="item[itemImageName]" class="not-here" rows="1" cols="40"><?=$item->itemImageName ?? $_SESSION['item']['itemImageName'] ?? ''?></textarea>
-    <br>
+    
     <!--add sizes -->
     <p>Select sizes for this item:</p>
     <?php
@@ -94,9 +92,14 @@ if (isset($_SESSION['uploadErrorMessage'])) {
     }
     ?>
 	<br>
+	<label for="itemImageName">Type your image filename here (noSpaces):</label>
+    <textarea id="itemImageName" name="item[itemImageName]" class="not-here" rows="1" cols="40"><?=$item->itemImageName ?? $_SESSION['item']['itemImageName'] ?? ''?></textarea>
+    <br>
     
     <label for="itemImage">Image Upload</label>
     <input type="file" name="file">
+
+	<!-- to allow edited upload fail to refill values -->
     <input type="hidden" name="hiddenId" value="<?=$_GET['id'] ?? ''?>">
     <br>
     <input type="submit" value="Save">

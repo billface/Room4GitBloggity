@@ -112,6 +112,8 @@ class Blog {
                         // edit form => modDate
                         if (isset($_GET['id'])) {
                             $blog['blogModDate'] = new \DateTime();
+
+                            //entities allow categories to be added in lookup tables
                             $blogEntity = $author->addBlog($blog); 
 
                             //a little fudge to edit categories

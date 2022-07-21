@@ -87,13 +87,31 @@ class Event {
             $event['outOfStock'] = 0;
         }
 
+        //upload file if it has been selected
+        if ($_FILES['file']['size'] > 0){
+            $return = $this->eventsTable->upload($event['eventImageName']);
+            $event['eventFileName'] = $return['fileNameNew'];
 
-        
-        $author->addEvent($event);
-
-        
-
-        header('location: /event/list');
+            //end upload files and handle any errors
+                if ($return['message'] == '') {
+                $author->addEvent($event);
+                unset($_SESSION['event']);
+                header('location: /event/list');
+                } else {
+                    $_SESSION['event'] = $event;
+                    $_SESSION['uploadErrorMessage'] = $return['message'];
+                    if ($_POST['hiddenId'] != '') {
+                        header('location: /event/edit?id='.$_POST['hiddenId']);
+                    } else {
+                        header('location: /event/edit');
+                    }
+                }
+            }else{
+                $author->addEvent($event);
+                header('location: /event/list');
+            }
+    // if no file
+            
 
     }
 
